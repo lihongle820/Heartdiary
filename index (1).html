@@ -1,0 +1,2542 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-mode="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>每日台账 × Skill工作台 × 心灵角落 × 元气补给站</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{--p:#5b6fd0;--pr:91,111,208;--bg:#f3f5fa;--card:#fff;--tx:#1c2030;--tx2:#565d75;--mu:#8b92a8;--bd:#e6e9f2;--sh:0 2px 10px rgba(28,32,48,.05);--shl:0 10px 30px rgba(28,32,48,.10);--r:16px}
+html[data-mode="dark"]{--bg:#0e1017;--card:#181b25;--tx:#e8eaf2;--tx2:#a4abc2;--mu:#79809a;--bd:#262b3a;--sh:0 2px 12px rgba(0,0,0,.35);--shl:0 12px 34px rgba(0,0,0,.5)}
+html,body{height:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+button,input,textarea,select{font-family:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+/* 顶栏 */
+.topbar{position:sticky;top:0;z-index:60;background:var(--card);border-bottom:1px solid var(--bd)}
+.tbi{display:flex;align-items:center;gap:14px;height:64px}
+.brand{display:flex;align-items:center;gap:9px;min-width:0}
+.logo{font-size:22px;line-height:1}
+.bt{font-size:14px;font-weight:800;white-space:nowrap}
+.bs{font-size:11px;color:var(--mu);margin-top:1px;white-space:nowrap}
+.tabs{display:flex;gap:3px;background:var(--bg);padding:4px;border-radius:12px;margin-left:auto;overflow-x:auto}
+.tab{border:0;background:transparent;padding:7px 13px;border-radius:9px;font-size:13px;color:var(--tx2);cursor:pointer;font-weight:500;transition:.18s;white-space:nowrap}
+.tab.active{background:rgba(var(--pr),.14);color:var(--p);font-weight:800}
+.ta{display:flex;gap:5px}
+.ib{border:1px solid var(--bd);background:var(--card);color:var(--tx2);width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:15px;display:grid;place-items:center;transition:.18s}
+.ib:hover{border-color:rgba(var(--pr),.55);color:var(--p)}
+.ib.sm{width:28px;height:28px;font-size:12px;border-radius:8px}
+.ib.xs{width:21px;height:21px;font-size:10px;border-radius:6px;border-color:transparent;background:transparent}
+.ib.xs:hover{background:rgba(var(--pr),.12)}
+main{padding:18px 0 70px}
+.view{display:none}
+.view.active{display:block;animation:f .22s ease}
+@keyframes f{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);box-shadow:var(--sh);padding:17px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--bd);background:var(--card);color:var(--tx2);padding:8px 14px;border-radius:10px;font-size:13px;cursor:pointer;font-weight:500;transition:.15s;white-space:nowrap}
+.btn:hover{border-color:rgba(var(--pr),.55);color:var(--p)}
+.btn.p{background:var(--p);border-color:var(--p);color:#fff;box-shadow:0 4px 12px rgba(var(--pr),.28)}
+.btn.p:hover{filter:brightness(1.07);color:#fff}
+.btn.d:hover{border-color:#e05a4f;color:#e05a4f}
+.btn.s{padding:5px 10px;font-size:12px;border-radius:8px}
+.btn.g{background:transparent}
+input,textarea,select{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:9px 11px;font-size:13.5px;outline:none;transition:.15s}
+input:focus,textarea:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(var(--pr),.13)}
+textarea{resize:vertical;line-height:1.6}
+label.f{display:block;margin-bottom:11px}
+label.f>span{display:block;font-size:12px;color:var(--tx2);font-weight:700;margin-bottom:5px}
+.empty{color:var(--mu);font-size:12.5px;text-align:center;padding:28px 10px;border:1.5px dashed var(--bd);border-radius:14px}
+/* 打卡 */
+.dg{display:grid;grid-template-columns:1fr 320px;gap:15px;align-items:start}
+.ds{display:flex;flex-direction:column;gap:13px;position:sticky;top:82px}
+.db{display:flex;align-items:center;gap:9px;padding:13px 15px;flex-wrap:wrap}
+.dm{font-size:20px;font-weight:800;letter-spacing:.4px}
+.dsub{font-size:11.5px;color:var(--mu);margin-top:2px}
+.dmid{flex:1;min-width:0}
+.db input[type=date]{width:auto;min-width:145px;padding:7px 9px;font-size:12.5px}
+.goal{margin-top:13px}
+.gh{display:flex;align-items:center;gap:9px}
+.gtw{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.gdot{width:9px;height:9px;border-radius:50%;background:var(--p);flex:none;box-shadow:0 0 0 3px rgba(var(--pr),.16)}
+.gtitle{font-size:14.5px;font-weight:800;cursor:text;padding:2px 4px;border-radius:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gtitle:hover{background:rgba(var(--pr),.09)}
+.gm{display:flex;align-items:center;gap:7px;flex:none}
+.gc{font-size:12px;color:var(--mu);font-weight:700;font-variant-numeric:tabular-nums}
+.gbar{height:4px;border-radius:99px;background:var(--bd);margin:10px 0 4px;overflow:hidden}
+.gbar i{display:block;height:100%;background:linear-gradient(90deg,var(--p),rgba(var(--pr),.6));border-radius:99px;transition:width .3s}
+.gi{display:flex;flex-direction:column}
+.item{display:flex;align-items:center;gap:9px;padding:7px 5px;border-radius:9px;cursor:pointer;transition:.12s}
+.item:hover{background:rgba(var(--pr),.06)}
+.item input[type=checkbox]{width:16px;height:16px;accent-color:var(--p);cursor:pointer;flex:none}
+.itx{flex:1;font-size:13.5px;line-height:1.5;cursor:text;padding:2px 4px;border-radius:5px;word-break:break-word}
+.itx:hover{background:rgba(var(--pr),.09)}
+.item.done .itx{text-decoration:line-through;color:var(--mu)}
+.ga{margin-top:7px}
+.ga input{border-style:dashed;background:transparent;font-size:13px;padding:7px 11px}
+.ie{border-radius:8px;padding:4px 8px;font-size:13.5px}
+.agc{display:flex;gap:9px;margin-top:15px;align-items:center}
+.agc input{flex:1}
+.nc{margin-top:13px}
+.nc h3{margin:0 0 9px;font-size:13px;color:var(--tx2);font-weight:800}
+.nc textarea{min-height:100px}
+.sh{display:flex;align-items:center;gap:15px}
+.ring{--p:0;position:relative;width:82px;height:82px;border-radius:50%;flex:none;background:conic-gradient(var(--p) calc(var(--p)*1%), var(--bd) 0);display:grid;place-items:center;transition:.4s}
+.ring::before{content:'';position:absolute;inset:9px;border-radius:50%;background:var(--card)}
+.ring span{position:relative;font-size:17px;font-weight:800;color:var(--p);font-variant-numeric:tabular-nums}
+.sl{flex:1;display:flex;flex-direction:column;gap:8px}
+.sline{display:flex;justify-content:space-between;font-size:12px;color:var(--tx2)}
+.sline b{color:var(--tx);font-variant-numeric:tabular-nums}
+.ct{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;gap:8px}
+.ct h3{margin:0;font-size:13px;font-weight:800;display:flex;align-items:center;gap:6px}
+.ml{display:flex;flex-direction:column;gap:7px}
+.mi{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:11px;background:var(--bg);border:1px solid transparent;transition:.15s}
+.mi.soon{border-color:rgba(var(--pr),.4);background:rgba(var(--pr),.08)}
+.mi.today{background:linear-gradient(135deg,rgba(var(--pr),.2),rgba(var(--pr),.07));border-color:var(--p)}
+.mi.over{opacity:.6}
+.mim{flex:1;min-width:0}
+.min{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mis{font-size:10.5px;color:var(--mu);margin-top:2px}
+.mid{font-size:11.5px;font-weight:800;color:var(--p);flex:none;font-variant-numeric:tabular-nums}
+.mid.ot{color:#e05a4f}
+/* Skill */
+.shd{margin-bottom:15px}
+.shd h2{margin:0 0 5px;font-size:19px;font-weight:800}
+.shd p{margin:0;font-size:12.5px;color:var(--mu);line-height:1.6}
+.tb{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:13px}
+.sb{position:relative;flex:1;min-width:180px}
+.sb input{padding-left:32px}
+.sb .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mu);pointer-events:none}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px}
+.cat{border:1px solid var(--bd);background:var(--card);color:var(--tx2);padding:5px 13px;border-radius:99px;font-size:12px;cursor:pointer;transition:.15s;font-weight:600}
+.cat.active{background:var(--p);border-color:var(--p);color:#fff}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.sc{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:15px;cursor:pointer;transition:.18s;box-shadow:var(--sh);position:relative;display:flex;flex-direction:column;overflow:hidden}
+.sc::after{content:'';position:absolute;inset:0;border-radius:14px;border:2px solid transparent;transition:.18s;pointer-events:none}
+.sc:hover{transform:translateY(-3px);box-shadow:var(--shl)}
+.sc:hover::after{border-color:rgba(var(--pr),.4)}
+.sci{font-size:22px;line-height:1;margin-bottom:8px}
+.scn{font-size:14px;font-weight:800;margin-bottom:5px;line-height:1.4}
+.scd{font-size:11.5px;color:var(--mu);line-height:1.6;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.sct{display:flex;gap:4px;flex-wrap:wrap;margin-top:9px}
+.tag{font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(var(--pr),.12);color:var(--p);font-weight:700}
+.tag.g{background:var(--bg);color:var(--mu)}
+.scf{display:flex;align-items:center;gap:9px;margin-top:10px;font-size:10.5px;color:var(--mu)}
+.scdel{position:absolute;top:8px;right:8px;opacity:0;transition:.15s}
+.sc:hover .scdel{opacity:1}
+.asc{border:1.5px dashed var(--bd);background:transparent;box-shadow:none;display:grid;place-items:center;min-height:140px;color:var(--mu);font-size:13px;font-weight:700}
+.asc:hover{border-color:var(--p);color:var(--p);transform:none;box-shadow:none}
+.pager{display:flex;gap:7px;justify-content:center;align-items:center;margin-top:18px;font-size:12px;color:var(--mu)}
+/* 抽屉 */
+.dmask{position:fixed;inset:0;background:rgba(10,12,20,.45);backdrop-filter:blur(2px);z-index:90;opacity:0;pointer-events:none;transition:.25s}
+.dmask.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(580px,100%);background:var(--card);z-index:100;transform:translateX(102%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 44px rgba(0,0,0,.2)}
+.drawer.show{transform:translateX(0)}
+.dh{display:flex;align-items:center;gap:11px;padding:16px 19px;border-bottom:1px solid var(--bd);flex:none}
+.dhi{font-size:24px;line-height:1}
+.dht{font-size:15px;font-weight:800}
+.dhs{font-size:11px;color:var(--mu);margin-top:2px}
+.dh .ib{margin-left:auto}
+.dbd{padding:19px;overflow-y:auto;flex:1}
+.snapb{display:flex;gap:7px;align-items:center;margin-bottom:15px;flex-wrap:wrap}
+.snapb select{flex:1;min-width:110px;padding:7px 9px;font-size:12px}
+.acc{border:1px solid var(--bd);border-radius:11px;margin:9px 0;overflow:hidden;background:var(--bg)}
+.acc>summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--tx2);padding:10px 13px;list-style:none;display:flex;align-items:center;gap:6px}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::after{content:'▾';margin-left:auto;font-size:10px;transition:.2s}
+.acc[open]>summary::after{transform:rotate(180deg)}
+.accb{padding:0 13px 13px;font-size:12px;line-height:1.75;color:var(--tx2)}
+.accb pre{margin:0;white-space:pre-wrap;font-size:11px;line-height:1.75;font-family:ui-monospace,Menlo,Consolas,monospace}
+.pacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.pprev{margin-top:13px;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:13px;font-size:11px;line-height:1.75;white-space:pre-wrap;word-break:break-word;max-height:300px;overflow:auto;font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--tx2)}
+/* 黑话 */
+.gg{margin-bottom:13px}
+.gt{font-size:12px;font-weight:800;color:var(--p);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.gi2{padding:7px 10px;border-radius:9px;background:var(--card);border:1px solid var(--bd);margin-bottom:5px;font-size:11.5px;line-height:1.65}
+.gi2 b{color:var(--tx);font-weight:800;font-size:12px}
+.gi2 span{color:var(--tx2)}
+.gi2 mark{background:rgba(var(--pr),.22);color:var(--p);border-radius:4px;padding:0 2px}
+/* 占卜 */
+.otabs{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap}
+.otab{border:1px solid var(--bd);background:var(--card);color:var(--tx2);padding:7px 16px;border-radius:99px;font-size:12.5px;cursor:pointer;font-weight:700;transition:.15s}
+.otab.active{background:var(--p);border-color:var(--p);color:#fff}
+.opanel{display:none}
+.opanel.active{display:block}
+.qchips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
+.chip{border:1px solid var(--bd);background:var(--card);color:var(--tx2);padding:6px 13px;border-radius:99px;font-size:12px;cursor:pointer;transition:.15s;font-weight:600}
+.chip.active{background:rgba(var(--pr),.15);border-color:var(--p);color:var(--p);font-weight:800}
+.tstage{display:flex;flex-direction:column;align-items:center;gap:15px;padding:20px 0 10px}
+.tcard{width:175px;height:280px;perspective:1200px;cursor:pointer}
+.tinner{position:relative;width:100%;height:100%;transition:transform .8s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.tcard.flipped .tinner{transform:rotateY(180deg)}
+.tface{position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:17px;text-align:center;box-shadow:var(--shl)}
+.tback{background:linear-gradient(150deg,var(--p),rgba(var(--pr),.55));color:#fff;font-size:36px;border:1px solid rgba(255,255,255,.25)}
+.tback small{display:block;font-size:10.5px;margin-top:11px;opacity:.85;letter-spacing:2px}
+.tfront{background:var(--card);border:2px solid var(--p);transform:rotateY(180deg)}
+.tfn{font-size:16px;font-weight:800;margin-bottom:4px;line-height:1.35}
+.tfa{font-size:10px;color:var(--mu);margin-bottom:9px;letter-spacing:1px}
+.tfs{font-size:30px;margin-bottom:9px}
+.tfp{font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:99px;background:rgba(var(--pr),.14);color:var(--p)}
+.reading{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:15px 17px;width:100%;max-width:560px;box-shadow:var(--sh);font-size:12.5px;line-height:1.85;color:var(--tx2)}
+.reading h4{margin:0 0 7px;font-size:13px;color:var(--tx);font-weight:800}
+.reading .kw{color:var(--p);font-weight:800}
+.reading .adv{margin-top:9px;padding-top:9px;border-top:1px dashed var(--bd)}
+.hstage{display:flex;flex-direction:column;align-items:center;gap:15px;padding:18px 0 10px}
+.hbox{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:18px 22px;box-shadow:var(--shl);min-width:240px}
+.hline{display:flex;align-items:center;gap:9px;height:24px;justify-content:center}
+.hy{width:108px;height:8px;border-radius:3px;background:var(--p)}
+.hyi{display:flex;gap:13px}
+.hyi i{width:47px;height:8px;border-radius:3px;background:var(--p);display:block}
+.hlb{font-size:10px;color:var(--mu);width:38px;text-align:right}
+.hmk{font-size:10.5px;color:#e0913f;width:13px;font-weight:800}
+.hname{text-align:center;font-size:15px;font-weight:800;margin-top:13px;letter-spacing:1px}
+.hsub{text-align:center;font-size:11px;color:var(--mu);margin-top:4px}
+.hchg{text-align:center;margin-top:9px;font-size:12px;color:var(--tx2)}
+.hchg b{color:var(--p)}
+/* 元气补给站 */
+.stage{display:grid;grid-template-columns:1fr 1fr;gap:15px;align-items:start}
+.egcard{background:linear-gradient(135deg,rgba(var(--pr),.12),rgba(var(--pr),.04));border:1px solid rgba(var(--pr),.3);border-radius:16px;padding:22px;min-height:150px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.egtype{position:absolute;top:10px;right:13px;font-size:10px;padding:2px 9px;border-radius:99px;background:rgba(var(--pr),.16);color:var(--p);font-weight:800}
+.egtxt{font-size:15px;line-height:1.85;color:var(--tx);font-weight:500}
+.egacts{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.numbox{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.num{width:42px;height:38px;text-align:center;padding:6px;font-size:15px;font-weight:800}
+.story-stage{border:1px solid var(--bd);border-radius:14px;padding:16px;background:var(--card)}
+.story-cand{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}
+.cand{border:1.5px solid var(--bd);background:var(--bg);color:var(--tx);padding:10px 18px;border-radius:11px;font-size:14px;cursor:pointer;font-weight:700;transition:.15s}
+.cand:hover{border-color:var(--p);background:rgba(var(--pr),.08)}
+.cand.done{background:rgba(var(--pr),.15);border-color:var(--p);color:var(--p)}
+.round-info{font-size:11.5px;color:var(--mu);margin-bottom:9px}
+.story-text{margin-top:15px;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:15px;font-size:13.5px;line-height:1.9;color:var(--tx);white-space:pre-wrap;min-height:80px}
+/* 模态 */
+.mmask{position:fixed;inset:0;background:rgba(10,12,20,.5);z-index:120;display:none;place-items:center;padding:20px}
+.mmask.show{display:grid}
+.modal{background:var(--card);border-radius:17px;width:min(540px,100%);max-height:86vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.32);padding:21px;animation:pop .2s ease}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.modal h3{margin:0 0 15px;font-size:15px;font-weight:800}
+.macts{display:flex;gap:9px;justify-content:flex-end;margin-top:17px}
+.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);background:var(--tx);color:var(--card);padding:10px 19px;border-radius:99px;font-size:12.5px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:200;max-width:86vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:920px){.dg{grid-template-columns:1fr}.ds{position:static}.bs{display:none}.tbi{height:58px;gap:8px}.bt{font-size:12px}.tab{padding:6px 9px;font-size:12px}.stage{grid-template-columns:1fr}}
+@media(max-width:600px){.bt{display:none}.wrap{padding:0 12px}.card{padding:14px;border-radius:14px}.tcard{width:150px;height:240px}}
+
+/* ===== 占卜额度与冷却 ===== */
+.quota{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(var(--pr),.12),rgba(var(--pr),.03));border:1px solid rgba(var(--pr),.3);border-radius:13px;padding:10px 14px;margin-bottom:15px;flex-wrap:wrap}
+.quota .qdots{display:flex;gap:5px}
+.quota .qd{width:13px;height:13px;border-radius:50%;background:var(--bd);transition:.3s;position:relative}
+.quota .qd.on{background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.85),var(--p) 60%);box-shadow:0 0 8px rgba(var(--pr),.55)}
+.quota .qt{font-size:12px;font-weight:800;color:var(--p)}
+.quota .qcd{margin-left:auto;font-size:11.5px;color:var(--mu);font-weight:700;font-variant-numeric:tabular-nums}
+.quota .qcd.hot{color:#e0913f}
+.quota .qtip{width:100%;font-size:10.5px;color:var(--mu);line-height:1.6}
+.btn.cooling{opacity:.55;cursor:not-allowed}
+[hidden]{display:none!important}
+/* ===== 塔罗动画 ===== */
+.tstage{position:relative}
+.tcard{transition:filter .3s}
+.tcard.shuffling .tinner{animation:shuffle .9s ease}
+@keyframes shuffle{0%{transform:rotate(0) translateX(0)}18%{transform:rotate(-9deg) translateX(-16px)}40%{transform:rotate(7deg) translateX(14px)}62%{transform:rotate(-5deg) translateX(-9px)}82%{transform:rotate(3deg) translateX(5px)}100%{transform:rotate(0) translateX(0)}}
+.tcard.glow{box-shadow:0 0 36px 6px rgba(var(--pr),.6);border-radius:16px}
+.tfront .tfs{transition:transform .5s}
+.tfront.rev .tfs{transform:rotate(180deg)}
+.tfront .revmark{position:absolute;top:10px;left:10px;font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:99px;background:#7a4a7e;color:#fff;letter-spacing:1px}
+.tfront .tfn.no{transition:none}
+.tparticles{position:absolute;inset:-40px;pointer-events:none;overflow:visible}
+.tparticles i{position:absolute;left:50%;top:50%;width:7px;height:7px;border-radius:50%;background:var(--p);opacity:0;animation:tp .95s ease-out forwards}
+@keyframes tp{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}25%{opacity:.95}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.1)}}
+/* 六爻逐爻 */
+.hline{animation:lyi .38s ease both}
+.hline:nth-child(1){animation-delay:.02s}.hline:nth-child(2){animation-delay:.12s}.hline:nth-child(3){animation-delay:.22s}.hline:nth-child(4){animation-delay:.32s}.hline:nth-child(5){animation-delay:.42s}.hline:nth-child(6){animation-delay:.52s}
+@keyframes lyi{from{opacity:0;transform:scaleX(.2) translateY(6px)}to{opacity:1;transform:none}}
+.coin-stage{display:flex;gap:12px;justify-content:center;height:38px;align-items:center}
+.coin{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#f6d98a,#c89b3c 68%,#8f6b22);box-shadow:inset 0 0 0 4px rgba(120,84,20,.45),0 3px 8px rgba(0,0,0,.25);animation:coinflip .8s cubic-bezier(.3,.7,.4,1)}
+.coin:nth-child(2){animation-delay:.1s}.coin:nth-child(3){animation-delay:.2s}
+@keyframes coinflip{0%{transform:rotateX(0) translateY(0)}45%{transform:rotateX(540deg) translateY(-22px)}100%{transform:rotateX(1080deg) translateY(0)}}
+/* 通用解读生成动画 */
+.reading{animation:rdin .5s ease}
+@keyframes rdin{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.blessline{margin-top:10px;padding:8px 11px;border-radius:10px;background:linear-gradient(135deg,rgba(var(--pr),.12),rgba(var(--pr),.04));font-size:11.5px;color:var(--tx2);line-height:1.8}
+.blessline b{color:var(--p)}
+/* 灵签 */
+.sign-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;width:100%;max-width:640px}
+.sign-item{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:11px 12px;font-size:12px;line-height:1.7;animation:rdin .55s ease both}
+.sign-item:nth-child(2){animation-delay:.08s}.sign-item:nth-child(3){animation-delay:.16s}.sign-item:nth-child(4){animation-delay:.24s}.sign-item:nth-child(5){animation-delay:.32s}.sign-item:nth-child(6){animation-delay:.4s}
+.sign-item .sl1{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:1px;margin-bottom:3px}
+.sign-item .sl2{font-size:13px;font-weight:800;color:var(--p)}
+.moon-phase{font-size:30px;line-height:1}
+/* ===== 心情打卡（参照心屿） ===== */
+.mood-card{position:relative}
+.emo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:4px}
+.emo{border:1.5px solid var(--bd);background:var(--card);border-radius:13px;padding:11px 2px 9px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:.16s;font-family:inherit;color:var(--tx)}
+.emo:hover{border-color:rgba(var(--pr),.5);transform:translateY(-2px)}
+.emo:active{transform:scale(.95)}
+.emo.sel{border-color:var(--emoc,var(--p));background:color-mix(in srgb,var(--emoc,var(--p)) 12%,var(--card));transform:translateY(-2px);box-shadow:0 5px 14px rgba(28,32,48,.1)}
+.emo .emoi{font-size:23px;line-height:1}
+.emo .emon{font-size:11.5px;color:var(--tx2)}
+.emo.sel .emon{color:var(--tx);font-weight:800}
+.mslider-wrap{margin-top:13px}
+.mslider-top{display:flex;justify-content:space-between;align-items:baseline}
+.mslider-top .mv{font-size:17px;font-weight:800;color:var(--p);font-variant-numeric:tabular-nums}
+.mslider-top .mlab{font-size:12px;color:var(--tx2);font-weight:700}
+input[type=range].mrange{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(90deg,rgba(var(--pr),.25),var(--p));outline:none;margin:11px 0 5px;padding:0;border:none}
+input[type=range].mrange::-webkit-slider-thumb{-webkit-appearance:none;width:21px;height:21px;border-radius:50%;background:var(--card);border:3px solid var(--p);box-shadow:0 2px 9px rgba(0,0,0,.18);cursor:pointer}
+input[type=range].mrange::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--card);border:3px solid var(--p);cursor:pointer}
+.mrange-lb{display:flex;justify-content:space-between;font-size:10.5px;color:var(--mu)}
+.mtags{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.mtag{padding:6px 12px;border-radius:99px;background:var(--bg);border:1.5px solid transparent;color:var(--tx2);font-size:12px;cursor:pointer;transition:.15s;font-family:inherit}
+.mtag:hover{border-color:rgba(var(--pr),.45)}
+.mtag.on{background:var(--p);border-color:var(--p);color:#fff;font-weight:700}
+.mood-sub{font-size:12px;color:var(--tx2);font-weight:800;margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.mood-sub .hint{font-weight:400;color:var(--mu);font-size:11px}
+.mood-stats{display:flex;gap:8px;margin-bottom:13px}
+.mstat{flex:1;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px 4px;text-align:center}
+.mstat b{display:block;font-size:17px;color:var(--p);font-variant-numeric:tabular-nums}
+.mstat span{display:block;font-size:10px;color:var(--mu);margin-top:2px}
+.mood-today{display:flex;flex-direction:column;gap:6px;margin-top:11px}
+.mood-rec{display:flex;align-items:center;gap:9px;background:var(--bg);border:1px solid var(--bd);border-radius:11px;padding:8px 11px;font-size:12px}
+.mood-rec .me{font-size:17px}
+.mood-rec .mm{flex:1;min-width:0}
+.mood-rec .mn{font-weight:800;font-size:12px}
+.mood-rec .ms2{font-size:10.5px;color:var(--mu);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mood-rec .mt{font-size:10.5px;color:var(--mu);flex:none;font-variant-numeric:tabular-nums}
+.mood-rec .md{border:none;background:transparent;color:var(--mu);cursor:pointer;font-size:12px;padding:2px 4px;border-radius:5px}
+.mood-rec .md:hover{color:#e05a4f;background:rgba(224,90,79,.1)}
+.trendbox{margin-top:13px;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px 10px 6px}
+.trendbox .tt{font-size:11px;color:var(--mu);font-weight:800;margin-bottom:2px;padding-left:4px}
+/* 纸屑 */
+.confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:300}
+.confetti-layer i{position:absolute;left:50%;top:38%;width:8px;height:8px;border-radius:2px;animation:cfly 1.15s ease-out forwards}
+@keyframes cfly{to{transform:translate(var(--tx),var(--ty)) rotate(540deg);opacity:0}}
+/* 自建黑话 */
+.gi2 .gops{float:right;display:flex;gap:3px;margin-left:8px}
+.gi2 .gops button{border:none;background:transparent;color:var(--mu);cursor:pointer;font-size:11px;padding:1px 5px;border-radius:5px}
+.gi2 .gops button:hover{background:rgba(var(--pr),.12);color:var(--p)}
+.gi2.mine{border-color:rgba(var(--pr),.45);background:linear-gradient(135deg,rgba(var(--pr),.07),transparent)}
+.gi2.mine b::after{content:'自建';font-size:9px;color:#fff;background:var(--p);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:1px}
+@media(max-width:600px){.emo-grid{grid-template-columns:repeat(4,1fr);gap:7px}.sign-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap tbi">
+    <div class="brand"><span class="logo">📔</span><div><div class="bt">每日台账 × Skill工作台</div><div class="bs" id="brandSub"></div></div></div>
+    <nav class="tabs">
+      <button class="tab active" data-v="daily">每日打卡</button>
+      <button class="tab" data-v="skill">Skill工作台</button>
+      <button class="tab" data-v="oracle">心灵角落</button>
+      <button class="tab" data-v="energy">元气补给站</button>
+    </nav>
+    <div class="ta">
+      <button class="ib" id="btnGloss" title="黑话词典">📖</button>
+      <button class="ib" id="btnTheme" title="明暗">🌙</button>
+      <button class="ib" id="btnSet" title="设置">⚙️</button>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+<!-- 每日打卡 -->
+<section id="view-daily" class="view active">
+  <div class="dg">
+    <div>
+      <div class="card db">
+        <button class="ib" id="prevD">‹</button>
+        <div class="dmid"><div class="dm" id="dMain">—</div><div class="dsub" id="dSub">—</div></div>
+        <button class="ib" id="nextD">›</button>
+        <input type="date" id="dPick">
+        <button class="btn s" id="btnToday">今天</button>
+      </div>
+      <div id="goalList"></div>
+      <div class="card agc"><input id="newGoal" placeholder="➕ 添加今日大目标，如：主试考核 / 秋招推进 / 论文修改"><button class="btn p" id="btnAddGoal">添加</button></div>
+      <div class="card nc"><h3>📝 今日复盘 / 日志</h3><textarea id="noteArea" placeholder="今天完成了什么、卡在哪里、明天第一件事是什么…"></textarea></div>
+    </div>
+    <aside class="ds">
+      <div class="card">
+        <div class="ct"><h3>📊 进度统计</h3></div>
+        <div class="sh"><div class="ring" id="ring"><span>0%</span></div>
+          <div class="sl">
+            <div class="sline"><span>今日完成</span><b id="stToday">0 / 0</b></div>
+            <div class="sline"><span>本周完成率</span><b id="stWeek">0%</b></div>
+            <div class="sline"><span>连续打卡</span><b id="stStreak">0 天</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="ct"><h3>🎂 生日提醒</h3><button class="btn s" id="btnAddBday">+ 添加</button></div><div class="ml" id="bdayList"></div></div>
+      <div class="card"><div class="ct"><h3>⏰ DDL 倒计时</h3><button class="btn s" id="btnAddDDL">+ 添加</button></div><div class="ml" id="ddlList"></div></div>
+    </aside>
+  </div>
+</section>
+<!-- Skill -->
+<section id="view-skill" class="view">
+  <div class="shd"><h2>Skill / Prompt 工作台</h2><p>纯本地：写 Skill、打标签、关键词检索、导出 JSON 分享。不存图片、不存对话记录，只保存文本。</p></div>
+  <div class="tb">
+    <div class="sb"><span class="si">🔍</span><input id="sSearch" placeholder="搜标题 / 标签 / 关键词 / 描述…"></div>
+    <select id="sSort" style="width:auto;min-width:112px"><option value="recent">最近更新</option><option value="hot">使用最多</option><option value="name">按名称</option></select>
+    <button class="btn s" id="btnNewSkill">＋ 新建</button>
+    <button class="btn s" id="btnImpSkill">⬆ 导入</button>
+    <button class="btn s" id="btnExpAll">⬇ 导出全部</button>
+    <label class="btn s g" style="gap:5px;cursor:pointer"><input type="checkbox" id="chkArc" style="width:auto;margin:0"> 显示已归档</label>
+  </div>
+  <div class="cats" id="catTabs"></div>
+  <div class="sgrid" id="sGrid"></div>
+  <div class="pager" id="sPager"></div>
+</section>
+<!-- 心灵角落 -->
+<section id="view-oracle" class="view">
+  <div class="shd"><h2>心灵角落</h2><p>焦虑的时候，抽一张牌、起一卦、看一段命盘。它不是预言，只是一面镜子，帮你把心里的声音说出来。</p></div>
+  <div class="quota" id="quotaBar">
+    <span class="qt">✦ 今日占卜</span>
+    <div class="qdots" id="quotaDots"></div>
+    <span class="qt" id="quotaText">7 / 7</span>
+    <span class="qcd" id="quotaCd"></span>
+    <span class="qtip">每天 7 次占卜机会，所有牌阵与起卦共用；每次至少间隔 1 分钟。结果是镜子不是预言，请理性看待。</span>
+  </div>
+  <div class="otabs">
+    <button class="otab active" data-op="tarot">🃏 塔罗</button>
+    <button class="otab" data-op="hex">☯️ 六爻</button>
+    <button class="otab" data-op="bazi">🔮 八字·紫微</button>
+    <button class="otab" data-op="astro">🌌 星盘</button>
+    <button class="otab" data-op="sign">✨ 每日灵签</button>
+    <button class="otab" data-op="num">🔢 数字仪式</button>
+  </div>
+  <!-- 塔罗 -->
+  <div class="opanel active" id="op-tarot">
+    <div class="card">
+      <div class="ct"><h3>选择你想问的方向</h3></div>
+      <div class="qchips" id="tarotChips"></div>
+      <div class="tstage">
+        <div class="tcard" id="tarotCard"><div class="tparticles" id="tParticles"></div><div class="tinner">
+          <div class="tface tback">✧<small>点击抽牌</small></div>
+          <div class="tface tfront" id="tarotFront"><div class="tfs">🌙</div><div class="tfn">等待抽牌</div><div class="tfa">—</div><div class="tfp">—</div></div>
+        </div></div>
+        <button class="btn p" id="btnDrawTarot">抽一张指引牌</button>
+        <div class="reading" id="tarotReading" hidden></div>
+      </div>
+    </div>
+  </div>
+  <!-- 六爻 -->
+  <div class="opanel" id="op-hex">
+    <div class="card">
+      <div class="ct"><h3>选择你想问的方向</h3></div>
+      <div class="qchips" id="hexChips"></div>
+      <div class="hstage">
+        <div class="hbox" id="hexBox">
+          <div class="hline"><span class="hlb"></span><div class="hy" style="opacity:.18"></div><span class="hmk"></span></div>
+          <div class="hline"><span class="hlb"></span><div class="hy" style="opacity:.18"></div><span class="hmk"></span></div>
+          <div class="hline"><span class="hlb"></span><div class="hy" style="opacity:.18"></div><span class="hmk"></span></div>
+          <div class="hline"><span class="hlb"></span><div class="hy" style="opacity:.18"></div><span class="hmk"></span></div>
+          <div class="hline"><span class="hlb"></span><div class="hy" style="opacity:.18"></div><span class="hmk"></span></div>
+          <div class="hline"><span class="hlb"></span><div class="hy" style="opacity:.18"></div><span class="hmk"></span></div>
+          <div class="hname" id="hexName">待起卦</div><div class="hsub" id="hexSub">—</div>
+        </div>
+        <div class="coin-stage" id="coinStage" hidden><div class="coin"></div><div class="coin"></div><div class="coin"></div></div>
+        <button class="btn p" id="btnCastHex">起 卦</button>
+        <div class="reading" id="hexReading" hidden></div>
+      </div>
+    </div>
+  </div>
+  <!-- 八字紫微 -->
+  <div class="opanel" id="op-bazi">
+    <div class="card">
+      <div class="ct"><h3>随机生成一段命盘摘要</h3></div>
+      <p style="font-size:12px;color:var(--mu);margin:0 0 13px;line-height:1.7">此功能为仪式感随机抽签：从术语库中随机组合日主、格局、大运等关键词，生成一段命盘摘要并给出指引。它不是真实排盘，不作为任何决策依据。</p>
+      <div class="qchips" id="baziChips"></div>
+      <button class="btn p" id="btnDrawBazi" style="margin-bottom:13px">抽取命盘</button>
+      <div class="reading" id="baziReading" hidden></div>
+    </div>
+  </div>
+  <!-- 星盘 -->
+  <div class="opanel" id="op-astro">
+    <div class="card">
+      <div class="ct"><h3>随机生成一张星盘摘要</h3></div>
+      <p style="font-size:12px;color:var(--mu);margin:0 0 13px;line-height:1.7">此功能为仪式感随机抽签：随机组合星座落宫、宫主飞宫、星体相位、小星体与格局，生成一段星盘摘要并给出指引。不是真实排盘。</p>
+      <button class="btn p" id="btnDrawAstro" style="margin-bottom:13px">抽取星盘</button>
+      <div class="reading" id="astroReading" hidden></div>
+    </div>
+  </div>
+  <!-- 每日灵签 -->
+  <div class="opanel" id="op-sign">
+    <div class="card">
+      <div class="ct"><h3>每日灵签 · 玄学小贴士</h3></div>
+      <p style="font-size:12px;color:var(--mu);margin:0 0 13px;line-height:1.7">抽一张综合灵签：真实月相 + 天使数字 + 今日水晶 + 脉轮提醒 + 如尼符文 + 幸运指引与宜忌。这是一份仪式感小礼物，不构成任何预测。</p>
+      <div class="tstage" style="padding-top:6px">
+        <button class="btn p" id="btnDrawSign">抽今日灵签</button>
+        <div id="signResult" hidden style="width:100%;display:flex;flex-direction:column;align-items:center;gap:13px"></div>
+      </div>
+    </div>
+  </div>
+  <!-- 数字仪式 -->
+  <div class="opanel" id="op-num">
+    <div class="card">
+      <div class="ct"><h3>数字仪式（结合梅花易数）</h3></div>
+      <p style="font-size:12px;color:var(--mu);margin:0 0 13px;line-height:1.7">输入任意三个 0-9 的数字（比如此刻脑海里冒出来的数），或让系统随机摇三个数字。系统用梅花易数取余映射到八组关键词，抽一个词作为今日主题，并推荐一个歌曲类别。这一步只是增加仪式感，不构成任何预测。</p>
+      <div class="numbox">
+        <input class="num" id="n1" placeholder="?" maxlength="2" inputmode="numeric">
+        <input class="num" id="n2" placeholder="?" maxlength="2" inputmode="numeric">
+        <input class="num" id="n3" placeholder="?" maxlength="2" inputmode="numeric">
+        <button class="btn s" id="btnRollNum">🎲 随机 roll 一组</button>
+        <button class="btn p s" id="btnCastNum">取 卦</button>
+      </div>
+      <div class="reading" id="numReading" hidden style="margin-top:15px"></div>
+    </div>
+  </div>
+</section>
+<!-- 元气补给站 -->
+<section id="view-energy" class="view">
+  <div class="shd"><h2>元气补给站</h2><p>心理学小方法、短名言、趣味打气、自我肯定，再加一个心情小故事生成器。全部本地文本，不联网、不调用 AI。</p></div>
+  <div class="stage">
+    <div>
+      <div class="card" style="margin-bottom:15px">
+        <div class="ct"><h3>✨ 今日打气卡</h3><button class="btn s" id="btnNextEg">换一张</button></div>
+        <div class="egcard"><span class="egtype" id="egType">—</span><div class="egtxt" id="egText">加载中…</div></div>
+        <div class="egacts"><button class="btn s" id="btnFavEg">⭐ 收藏</button><button class="btn s" id="btnCopyEg">📋 复制</button></div>
+      </div>
+      <div class="card mood-card" style="margin-bottom:15px">
+        <div class="ct"><h3>😊 心情打卡</h3><span style="font-size:10.5px;color:var(--mu)">花一分钟，把此刻的自己接住</span></div>
+        <div class="mood-stats" id="moodStats"></div>
+        <div class="mood-sub">此刻的心情</div>
+        <div class="emo-grid" id="emoGrid"></div>
+        <div class="mslider-wrap">
+          <div class="mslider-top"><span class="mlab">强烈程度</span><span class="mv"><span id="intenVal">5</span><span style="font-size:11px;color:var(--mu);font-weight:400"> /10</span></span></div>
+          <input type="range" class="mrange" id="intenRange" min="1" max="10" step="1" value="5">
+          <div class="mrange-lb"><span>轻微</span><span>强烈</span></div>
+        </div>
+        <div class="mood-sub">是什么引发的？<span class="hint">可多选</span></div>
+        <div class="mtags" id="moodTags"></div>
+        <div class="mood-sub">想多说一点吗？<span class="hint">选填</span></div>
+        <textarea id="moodNote" maxlength="300" placeholder="写下此刻的念头，不用修饰，只写给自己看…" style="min-height:64px"></textarea>
+        <button class="btn p" id="btnSaveMood" style="width:100%;margin-top:12px;padding:11px">打卡 · 记录下来</button>
+        <div class="mood-today" id="moodToday"></div>
+        <div class="trendbox" id="moodTrendBox"><div class="tt">近 7 天情绪走势 · 0 低落 / 10 愉快</div><div id="moodTrend"></div></div>
+      </div>
+      <div class="card">
+        <div class="ct"><h3>🎲 数字仪式</h3></div>
+        <p style="font-size:11.5px;color:var(--mu);margin:0 0 10px;line-height:1.7">输入三个 0-9 的数字，或让系统摇。结合梅花易数取余映射到关键词组，抽一个词并推荐歌曲类别。只是仪式感。</p>
+        <div class="numbox">
+          <input class="num" id="e1" placeholder="?" maxlength="2" inputmode="numeric">
+          <input class="num" id="e2" placeholder="?" maxlength="2" inputmode="numeric">
+          <input class="num" id="e3" placeholder="?" maxlength="2" inputmode="numeric">
+          <button class="btn s" id="btnRollE">🎲 摇一组</button>
+          <button class="btn p s" id="btnCastE">取 卦</button>
+        </div>
+        <div class="reading" id="eReading" hidden style="margin-top:13px"></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="ct"><h3>📖 心情小故事生成器</h3></div>
+        <div class="story-stage">
+          <div class="round-info" id="roundInfo">第 1 轮 / 共 3 轮，选 1 个词</div>
+          <div class="story-cand" id="storyCand"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn s" id="btnRefreshCand">🔄 换一批候选</button>
+            <button class="btn s" id="btnResetStory">↺ 重来</button>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:var(--tx2);font-weight:700">已选关键词：<span id="pickedKeys" style="color:var(--p)">（尚未选择）</span></div>
+          <div class="pacts" style="margin-top:12px">
+            <button class="btn p" id="btnGenStory" disabled>✨ 生成故事</button>
+            <button class="btn" id="btnCopyStoryPrompt">📋 复制豆包 Prompt</button>
+          </div>
+          <div class="story-text" id="storyText" style="display:none"></div>
+          <div class="pacts" style="margin-top:10px">
+            <button class="btn s" id="btnAddStoryToNote" style="display:none">📝 写入今日日志</button>
+            <button class="btn s" id="btnCopyStory" style="display:none">📋 复制故事</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<div class="dmask" id="dMask"></div>
+<aside class="drawer" id="drawer"></aside>
+<div class="mmask" id="mMask"><div class="modal" id="mBox"></div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileSkill" accept=".json,application/json" style="display:none">
+<input type="file" id="fileLedger" accept=".json,application/json" style="display:none">
+<script>
+/* ============================================================
+   0. 工具
+============================================================ */
+const $=s=>document.querySelector(s), $$=s=>Array.prototype.slice.call(document.querySelectorAll(s));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const pad2=n=>String(n).padStart(2,'0');
+const fmtD=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+const parseD=s=>{const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const todayS=()=>fmtD(new Date());
+const sod=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const dayDiff=(a,b)=>Math.round((sod(a)-sod(b))/864e5);
+const WK=['日','一','二','三','四','五','六'];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const h2r=h=>{const x=h.replace('#','');return parseInt(x.slice(0,2),16)+','+parseInt(x.slice(2,4),16)+','+parseInt(x.slice(4,6),16)};
+let toastT=null;
+function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('show'),2300)}
+function copyT(t){
+  if(navigator.clipboard&&window.isSecureContext){return navigator.clipboard.writeText(t).then(()=>true).catch(()=>fbCopy(t))}
+  return Promise.resolve(fbCopy(t));
+}
+function fbCopy(t){
+  try{const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.top='-1000px';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');document.body.removeChild(ta);return ok}catch(e){return false}
+}
+/* ============================================================
+   1. 存储（分 key 减负）
+============================================================ */
+const KEY={ledger:'lg_v3',skills:'sk_v3',arch:'ar_v3',stats:'st_v3',enc:'enc_v3',story:'stry_v3',gloss:'glc_v1',mood:'md_v1',oracle:'orc_v1'};
+function lj(k,f){try{const r=localStorage.getItem(k);if(!r)return f;const v=JSON.parse(r);return v==null?f:v}catch(e){return f}}
+function defLg(){return{checkins:{},birthdays:[],ddls:[],user:{birthday:''},setting:{mode:'light',useZodiac:true,remindDays:7}}}
+let ledger=lj(KEY.ledger,defLg());
+let customSkills=lj(KEY.skills,[]);
+let archives=lj(KEY.arch,{});
+let stats=lj(KEY.stats,{});
+let encLib=lj(KEY.enc,{list:[],lastShowId:''});
+let storyRec=lj(KEY.story,[]);
+let myGloss=lj(KEY.gloss,[]);
+let moodRec=lj(KEY.mood,[]);
+let orc=lj(KEY.oracle,{date:todayS(),used:0,last:0});
+if(orc.date!==todayS())orc={date:todayS(),used:0,last:0};
+['checkins','birthdays','ddls','user','setting'].forEach(k=>{if(ledger[k]===undefined)ledger[k]=defLg()[k]});
+const tmr={};
+function saveK(k,v){clearTimeout(tmr[k]);tmr[k]=setTimeout(()=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('保存失败：本地存储可能已满，请清理旧数据')}},200)}
+const saveLg=()=>saveK(KEY.ledger,ledger);
+const saveSk=()=>saveK(KEY.skills,customSkills);
+const saveAr=()=>saveK(KEY.arch,archives);
+const saveSt=()=>saveK(KEY.stats,stats);
+const saveEnc=()=>saveK(KEY.enc,encLib);
+const saveStory=()=>saveK(KEY.story,storyRec);
+const saveGloss=()=>saveK(KEY.gloss,myGloss);
+const saveMood=()=>saveK(KEY.mood,moodRec);
+const saveOrc=()=>saveK(KEY.oracle,orc);
+function usage(){let b=0;Object.keys(KEY).forEach(k=>{const v=localStorage.getItem(KEY[k]);if(v)b+=(v.length+k.length)*2});return b}
+function fmtB(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(2)+' MB'}
+/* ============================================================
+   2. 主题
+============================================================ */
+const ZODIAC={'白羊座':'#e25c4f','金牛座':'#4c8c5a','双子座':'#d99a1c','巨蟹座':'#6f9fc4','狮子座':'#e08a2e','处女座':'#5f8a6a','天秤座':'#cf7fa8','天蝎座':'#7a4a7e','射手座':'#5b6fd0','摩羯座':'#5a6472','水瓶座':'#3f8fbf','双鱼座':'#8a7bc8'};
+const ZS=['摩羯座','水瓶座','双鱼座','白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座'];
+const ZC=[20,19,21,20,21,22,23,23,23,24,23,22];
+function getZ(m,d){return d<ZC[m-1]?ZS[m-1]:ZS[m%12]}
+function applyTheme(){
+  document.documentElement.dataset.mode=ledger.setting.mode;
+  $('#btnTheme').textContent=ledger.setting.mode==='dark'?'☀️':'🌙';
+  let c='#5b6fd0';
+  if(ledger.setting.useZodiac&&ledger.user.birthday){const p=ledger.user.birthday.split('-').map(Number);const z=getZ(p[1],p[2]);if(ZODIAC[z])c=ZODIAC[z]}
+  document.documentElement.style.setProperty('--p',c);
+  document.documentElement.style.setProperty('--pr',h2r(c));
+}
+/* ============================================================
+   3. 农历
+============================================================ */
+const LI=[0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,0x06566,0x0d4a0,0x0ea50,0x06e95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,0x06ca0,0x0b550,0x15355,0x04da0,0x0a5b0,0x14573,0x052b0,0x0a9a8,0x0e950,0x06aa0,0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b6a0,0x195a6,0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x05ac0,0x0ab60,0x096d5,0x092e0,0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,0x05aa0,0x076a3,0x096d0,0x04afb,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0,0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x168a6,0x0ea50,0x06b20,0x1a6c4,0x0aae0,0x0a2e0,0x0d2e3,0x0c960,0x0d557,0x0d4a0,0x0da50,0x05d55,0x056a0,0x0a6d0,0x055d4,0x052d0,0x0a9b8,0x0a950,0x0b4a0,0x0b6a6,0x0ad50,0x055a0,0x0aba4,0x0a5b0,0x052b0,0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d160,0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a2d0,0x0d150,0x0f252,0x0d520];
+const LBASE=Date.UTC(1900,0,31), LM=['正','二','三','四','五','六','七','八','九','十','冬','腊'], LD=['初一','初二','初三','初四','初五','初六','初七','初八','初九','初十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十','廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'];
+function lm(y){return LI[y-1900]&0xf}
+function lmd(y){return lm(y)?((LI[y-1900]&0x10000)?30:29):0}
+function md(y,m){return(LI[y-1900]&(0x10000>>m))?30:29}
+function lyd(y){let s=348;for(let i=0x8000;i>0x8;i>>=1)s+=(LI[y-1900]&i)?1:0;return s+lmd(y)}
+function s2l(y,m,d){
+  let o=Math.round((Date.UTC(y,m-1,d)-LBASE)/864e5);
+  if(o<0||o>73000)return null;
+  let i,t=0;for(i=1900;i<2101&&o>0;i++){t=lyd(i);o-=t}
+  if(o<0){o+=t;i--}
+  const ly=i,lp=lm(ly);let il=false;
+  for(i=1;i<13&&o>0;i++){
+    if(lp>0&&i===lp+1&&!il){--i;il=true;t=lmd(ly)}else{t=md(ly,i)}
+    if(il&&i===lp+1)il=false;o-=t;
+  }
+  if(o===0&&lp>0&&i===lp+1){if(il)il=false;else{il=true;--i}}
+  if(o<0){o+=t;--i}
+  return{year:ly,month:i,day:o+1,isLeap:il};
+}
+const lc=new Map();
+function lof(y,m,d){const k=y+'-'+m+'-'+d;if(!lc.has(k))lc.set(k,s2l(y,m,d));return lc.get(k)}
+function l2s(ml,dl,y){for(let d=new Date(y,0,1);d.getFullYear()===y;d.setDate(d.getDate()+1)){const l=lof(d.getFullYear(),d.getMonth()+1,d.getDate());if(l&&l.month===ml&&l.day===dl)return new Date(d)}return null}
+/* ============================================================
+   4. 词库：150 词 × 3 句
+============================================================ */
+const WORDS=[
+["微光","加班到很晚的时候，走廊尽头总还留着一小片微光，像在等你收工。","不必等到整个人生都亮起来，你心里那一点微光也够照亮下一步。","今天先做一件让那点微光变大一点的小事，比如把最想逃开的任务打开看一眼。"],
+["晨光","晨光落在桌角的时候，一天还没被任何人评价过，它是干净的。","你可以在晨光里慢半拍醒来，不用一睁眼就进入战斗状态。","明早给自己留十分钟，只晒一会儿晨光，不刷手机。"],
+["暖阳","冬天的暖阳很吝啬，但落在手背上那一点，足够让人愿意多站一会儿。","你值得被暖阳一样的东西对待，哪怕那点温度是你自己给的。","今天找一处有光的地方坐五分钟，把肩膀放松下来。"],
+["余晖","太阳落下去以后，天边还留着一段余晖，说明结束也可以很好看。","你不必在余晖里清算今天所有的失误，天色暗下来本就该休息。","把今天的待办划掉一半，剩下的留给还有余晖的明天。"],
+["烛火","停电的夜里点一支烛火，房间小了一圈，心反而安静了。","世界再嘈杂，你也能守住自己那一小簇烛火，不让它被风吹灭。","睡前关掉所有屏幕，只留一盏小灯，让烛火一样的安静陪着你。"],
+["萤火","夏夜的萤火不照亮整片林子，只在自己的方寸里亮一下。","你的努力也像萤火，微小但真实，不需要照亮所有人的路。","记录一件今天做到的小事，别让它像萤火一样闪完就没了。"],
+["星芒","抬头的时候，星芒细得几乎看不见，可它确实在那里。","你不必成为最亮的那颗星芒，只要还在自己的轨道上就行。","今晚出门走两步，看一眼天上的星芒，提醒自己不必那么用力。"],
+["月色","月色把楼道照得很淡，疲惫的人走在里面也不显得狼狈。","你可以在月色里承认自己累了，不用等到崩溃才允许休息。","关灯前把明天的第一件事写下来，让月色先替你把这件事记住。"],
+["薄雾","清早的薄雾让人看不清远处，但脚下的路还是能走。","看不清未来的时候，就当是薄雾，你先走眼前这几步。","今天只规划接下来一小时的事，薄雾散去再说。"],
+["初雪","初雪落下来的时候，城市忽然安静，像被谁轻轻按了暂停。","你也值得给自己一场初雪，把心里那些吵闹的念头盖一层白。","找一件与效率无关的事做十分钟，比如只是看窗外。"],
+["晴日","晴日里连阴影都变得清晰，人的轮廓也跟着利落起来。","你可以在晴日里什么都不做，只是待着也很好。","今天把一件拖了很久的小事办掉，让晴日替你收个尾。"],
+["雨天","雨天的窗户上挂着水痕，世界被擦得模糊，反而没那么咄咄逼人。","你可以在雨天降低对自己的要求，天气本就不适合冲刺。","今天就选一件室内能完成的事，其余的顺延，不算失败。"],
+["彩虹","彩虹出现得很短，短到大部分人只来得及惊呼一声。","你不必追着彩虹跑，能看见一次就已经足够。","今天给自己留一个只为了开心的空档，哪怕只有十分钟。"],
+["云隙","云层很厚的时候，光还是能从云隙里挤下来一小束。","再密的日程也有云隙，只要你不把它全部填满。","在今天的安排里留一个空格，什么都不放。"],
+["灯下","灯下摊开的书和笔记，是一个人认真生活的证据。","你在灯下做的每一点努力，都在替未来的自己攒底气。","今晚在灯下只做一件事，做完就关灯，不追加。"],
+["窗台","窗台上放一杯水，阳光会替它镀一层金边。","你的心也需要一个窗台，能放点没用但让自己舒服的东西。","今天整理一下桌面的一个小角落，给心情腾个窗台。"],
+["屋檐","下雨时屋檐替人挡了一阵，走进去的人会自然地松口气。","你也可以做自己的屋檐，先把自己护住，再去应付外面。","感到被冒犯时先退半步，回到自己的屋檐下再回应。"],
+["倒影","雨后的水洼里有倒影，路人低头才看见另一个世界。","你偶尔在别人的评价里看到自己的倒影，但那不是你本人。","今天听到一句不好听的话，先问自己：这是事实还是倒影。"],
+["光影","光影在墙上慢慢挪，时间就这样被看见了。","你不必把每一分钟都填满，光影挪过去也算一天没白过。","今天留十五分钟什么都不做，只看着光影走。"],
+["亮处","站在亮处的人容易被看见，站在暗处的人也在往前走。","你不必急着挤到亮处，先把手上的事做好。","今天把一件做得不错的事写下来，自己给自己打一次光。"],
+["新芽","花盆里冒出新芽的时候，没人记得它之前枯了多久。","你身上也还有新芽，只要不天天拿它和别人的花期比。","今天做一件小小的新尝试，给新芽一点土壤。"],
+["破土","种子破土的时候没有声音，只有它自己知道费了多大力气。","你的破土期不需要别人看见，慢一点也算在长。","把今天最难开始的那一步，先破土一米。"],
+["扎根","树是先扎根再长高的，人却常常想跳过这一步。","你可以允许自己在扎根的阶段看起来毫无进展。","今天重复一件基础的小事，比如背二十个词、走三千步。"],
+["抽枝","春天抽枝的时候，枝桠伸向哪边没人规定。","你也可以往自己想去的地方抽枝，不必都长成同一个形状。","今天尝试一种新的做事顺序，看看会不会更顺。"],
+["舒展","猫醒来会先把身体舒展一遍，才开始做别的事。","你也值得让自己舒展，而不是一直蜷着应付任务。","现在做一次肩颈拉伸，让身体先舒展。"],
+["生长","生长从来不是匀速的，有时猛长，有时几乎停住。","你的生长也允许有停滞期，那不是退步。","今天记录一个比上周好一点的地方，给生长留个刻度。"],
+["花开","花开得早的那株，不一定开得久。","你不必急着在别人的时间点花开。","今天为一件还没结果的事浇一次水，做完就放下。"],
+["落叶","落叶不是树的失败，是它主动做的减法。","你也需要落叶一样的减法，舍掉一些扛不动的东西。","今天删掉一件并不重要的待办，允许它落地。"],
+["年轮","树的年轮不会说谎，宽的一年窄的一年都留在里面。","你的年轮里有松有紧，这才是一条完整的生命线。","今天回看一次过去半年的记录，看看年轮里的自己。"],
+["苔痕","石阶上的苔痕长得很慢，但一年后就铺满了。","你的进步也可能像苔痕，肉眼看不见却在蔓延。","今天保留一件坚持了很久的小习惯，哪怕只做一半。"],
+["根系","看得见的枝叶下面，是没人注意的根系。","你在没人看见的地方积累的根系，正在稳稳托住你。","今天补一次基础功，给根系浇水。"],
+["枝头","枝头的果子要等，等不到的时候人容易怀疑树。","你不必怀疑自己，只是枝头还没到时候。","今天把准备期的一件材料再完善一点，等枝头成熟。"],
+["藤蔓","藤蔓不挑方向，给它一面墙它就能爬上去。","你也可以像藤蔓一样借一点外力，不必什么都靠自己硬撑。","今天向一个人求助或提问，让藤蔓有地方可攀。"],
+["种子","种子在土里的时候，看上去和一颗石子没区别。","你现在的沉默期也许正是一颗种子在酝酿。","今天种下一个长期想法，只写下第一步。"],
+["叶脉","逆光看叶脉，才知道一片叶子藏着多少条细路。","你身上也有很多条叶脉，不必只走一条路。","今天给一个被搁置的备选路径留十分钟。"],
+["花期","花期长短不同，有的花只开三天，有的开一整季。","你的花期由你自己定，不必按别人的日历开花。","今天取消一个“应该做”但不想做的安排。"],
+["拔节","竹子拔节的夜里会有一点声响，长得快的人自己也会被吓到。","你拔节的时候会不适应，那是正常的水土不服。","今天给自己多留半小时缓冲，别把拔节期排满。"],
+["成熟","果子成熟的标准只有一个：它自己变甜了。","你的成熟不必由别人的评价盖章。","今天肯定一件自己做得比从前好的事，写具体一点。"],
+["结穗","稻子结穗的时候会低下头，不是因为羞愧，是因为沉。","你不必时时昂着头证明自己，沉下来也是一种结穗。","今天安静地做完一件事，不汇报、不炫耀。"],
+["林间","林间的路很多，走错一条也还是能进山。","你在林间绕的那几圈，也是在熟悉这片地形。","今天允许自己换一种方式做事，不必守着旧路线。"],
+["慢行","慢行的人能看见路边小店的招牌换了颜色。","你选择慢行，不是能力不够，是不想把生活全用来赶路。","今天有一段路不赶时间，慢行过去。"],
+["停顿","音乐里的停顿不是空白，是让下一句更好听。","你的停顿也是结构的一部分，不是断掉。","今天在两个任务之间停五分钟，什么都不做。"],
+["喘息","长跑的人都知道，喘息是继续跑下去的必要条件。","你需要喘息，而不是需要被指责不够努力。","今天安排一次真正的喘息，把提醒关掉。"],
+["留白","画面上留白的地方，反而最让人放松。","你也需要在日程里留白，让心有地方落脚。","今天把一个时段留白，不预定任何事。"],
+["静待","静待不是放弃，是把力气从焦虑里收回来。","你愿意静待一段时间，让结果自己长出来。","今天对一件没有回音的事，停止反复刷新。"],
+["慢渡","慢渡的人不催船，也不催自己。","你可以慢渡这一段，把过程也过成生活。","今天把一件急着完成的事，拆成三天做。"],
+["缓坡","缓坡比陡坡慢，但能让人一直走上去。","你给自己选的缓坡，是可持续的那种努力。","今天把目标调低一档，走缓坡上去。"],
+["驻足","驻足看了一会儿橱窗，那天忽然变得具体。","你值得偶尔驻足，才不至于把日子过成一串勾选框。","今天在一个喜欢的地方驻足两分钟，认真看一眼。"],
+["休憩","休憩的人和偷懒的人看起来一样，其实是两种心情。","你的休憩是充电，不是欠债。","今天给自己一次不带愧疚的休憩。"],
+["松弛","松弛的人呼吸是往下走的，不像紧张时悬在胸口。","你可以练着松弛，而不是逼自己随时紧绷。","现在深呼吸三次，让肩膀先松弛。"],
+["散步","散步时冒出来的想法，常常比坐着想的时候更清楚。","你需要散步这样的低强度思考，不是每件事都要硬想。","今天出门散步十五分钟，不带目的地。"],
+["午睡","午睡二十分钟，下午的世界会温和很多。","你值得一个午睡，不是非得熬到眼睛发干。","今天安排一次午睡，把闹钟设好，安心睡。"],
+["发呆","发呆的时候，脑子在悄悄整理那些没消化的东西。","你需要发呆的权利，别把它当成浪费。","今天给自己五分钟发呆，不看手机。"],
+["早睡","早睡的人第二天会多出一点余地。","你把早睡当成给明天的自己留余地，而不是牺牲。","今晚提前半小时放下手机，试试早睡。"],
+["慢跑","慢跑的人不追配速，只追那种身体被唤醒的感觉。","你做事的节奏也可以像慢跑，稳而不喘。","今天用慢跑的心态做完一件拖了很久的事。"],
+["沏茶","沏茶要等水开、等叶展，急不来。","你也要学会沏茶一样地对待自己，允许有等待的过程。","今天泡一杯热的，喝完再做下一件事。"],
+["翻书","翻书翻到一半停下来，句子会在心里继续走。","你不必一口气读完所有该读的东西，翻书本就该有停。","今天读十页就合上，记住一句就够。"],
+["收尾","收尾比开头难，因为人总想再多做一点。","你可以允许自己在七十分的位置收尾，不必凑到一百。","今天选一件做到七十分的事，正式收尾。"],
+["启程","启程那天往往没有仪式，只有一张车票和一个念头。","你的启程不必等到万事俱备。","今天为一件想做的事，只做启动动作。"],
+["循环","循环的意思是，今天没做好，明天还会再来一次。","你在循环里慢慢变好，而不是在循环里被审判。","今天把一件失败的事重新放进明天的清单，温柔地再试一次。"],
+["松绑","松绑先从松开一个念头开始，比如“必须现在就成功”。","你愿意给自己松绑，把那些过紧的标准调松一格。","今天删掉一条自己给自己加的规矩。"],
+["释怀","释怀不是忘记，是想起时不再疼。","你可以慢慢释怀，不必强迫自己马上想通。","今天写下一件还放不下的事，写完折起来收好。"],
+["和解","和解有时候只是承认：那次我确实尽力了。","你愿意和过去的自己和解，他当时知道的没你现在多。","今天对一件旧事说一句“那时也不容易”。"],
+["自愈","自愈的过程没有旁观者，全靠自己一点点缓过来。","你的自愈速度不必和别人比。","今天做一件明确对自己好的事，哪怕很小。"],
+["重启","重启不需要从零开始，只要从停下的地方再动一下。","你可以多次重启，这是系统正常功能。","今天把停了三天的习惯重启一次，只做最小量。"],
+["拾光","拾光的人会把地上散落的片刻捡起来。","你愿意做自己的拾光者，记下那些被忽略的好。","今天写下三件今天还不错的小事。"],
+["拾获","一次失败的面试里，也能拾获一句有用的反馈。","你在每件事里拾获一点东西，就不算白过。","今天从一件不顺利的事里，找出一个收获写下来。"],
+["蓄力","蓄力的时候看不出动静，只有自己知道在攒。","你的蓄力期不需要向任何人解释。","今天补一件基础的事，安静地蓄力。"],
+["沉淀","沉淀需要静，而静常常被误认为停滞。","你愿意让情绪先沉淀，再决定说什么。","今天遇到情绪上头时，先放十五分钟再回复。"],
+["回望","回望一段走过的路，会发现自己比记忆里走得远。","你回望是为了看清楚，不是为了责备。","今天翻一次三个月前的记录，看看自己的变化。"],
+["放下","放下一样东西，手才会空出来拿别的。","你可以放下一些已经不属于你的目标。","今天从清单里划掉一件其实不想做的事。"],
+["拥抱","拥抱不必来自别人，自己抱住肩膀也算。","你需要被拥抱，包括被自己拥抱。","今天在难受的时候，把手放在心口停十秒。"],
+["允许","允许是给自己开一扇不锁的门。","你允许自己有状态差的一天，也允许它过去。","今天说一次“我今天状态一般，但我还在”。"],
+["接纳","接纳不是认输，是先承认现状再往前走。","你接纳此刻的自己，包括那些还不满意的部分。","今天写下自己的一个缺点，不评判，只描述。"],
+["自洽","自洽的人说起自己的选择时，语气是平的，不需要辩解。","你正在慢慢长成一个说得通、也活得下去的自己。","今天为一个小决定说出真正的理由，哪怕只是“我就是想”。"],
+["原谅","原谅有时候不是对别人，是对那个当时没做好的自己。","你可以原谅自己曾经的无能为力。","今天对一件旧事补一句“没关系，那已经是过去”。"],
+["温柔","温柔的人走路会绕开水洼，不是因为怕湿，是因为怕踩碎倒影。","你值得用温柔的方式对待自己，而不是拿鞭子赶自己。","今天用你最想被对待的语气，跟自己说一句话。"],
+["笃定","笃定的人不急着解释，他知道自己的方向在哪。","你也可以在不被理解的时候，安静地相信自己一次。","今天为自己做了一个小决定，不再反复推演。"],
+["安宁","安宁的房间不需要很大，只要没有人在催你。","你有权过一段安静的日子，不必时刻都在响。","今天给自己十分钟，把能关的通知都关掉。"],
+["勇气","勇气不是不害怕，是害怕的时候还是往前挪了一小步。","你已经有过很多次勇气，只是你习惯把它叫做“硬撑”。","今天做一件让你稍微有点怕、但你知道该做的事。"],
+["陪伴","陪伴不需要说话，坐在同一盏灯下，各自做各自的事也算。","你不必总是那个照顾别人的人，也可以让人陪你坐一会儿。","今天约一个人吃饭，或者只发一句“在吗”。"],
+["倾听","倾听的人不急着给答案，他只是把你说的话好好接住。","你也需要一个能好好听你说话的人，而不是一直做那个倾听者。","今天找一个人，说完一件事，不要求对方解决。"],
+["共情","共情是你描述一件小事，对方说“我懂”，然后你就没那么孤单了。","你值得被理解，不必每次都先解释清楚才有资格难过。","今天跟一个懂你的人说一句真心话。"],
+["边界","边界是一道半开的门，能关，也能开，钥匙在你手里。","你可以拒绝，不必为每一次“不”附赠一份解释。","今天拒绝一件明显超出你承受范围的事。"],
+["求助","求助不是把问题丢给别人，是给问题多一条出口。","你不是非得一个人扛，求助是能力，不是软弱。","今天把一件卡住的事说给一个人听。"],
+["谢谢","谢谢说得具体一点，对方会记得更久。","你今天也可以谢谢自己，为一件别人看不见的坚持。","今天对一个人说一次具体的谢谢，也对自己说一次。"],
+["歉疚","歉疚像一件湿衣服，穿着不舒服，脱下来也不算什么罪过。","你可以为做过的事道歉，但不必为存在本身道歉。","今天把一件反复自责的事，写下“我尽力了”。"],
+["重逢","重逢的意义在于，你们在各自的地方都长了一点。","你不必勉强维系所有关系，留下来的那些才需要你用力。","今天给一个很久没联系的人发条消息，不必长。"],
+["告别","告别的正确方式，是把话说完整，然后转身。","你可以舍不得，但不必因此留在原地。","今天为一件已经结束的事，正式说一句“到此为止”。"],
+["孤独","孤独的时候，房间会显得比实际大一圈。","孤独不等于有问题，有时候只是你需要慢一点靠近人。","今天出门走一段路，去有人但不吵的地方。"],
+["疏离","疏离有时候是一种保护，先退开一点，才看得清。","你可以暂时不参与，不必为“不合群”道歉。","今天允许自己在一个场合里少说几句话。"],
+["靠近","靠近是从一句无关紧要的废话开始的。","你值得被靠近，也值得主动靠近别人一次。","今天对一个人多说一句话，比平时多一句就好。"],
+["托付","托付是相信对方能接住，也是相信自己可以松手。","你不必把所有事都攥在手里，分出去一点不会塌。","今天把一件小事交给别人做，不返工检查。"],
+["守候","守候的人不催，他知道有些事只能等。","你也可以守候自己一段时间，等状态回来。","今天对一件还没结果的事，先不追问。"],
+["分寸","分寸是知道什么时候该近一点，什么时候该退半步。","你可以既真诚又有界限，两者不冲突。","今天在一段对话里，练习说“这个我不太想聊”。"],
+["坦诚","坦诚不是把伤口全摊开，是至少对自己不说假话。","你可以诚实地说“我不知道”“我还没想好”。","今天对一个人说一次真实的想法，哪怕很小。"],
+["温柔以待","温柔以待不是软弱，是把刀放下，改用别的方式。","你对自己温柔一点，效率反而会回来。","今天做一件照顾自己的小事，不设任何条件。"],
+["被看见","被看见的那一刻，人会觉得之前那些努力都算数。","你希望被看见，这很正常，不必假装不在乎。","今天主动把自己做的一件事说出来。"],
+["回声","回声是你喊出去之后，世界返回来的那一点声音。","你给出去的善意不会立刻回来，但它会以别的形式回来。","今天对一个人释放一点善意，不期待回应。"],
+["留一盏灯","留一盏灯，是告诉晚归的人这里还有人等。","你也可以给自己留一盏灯，不让自己走丢。","今天为明天的自己准备一件顺手的事。"],
+["呼吸","紧张的时候呼吸会跑到胸口，慢下来的呼吸会回到腹部。","你随时可以用一次深呼吸，把身体叫回现在。","现在做三次深呼吸，呼气比吸气长一点。"],
+["心跳","心跳快的时候，人会误以为自己很糟，其实只是身体在准备。","心跳是身体在响应你，不是它在背叛你。","今天在心跳加快时，先不做决定，等它缓下来。"],
+["肩颈","肩颈是最先记住压力的地方，它比嘴诚实。","你不必等到酸痛才允许自己放松。","现在把肩膀向上耸，五秒后放下，做三次。"],
+["脚步","走路的时候，脚步的节奏会慢慢把情绪带稳。","你不需要想清楚再走，走着走着就清楚了。","今天出门走十分钟，只注意脚下。"],
+["掌心","掌心贴一下热水杯，整个人会先暖一半。","你需要的安慰有时候很具体，比如一点温度。","今天给自己倒一杯热的，双手握住。"],
+["温度","温度是身体最早感知到的善意。","冷的时候加一件衣服，这不是娇气，是照顾。","今天检查一下自己冷不冷，然后加件衣服。"],
+["味觉","认真吃完一顿饭，是件很容易被忽略的自我照顾。","你的情绪有时候需要一个具体的味道来接住。","今天专心吃一顿饭，不刷手机。"],
+["香气","熟悉的香气会把人带回安全的地方。","你可以用一点气味，把自己从焦虑里拉出来。","今天闻一闻喜欢的东西，咖啡、洗衣液、水果都行。"],
+["触感","摸一摸粗糙的桌面，人会被带回现实。","你焦虑的时候，触感是最快把你拉回来的东西。","今天摸三样东西，认真感受它们的质地。"],
+["汗水","出汗之后的身体是轻的，脑子也常常跟着轻。","你不需要每天都拼命，但可以给身体一次舒展的机会。","今天让自己出一次汗，走路、跳绳、拉伸都算。"],
+["饥饿","饿的时候情绪会变差，这几乎是生理规律。","你不需要靠忍饿来证明自律。","今天饿了就吃，不必等到规定时间。"],
+["睡眠","睡不好的人，会以为是自己不够好，其实只是没休息好。","你今天的状态差，可能不是能力问题，是睡眠问题。","今晚提前半小时上床，哪怕只是躺着。"],
+["眼睛","长时间盯着屏幕之后，眼睛会先累，然后才是情绪。","你需要让眼睛休息，就像需要让心休息。","今天每小时看一次远处，二十秒就好。"],
+["耳朵","安静的环境里，耳朵会先松下来。","你也可以给自己几分钟，只听一种声音。","今天戴上耳机，听一首不带歌词的曲子。"],
+["走路","走路的时候，人会从脑子回到身体里。","你不需要解决所有问题，先走完这一段。","今天绕一段远路回家。"],
+["拉伸","拉伸的时候人会发现自己原来绷得这么紧。","你值得每天给自己三分钟，什么都不想，只拉伸。","现在站起来，向上伸一次懒腰。"],
+["热水","洗热水澡的时候，一天的边界会被慢慢冲掉。","你有权用一件小事，把今天和明天分开。","今晚洗澡时多站两分钟，什么都不想。"],
+["干净","收拾干净的桌面，会让人多出一点做事的力气。","你不需要一次收拾完，收一个角落也算。","今天只清掉桌上一样不需要的东西。"],
+["声息","房间里有一点空调声、窗外有车声，这些都说明你还在世界里。","你不必把一切都做得安静无声，人才是需要动静的。","今天开一点窗，听一会儿外面的声音。"],
+["安稳","安稳不是永远不出事，是出事的时候脚下还有地。","你可以为自己造一点点安稳，比如固定的作息。","今天把一件小事固定下来，比如固定时间喝一杯水。"],
+["清晨","清晨是一天里最没有评价的时刻。","你不必一醒来就进入战斗状态。","今天早起十分钟，只用来发呆。"],
+["正午","正午的光最直，影子最短，人也最容易被照出疲惫。","你可以在中午停一下，不必全天都在线上。","今天中午离开屏幕十分钟。"],
+["傍晚","傍晚是白天和夜晚之间的缓冲带。","你也可以给自己一个缓冲带，不必从工作直接掉进焦虑。","今天傍晚找一段路，慢慢走。"],
+["深夜","深夜会把情绪放大，这是生理规律，不是你变脆弱了。","你可以对自己说：现在不适合做重要决定。","今天深夜想到了什么，先写下来，明天再看。"],
+["周一","周一的沉重感是真实的，不是你不够努力。","你可以把周一当成一个缓启动的日子。","今天只给自己定三个小任务。"],
+["周末","周末不是用来补完一周欠下的所有事的。","你值得拥有一个不产出成果的周末。","今天留半天什么都不安排。"],
+["季节","季节换了，人的状态本来就会跟着换。","你不必用夏天的标准要求冬天的自己。","今天注意一下自己身体的状态，再安排事情。"],
+["春天","春天是万物都在用力的时候，人也容易跟着用力过头。","你可以借一点春天的劲，但不必把自己榨干。","今天做一件有生长感的小事，比如整理一次桌面。"],
+["夏天","夏天会让人暴躁，这不是你的修养问题。","你可以允许自己在热天里效率低一点。","今天多喝水，找一处凉快的地方待一会儿。"],
+["秋天","秋天是一个适合做减法的季节。","你也可以在这个季节里，删掉一些不必要的承担。","今天清掉一件压着你的小事。"],
+["冬天","冬天万物都在收着，人也该收着一点。","你不必在冬天还保持夏天的产出。","今天允许自己多睡一会儿。"],
+["三月","三月总是被期待塞满，仿佛必须有一个新的开始。","你不需要在三月突然变成一个更好的人。","今天把一件事做得和上个月一样稳，就够了。"],
+["冬至","冬至是一年里夜最长的一天，过完之后就一天天亮回来。","你现在觉得难熬的那段，也许就是冬至。","今天记下现在的状态，等半年后再看。"],
+["月末","月末总会有人想清算自己：这个月到底做了些什么。","你可以统计，但不必审判。","今天写下这个月做到的三件事，不列没做到的。"],
+["年初","年初立下的目标，很多会在二月被忘掉，这很正常。","你不需要用一份新年计划来证明自己值得被期待。","今天只定一个这周想做的具体动作。"],
+["等待","等待的时候，时间会显得特别长。","你可以等，但不必在等的时候把自己消耗空。","今天在等的事上，设一个“再也不用天天看”的时间点。"],
+["限期","限期会让人提速，也会让人变形。","你可以给自己留出比期限稍早的完成点，别卡在最后一刻。","今天把手上的事，往后挪半天完成，试试看会不会更好。"],
+["倒计时","倒计时看着吓人，但它只是一串数字。","你不必每分钟都盯着它。","今天关掉那个倒计时小程序一天。"],
+["迈步","迈步的那一刻，路才会真的出现。","你不需要先看清整条路，才肯迈第一步。","今天为一个拖了很久的想法，做出第一步。"],
+["出发","出发的门槛比你想象的低，通常只需要关掉一个网页。","你可以随时出发，不必等到状态最好的那天。","今天用最烂的状态，开始做一件事。"],
+["尝试","尝试的价值在于得到一个真实的反馈，而不是一次成功。","你可以把这一次当成试验，而不是考试。","今天用“试试看”的心态去做一件有压力的事。"],
+["试错","试错的前提是，错了也不会被狠狠惩罚。","你可以给自己划一小块可以犯错的地方。","今天故意用另一套方法做一件小事，看看会怎样。"],
+["坚持","坚持不是每天都用力，是断了之后还愿意接上。","你不需要保持完美连续，你只需要回来。","今天把一个断掉的小习惯重新接上，只做最小量。"],
+["韧性","韧性不是不痛，是痛过之后还能再长回来。","你已经证明过很多次自己的韧性，只是没为它记过功。","今天写下过去一年里你扛过来的一件事。"],
+["用力","用力过猛的人，往往是因为怕来不及。","你可以用力，但不必用尽全力。","今天把一件事的用力程度调到七成。"],
+["松劲","松劲不是崩，是身体在提醒你节奏太快了。","你可以松一下，松完还能再紧回来。","今天在两个任务之间，主动松五分钟。"],
+["分寸感","分寸感是知道什么时候该停，什么时候还能再推一把。","你可以慢慢练出对自己节奏的判断，不必照搬别人的强度。","今天做一件事时，注意自己什么时候开始变烦，那就是边界。"],
+["承担","承担不是把所有责任都揽过来，是分清哪些真的是你的。","你可以为属于你的那部分负责，不必多背。","今天把一件不属于你的事，还给该负责的人。"],
+["决定","决定之所以难，是因为每个选项都意味着放弃另一些。","你可以做一个“够好”的决定，不必等到最优解。","今天在两件事之间做一个决定，然后不再回头重算。"],
+["抵达","抵达的那一刻，通常没有想象中隆重，只是终于可以坐下。","你可以先承认自己到了哪里，再谈下一步。","今天把一件已经完成的事，正式标记为完成。"]
+];
+/* ============================================================
+   5. 100 故事模板
+============================================================ */
+const TPL=[
+"清晨的光落在窗台上，你带着{w1}醒来，不必急着证明什么。走到一半需要一点{w2}，那不是停，是换个姿势继续。夜里关灯时你会发现，这一天一直有{w3}陪着。",
+"深夜的台灯下，桌面上摊着没写完的东西。你告诉自己再做十分钟，这十分钟里只有{w1}。做完之后你关掉灯，允许自己进入{w2}。第二天醒来你发现，昨天那点{w3}居然还在。",
+"地铁上人很多，你抓着扶手，忽然想起昨天没做完的事。你把它在心里过了一遍，发现其实没那么严重，只是需要一点{w1}。到站的时候你决定，今天要用{w2}的方式处理它。走出闸机，风里有{w3}的味道。",
+"雨下了一整天，你没有出门。窗玻璃上的水痕把外面的世界擦得模糊，反而让人安心。你给自己泡了一杯热的，那一点温度就是{w1}。下午你什么都没做成，但你允许了这份{w2}。傍晚雨停了，天边有一点{w3}。",
+"周一早上闹钟响的时候，你在被子里多躺了三分钟。这三分钟里你想的都是“不想起来”，然后你想到了一个很小的理由——{w1}。你起来了，泡了杯水，把今天要做的事写在纸上。写着写着你发现，{w2}比想象中容易。至于{w3}，也许就在今天下午。",
+"你在等一个结果，已经等了很久。每次手机震动你都会看一眼，然后放下。这样的日子需要{w1}，不是硬撑，是知道自己还在正常运转。后来你学会了在等待里给自己找点事做，那是{w2}。结果来的时候你正在忙别的，那一刻你想起了{w3}。",
+"下班的地铁上你睡着了，醒来发现坐过了两站。你没有生气，反而觉得有点好笑。走回去的路上天已经黑了，路灯一盏一盏亮起来，像{w1}。你想，今天也不算太糟，至少还有力气走回来，这就是{w2}。回到家你给自己煮了碗面，那碗面里有{w3}。",
+"傍晚的时候你在厨房洗菜，水声很响，脑子里的事反而安静下来。你想起今天有个人对你说了一句不太好听的话，现在那句已经淡了，只剩下{w1}。你把菜切好，下锅，翻动的声音很实在。这顿饭吃完，你觉得自己被{w2}接住了。窗外天完全黑了，屋里有一盏灯，那就是{w3}。",
+"早上出门的时候忘了带伞，回来的时候正好下雨。你在便利店门口站了一会儿，看着雨。那一刻你什么都没想，只是站着，这已经是一种{w1}。雨小了一点，你决定跑回去，跑起来的时候有一种奇怪的痛快，那是{w2}。湿着进门之后你笑了，这份轻松就是{w3}。",
+"周五下午，办公室里的人都开始松下来。你还有一件事没做完，但你决定先放一放。这不是拖延，是{w1}。你收拾桌面，把不需要的东西挪开，给自己腾出一小块地方，那是{w2}。离开的时候你看了一眼窗外，天还亮着，这一天的结尾有{w3}。",
+"周末的早上你醒得比平时还早，躺着不想动。手机在床头，你没有拿。就这样躺了二十分钟，脑子里空空的，只有{w1}。起来之后你慢悠悠地洗漱，把节奏调到自己舒服的位置，这是{w2}。上午十点的时候你发现自己居然做了不少事，那份意外就是{w3}。",
+"那天你去面试，路上堵车，到的时候有点晚。你深呼吸了几次，把心跳压下来，那是一种{w1}。进门之后你尽量把话说慢一点，让每个字都站得稳，那是{w2}。出来的时候下起小雨，你没有打伞，走了一段，心里意外地平静，这份平静就是{w3}。",
+"夜里两点，你还在改一份材料。改到第三遍的时候你意识到，其实第一版就已经够用了。你停下，把电脑合上，这是一种{w1}。躺在床上你还在想明天的事，后来你告诉自己：明天再说，这是{w2}。第二天早上你打开文件，发现问题真的不大，那份从容就是{w3}。",
+"你在医院走廊里等叫号，椅子上坐满了人。你低头看手机，又抬头看屏幕上的号码。这段等待里你能做的只有{w1}。叫到你的时候你站起来，脚步意外地稳，那是{w2}。出来之后你在门口站了一会儿，太阳很好，那点暖就是{w3}。",
+"搬家那天东西比想象中多。你把箱子一个个搬下楼，手心磨出一点红。搬到最后你想放弃，但还是搬完了，那是一种{w1}。新房间空空的，你坐在地上，觉得有点陌生，这是{w2}。后来你把床铺好，把灯打开，这个房间终于有了点{w3}。",
+"你在食堂排队，前面的人在聊 offer，声音不大但听得清。你没有刻意避开，只是低头看自己的餐盘。这份不被影响的能力是{w1}。吃饭的时候你想起自己也有进展，只是慢一点，这是{w2}。走出食堂的时候阳光有点刺眼，你眯了眯眼，那种坦然是{w3}。",
+"周三下午的会议比预计长了一小时。你坐在那里，听别人讨论你不太关心的事，脑子里开始走神。走神的那几分钟里你想到了一件让自己开心的小事，那是{w1}。会议结束后你没有急着回工位，绕了一圈，那是{w2}。回到座位你发现自己还有力气干活，这份余力就是{w3}。",
+"你很久没有给自己买过东西了。那天路过一家店，看见一个不贵的小物件，犹豫了几秒，还是买了。这份小小的纵容是{w1}。拿在手里的时候你想，原来让自己开心可以这么便宜，这是{w2}。回家把它放在桌上，每次看到都会笑一下，那点笑就是{w3}。",
+"那天你早起，去了一趟菜市场。摊主在吆喝，蔬菜上还有水。你挑了西红柿和青菜，付钱的时候听见旁边有人在讲价。这种热气腾腾是{w1}。回家做饭的时候你什么都不想，只是切菜、下锅，那是{w2}。端上桌的时候你拍了张照，这张照片是{w3}。",
+"毕业照拍完的那天下午，你和几个人坐在操场上没走。谁都没说话，风吹着有点凉。那份沉默里有一种{w1}。后来有人先开口说了句“以后常联系”，你笑了笑，那是{w2}。太阳落下去的时候你们才起身，走的时候你回头看了一眼，那一眼里有{w3}。",
+"你对自己说：今天不用那么拼。对方没有回答，但你知道那是一种{w1}。过了一会儿你又补了一句：做完这一件就好。这算是一种{w2}。晚上你躺下的时候想，其实今天还不错，这就是{w3}。",
+"有人问你最近怎么样。你想了两秒，说：还行。这个“还行”里有{w1}，也有{w2}。对方没有追问，你反而有点感激。分开的时候你说了一句“你也是”，那句话里有{w3}。",
+"你问自己：如果这件事做不成，最坏会怎样？想完之后你发现，其实也还好。这份底气是{w1}。你接着问：那我能不能先做一点点？这就是{w2}。最后你对自己说：做不完也没关系，那是{w3}。",
+"“我可能真的不行。”你听见自己这样说。说出口的瞬间你反而松了口气，这是{w1}。然后你换了一句：“我可能只是还没找到方法。”这是一次{w2}。最后你补了一句：“再试一次。”这句话里有{w3}。",
+"你在心里跟一个人说了很多话，说了很久。说到最后你发现，其实那些话更需要说给自己听，那是一种{w1}。说完之后你没有那么堵了，这是{w2}。你合上手机，觉得这件事可以暂时放下，那就是{w3}。",
+"电话那头说：“你别太勉强。”你应了一声，没多解释。挂掉电话你坐了一会儿，这句话在心里慢慢化开，那是{w1}。你决定今天就到这，这需要一点{w2}。晚上你睡得很好，这份好就是{w3}。",
+"你在群里看着大家报进度，手指悬在输入框上，最后什么都没发。这份克制是{w1}。过了一会儿你私聊了一个人，说了一句实话，那是一次{w2}。对方回了个“我也是”，那一刻你感到一种{w3}。",
+"“你最近是不是瘦了？”有人这样问你。你说可能是吧。其实你知道不是瘦，是累。承认这一点需要{w1}。你没有多解释，这就是{w2}。那天晚上你早早睡了，那一觉里有{w3}。",
+"你对自己说：不用解释。说了三遍之后，你终于不那么想解释了，这就是{w1}。接下来的时间里你只做手上的事，那是一种{w2}。做完之后你发现没有人来问责，那份安静就是{w3}。",
+"有人夸你，你下意识地说“没有没有”。说完之后你想了想，其实可以只说“谢谢”。这是一个小小的{w1}。下次再有人夸，你试着接了，那是{w2}。接住之后心里那点不好意思，其实也挺暖，那是{w3}。",
+"你在心里排练了一遍要说的话，排练到第三遍的时候你意识到，对方可能根本不会问。这个意识是{w1}。你决定不排练了，那是{w2}。真的见面的时候，你反而说得比排练时更自然，这就是{w3}。",
+"“我不知道。”你终于说了这句话。说出口没有想象中难堪，反而有一种{w1}。对方说没关系，我们再想想，那是一份{w2}。走出会议室你脚步轻了一点，那是{w3}。",
+"你给自己发了一条消息：明天记得吃早饭。这条消息没有回音，但它是一种{w1}。第二天你真的吃了，那是一次{w2}。吃完之后你发现上午的状态好很多，这就是{w3}。",
+"有人在你面前抱怨，你没有跟着一起骂，只是听。这份不添油加醋是{w1}。听完你说了句“确实挺难的”，这是一点{w2}。对方叹了口气说谢谢，那口气里有一种{w3}。",
+"你在镜子前站了一会儿，看见自己眼下有点青。你没有评价自己，只是看了一眼，这是{w1}。然后你决定今天早点睡，这是一次{w2}。躺下的时候你想，明天看起来会好一点，那份期待是{w3}。",
+"“这个我做不完。”你说。没有人责怪你，反而有人说“那就先做一部分”，这句话是{w1}。你把手上的事重新排了一遍，那是{w2}。排完之后你发现真的能做完大半，这份踏实就是{w3}。",
+"你给一个很久没联系的朋友发消息，只写了三个字：“在忙吗”。发出去之后有点后悔，这是一种{w1}。对方很快回了“怎么啦”，这是一份{w2}。聊完之后你发现，有些关系不用维系也不会断，那是{w3}。",
+"你对自己说：今天允许你不完美。说完之后你没有立刻放松，但过了一会儿，那股劲真的松了，这是{w1}。你接着做了点别的，那是{w2}。晚上回想，今天反而是最近效率不错的一天，这就是{w3}。",
+"有人问你要不要一起吃饭，你犹豫了一下，说了好。这个“好”里有{w1}。吃饭的时候你没怎么说话，只是听，那是一份{w2}。分开的时候你觉得没那么累了，这就是{w3}。",
+"你终于把那条一直没发的消息发出去了。发出去之后你把手机放下，去洗了个碗，这是一种{w1}。回来看到对方回了，你没有立刻点开，那是{w2}。点开之后发现是很普通的回复，你笑了笑，那份平常就是{w3}。",
+"一棵树不会因为今天没长高就自责。它只是把根往下扎一点，把叶子朝光的方向转一点。人也一样，{w1}不是一天长成的，{w2}也不是。等到某天你回头看，才发现自己已经有了{w3}。",
+"溪水绕过石头的时候不会觉得那是失败。它只是换了个方向，继续往下走。你遇到的那些卡顿，也许只是需要一点{w1}。绕过去之后你会看到，前面还有{w2}。而这一路的水声，本身就是{w3}。",
+"春天不会催花开，也不会责怪哪一朵开得晚。它只是把光和水均匀地给出去。你也可以这样对自己，给一点{w1}，给一点{w2}。剩下的交给时间，那就是{w3}。",
+"候鸟迁徙的时候不会一路直线。它们会借风，会停歇，会绕远。你现在的绕路，也许正是{w1}。停下来的时候不是浪费，那是{w2}。等风向对了，你会重新飞起来，那时候天上有{w3}。",
+"竹子前几年几乎不长，只是在地下铺根。等到某一年，它一天能长几十厘米。你现在看不见进展的那段，可能就是在铺根，那是一种{w1}。铺根的日子里，{w2}是你唯一能做的事。等到拔节的那天，你会明白{w3}。",
+"海边的礁石被浪打了很久，棱角慢慢圆了。这不是磨损，是它找到了和浪相处的方式。你也可以在和生活的摩擦里，慢慢磨出{w1}。这个过程不会舒服，但会带来{w2}。最后留下来的那个形状，就是{w3}。",
+"月亮每天都不一样，有时圆有时缺，但它从来没有停止存在。你状态的起伏也一样，那是一种{w1}。不圆的时候不代表你消失了，那是{w2}。等到圆起来，你会更懂得{w3}。",
+"冬天看起来什么都没发生，其实地底下一直在动。你现在觉得停滞的那段，也许正是一种{w1}。表面上的安静里，藏着{w2}。等到春天，那些看不见的准备会变成{w3}。",
+"云层厚的时候，太阳并没有消失，只是被挡住了。你现在的低落也一样，那是{w1}。云会走，这是{w2}。云散开的时候你会发现，光一直在，那就是{w3}。",
+"河流从不着急，但它最终都会到海。你担心自己太慢的时候，可以想想这件事。慢不是问题，{w1}也不是。真正重要的是别断流，那就是{w2}。到海的那天，你会带着一路的{w3}。",
+"花盆里的土看起来什么都没长，但根系正在下面工作。你现在的沉默期也许就是这样，那是{w1}。看不见的地方一直在发生事情，那是{w2}。等到破土那天，你会知道{w3}。",
+"山不会因为有人爬得慢就变矮。你走的路，每一步都算数，那是一种{w1}。累的时候可以歇，歇完再走，那是{w2}。到山顶的时候，风景是一样的，那份风景就是{w3}。",
+"种子在土里的时候和石子没区别。没有人能看出它将来会长成什么。你现在也可能是这样，那是一种{w1}。土里的日子里，{w2}是唯一需要的养分。等它冒出来的那天，你会认出{w3}。",
+"夜空里的星星不会互相比较亮度。它们只是各自在那里，那是一种{w1}。你也不需要和任何人比，那是{w2}。只要还在自己的位置上，你就已经是{w3}。",
+"潮水每天涨落，从来不会因为今天心情不好就停。你也不必要求自己每天都一样，那是{w1}。落下去的时候不是失败，那是{w2}。涨回来的时候，你会带着{w3}。",
+"秋天落叶不是树在放弃，是它知道什么该留住。你也可以做一次这样的减法，那是一种{w1}。舍掉一些扛不动的，那是{w2}。轻装之后，剩下的就是{w3}。",
+"老树的年轮里，有宽的年份也有窄的年份。宽的那年雨水好，窄的那年熬过去了。你的日子也是，有{w1}也有{w2}。这些都是你，加起来就是{w3}。",
+"石阶上的苔痕长得很慢，但一直在长。你的进步也可能这样，那是{w1}。看不见的时候不代表没在发生，那是{w2}。有一天你回头看，才发现已经铺满了，那份满就是{w3}。",
+"风不会问树叶愿不愿意，它只是吹过。有些事你也拦不住，那是一种{w1}。能做的是把根扎稳，那是{w2}。风停之后还在的，就是{w3}。",
+"溪流遇到石头会让开，但不会往回走。你遇到的那些阻挡，也许只是需要一点{w1}。绕一下，那是{w2}。绕过去之后你会发现，路还在，那就是{w3}。",
+"你把碗洗了，把台面擦了，把垃圾袋系好放到门口。这三件事花不了多少时间，但它们让房间安静下来。那种安静就是{w1}。做完之后你在沙发上坐了一会儿，什么都没想，那是{w2}。那一刻的舒服，就是{w3}。",
+"你煮了一锅粥，看着它在锅里慢慢变稠。中间你搅了几次，每次都觉得时间过得很慢。这份慢是{w1}。盛出来的时候热气扑到脸上，那是{w2}。吃完之后胃里暖暖的，这份暖就是{w3}。",
+"你把换季的衣服翻出来，一件一件叠好。叠的时候你想起穿这些衣服时发生过的事。那些回忆是{w1}。叠完之后箱子合上，你有一种收拾过的踏实，那是{w2}。把箱子推到床底，那一下就是{w3}。",
+"你去楼下取快递，路上遇到邻居，点了下头。回来的时候天有点凉，你走得快了一点。这一段路很短，但它把你从屏幕前拉了出来，那是{w1}。上楼的时候你走得慢了些，那是{w2}。进门的时候身上有一点风，那就是{w3}。",
+"你把手机关了静音，放在抽屉里。抽屉关上的那一下，世界突然安静了很多。这份安静是{w1}。接下来的两个小时你做了不少事，那是{w2}。做完打开抽屉，你没有立刻去看，那份从容就是{w3}。",
+"你给自己剪了指甲，修得整整齐齐。这件事很小，但做完之后手看起来干净了。那种干净是{w1}。你顺手把手洗了，擦干，那是{w2}。看着自己的手，你觉得还不错，那就是{w3}。",
+"你把床单换了。抖开的时候有洗衣液的味道，铺的时候有点费劲。铺完之后房间像换了一个，那是{w1}。晚上躺上去的那一刻，你觉得自己被照顾了，那是{w2}。那一觉睡得很沉，那份沉就是{w3}。",
+"你出门倒垃圾，顺便走了一圈。小区的路灯亮着，有人在遛狗。你没做什么特别的事，但走完之后心里松了一点，那是{w1}。上楼的时候你没有急着看手机，那是{w2}。回到家，那份松弛还在，那就是{w3}。",
+"你给自己倒了一杯温水，坐在窗边喝。喝水这件事太平常了，平常到很少被注意到。但它确实在照顾你，那是{w1}。喝完你把杯子洗了放好，那是{w2}。这个小小的循环，本身就是{w3}。",
+"你把书桌整理了一遍，把不用的纸扔掉。扔的时候你犹豫了一下，最后还是扔了。这份果断是{w1}。桌面空出来之后，你有点想坐下来做点事，那是{w2}。真的坐下来的时候，那份想就是{w3}。",
+"你洗了个头，吹干，梳顺。做这些的时候脑子里很安静，只有水声和风声。这份安静是{w1}。吹完之后头发蓬松，你摸了一下，那是{w2}。看着镜子里的自己，那份清爽就是{w3}。",
+"你把冰箱里的东西清了一遍，过期的扔掉。扔完之后冰箱空了不少，但你反而觉得踏实，那是{w1}。接着你把剩下的摆整齐，那是{w2}。关上门的那一刻，那份整洁就是{w3}。",
+"你早起给自己煎了个蛋。蛋边有点焦，但你不在意。这份不在意是{w1}。坐下来慢慢吃完，那是{w2}。吃完收拾干净出门，那份从容就是{w3}。",
+"你把手机里的照片翻了一遍，删掉一些重复的。删的时候你看见了很多以前的自己，那是{w1}。删完之后相册清爽了，那是{w2}。最后你留了几张特别喜欢的，那就是{w3}。",
+"你在阳台上晒了会儿太阳。太阳不大，但有。你什么都没做，只是站着，那是{w1}。站了一会儿你有点困，那是{w2}。回屋的时候身上暖暖的，那份暖就是{w3}。",
+"你把鞋擦了。鞋子其实不太脏，但你擦了。擦的时候你注意到鞋边有些磨损，那是{w1}。擦完之后鞋子亮了，那是{w2}。穿上的时候脚下有点轻，那就是{w3}。",
+"你晚上出门扔垃圾，抬头看见月亮。月亮不圆，但很清楚。你站着看了一会儿，那是{w1}。看的时候你想起了一些事，那是{w2}。回屋之后你没有那么闷了，那份松就是{w3}。",
+"你给自己泡了一杯茶，等它凉一点。等的这几分钟里你什么都没做，那是{w1}。喝第一口的时候有点烫，你吹了吹，那是{w2}。慢慢喝完，那份安稳就是{w3}。",
+"你把充电线理了理，卷好，用夹子固定。这件事很小，但做完之后桌面舒服了。那份舒服是{w1}。接着你把其他线也理了，那是{w2}。全部弄完之后，那份整齐就是{w3}。",
+"你在超市里慢慢逛，没有买东西的目的。逛的时候你看货架，看标签，看别人推着车。这份闲是{w1}。最后你只买了一瓶水，那是{w2}。结账出来，那份轻松就是{w3}。",
+"把今天当成一局游戏。你不是在通关，你是在熟悉地图。{w1}是存档点，{w2}是补给包，{w3}是你终于打通的那一小段。",
+"生活有时候像一间还没装修好的房子。你现在做的事不是刷墙，是先把电通上。{w1}是那根线，{w2}是开关，{w3}是灯亮起来的那一下。",
+"你不是一台机器，你是一块地。地需要休耕，需要雨水，需要时间。{w1}是这一季的种子，{w2}是等它发芽的耐心，{w3}是收成。",
+"把这段时间看成一段隧道。隧道里看不见出口，但你知道方向没错。{w1}是你手里的手电，{w2}是脚下的路，{w3}是前面那一点光。",
+"你现在的状态像一杯刚倒的热水，烫，但会凉。{w1}是等它凉的这几分钟，{w2}是吹一吹的动作，{w3}是终于能喝下去的那一口。",
+"把目标想成一座山。你不必一次登顶，可以先走到半山腰。{w1}是登山杖，{w2}是中途的休息，{w3}是你回头看时的风景。",
+"你像一个正在更新的软件。更新的时候会卡，会慢，会暂时用不了。{w1}是更新包，{w2}是进度条，{w3}是更新完之后的新版本。",
+"把心事放进抽屉里，不是扔掉，是先收起来。{w1}是拉开抽屉的动作，{w2}是把它放进去，{w3}是关上抽屉后那份清空感。",
+"你像一棵正在换叶的树。旧叶子掉的时候看着难看，但那是必须的。{w1}是落叶，{w2}是空出来的枝，{w3}是新芽。",
+"把这段日子看成一首曲子。有快板也有慢板，有休止符。{w1}是前奏，{w2}是那个休止符，{w3}是副歌。",
+"你像一条正在改道的河。改道的时候会漫出来，会乱。{w1}是那段乱，{w2}是找到新河床的过程，{w3}是重新流起来的水。",
+"把今天看成一张还没画完的纸。不用每一笔都对，留白也是画的一部分。{w1}是第一笔，{w2}是那块留白，{w3}是最后落款的地方。",
+"你像一个正在长个子的少年，衣服总是短一截。{w1}是那件短了的衣服，{w2}是换衣服的过程，{w3}是合身的那一天。",
+"把焦虑想成一只在屋里乱飞的鸟。它不是来攻击你的，它是找不到出口。{w1}是打开窗，{w2}是等它自己飞出去，{w3}是屋子重新安静下来。",
+"你像一块正在被雕的木头。削掉的部分会疼，但那是成形的一部分。{w1}是刻刀，{w2}是那些削下来的屑，{w3}是最后的形状。",
+"把生活看成一锅正在炖的汤。急不得，火太大会糊。{w1}是火候，{w2}是等的过程，{w3}是那一口浓。",
+"你像一个刚刚学会骑车的人。会摔，会怕，会想放弃。{w1}是扶着车座的那只手，{w2}是松开的那一秒，{w3}是终于骑出去的那一段。",
+"把心事想成一团缠住的线。不用一次解开，先找到线头。{w1}是那个线头，{w2}是一点一点解的过程，{w3}是最后理顺的那一下。",
+"你像一棵在风里的树，看着摇晃，但根没动。{w1}是那阵风，{w2}是摇晃，{w3}是风停后还站着的你。",
+"把这段时间当成一段练习。练习不需要观众，也不需要每次都成功。{w1}是今天练的这一段，{w2}是中间停下来的那一次，{w3}是你终于觉得顺了的那一刻。"
+];
+/* ============================================================
+   6. 启示库
+============================================================ */
+const INSIGHT={
+ celebrate:[
+"今天你做到了很多，先把这件事记下来，再去想明天。","高效不是常态，你今天恰好有，这很好，值得高兴一下。","你把事情做完了，这份踏实是你自己挣的。","今天的状态值得被记住，不是因为完美，是因为你真的动了。","完成比完美重要，你今天站在完成这一边。","你今天的样子，就是你想成为的那个人的样子，只是他还没习惯。","别急着把功劳归给运气，今天是你自己撑起来的。","你今天的努力有名字，叫「说到做到」。","把今天写进记录里，以后状态差的时候翻出来看看。","今天很好。允许自己高兴，不用马上担心明天。"],
+ steady:[
+"你做了一部分，剩下的明天还在，这不算失败。","中间状态最难评价，但它也是最常见的状态。","不是每一天都要满格，能维持住就已经是本事。","今天做到了这些，够了。剩下的不是欠债，是余地。","你没有全做完，但你也没有全放下，这就是在往前走。","进度条走得慢一点没关系，只要还在动。","今天的状态像一个缓冲带，它让你明天不至于太陡。","你做的这部分，别人看不见，但你自己知道。","允许自己今天只完成一半，明天再接着来。","平稳不是平庸，能稳住就是能力。"],
+ accept:[
+"今天状态不好，这很正常，休息也是计划的一部分。","你不是机器，低电量的时候就应该低功耗运行。","今天没做成什么，不代表你这个人不行。","有些日子就是用来熬过去的，不是用来产出成果的。","允许自己有糟糕的一天，也允许它过去。","你今天还在，这已经是一件值得肯定的事。","明天不会因为今天没做好就变得更难。","把今天翻篇，不要带着愧疚上床。","你现在最需要的不是自责，是一点休息。","今天的你辛苦了。剩下的交给明天。"]
+};
+/* ============================================================
+   7. 元气补给站语料
+============================================================ */
+const ENC={
+ psychology:[
+"焦虑分流法：把烦心事写下来，分成「我能行动」和「我无法控制」，只处理前者。","自我同情练习：用你安慰好朋友的语气，和自己说话，不要加倍苛责自己。","最小行动法则：不想开始任务时，只要求自己先做 2 分钟，很多时候启动之后就会继续。","区分事实和想法：「我这次面试不太顺利」是事实；「我一无是处」是想法，不是事实。","呼吸稳情绪：4 秒吸气，6 秒呼气，循环 3 次，快速降低交感神经紧张。","5-4-3-2-1 落地法：说出 5 样看得见的东西、4 种触感、3 种声音、2 种气味、1 种味道。","任务拆分：把「写论文」拆成「打开文档，写三行」，降低启动成本。","情绪命名：说出「我现在是焦虑/委屈/疲惫」，命名本身就能降低情绪强度。","两分钟规则：任何能在两分钟内做完的事，立刻做，减少待办堆积。","身体优先：情绪卡住时先处理身体——喝水、走动、拉伸。","允许打折：今天完不成全部目标，完成 30% 也有效，不自我攻击。","标签解绑：一件事没做好 ≠ 你这个人不行，把事件和自我价值分开。","成长型思维：卡顿、失败是收集信息，不是对你能力的审判。","睡前一小时断网：蓝光和信息刺激会延迟入睡。","比较隔离：刷到别人进度时，提醒自己「我只看到他的结果，没看到他的过程」。","担忧时段：每天固定 15 分钟专门用来担忧，其余时间延后处理。","完成清单：每天睡前写「今天完成了什么」，而不是「还差什么」。","五分钟起步：告诉自己只做五分钟，五分钟后可以停。","换环境：状态卡住时换一个物理位置（去阳台、去咖啡馆）。","允许求助：把「我自己能行」换成「我可以找人帮忙」。"],
+ quote:[
+"你不必很厉害才开始，但要开始，才会慢慢变厉害。","不是因为看到希望才坚持，是坚持才慢慢生出希望。","允许一切发生，也允许自己慢慢来。","你不是在浪费时间，你是在成为一个能接住自己的人。","走得慢的人，往往看得清路。","慢一点没关系，只要方向是对的。","你的节奏不需要向任何人报备。","有些答案，要等情绪先过去。","不必每一天都闪闪发光，有些日子只需要平安度过。","你已经比昨天多知道一点怎么照顾自己了。","休息不是奖励，是必需品。","不是所有努力都会立刻有回音，但它们都不会白费。","你可以既焦虑又继续往前走，这两件事不冲突。","允许自己暂时做不到，是长期做下去的前提。","你的价值不由一次结果定义。","天黑了就休息，天亮再赶路，这不叫放弃。","你不需要变成另一个人，才能过好这一生。","能把平凡的日子过下去，本身就是一种了不起。","别用别人的进度表校准自己的心跳。","慢慢来，比较快。"],
+ fun:[
+"今天的你已经比昨天更会处理难题啦。","进度慢一点没关系，你是长跑，不是冲刺抢跑。","偶尔摆烂是系统自动维护，不是偷懒。","你的努力后台都有记录（就是你的打卡记录！）。","不用和别人的时间表对齐，你有自己的时区。","今天完成一件事就算赢，两件算大赢，零件算休息日。","你不是拖延，你是在等待最佳启动时机。","大脑有时候会自动放大失败，它只是一台容易焦虑的老机器。","你已经在照顾自己的节奏了，这件事本身就很棒。","世界很吵，但你可以调小音量。","今天没崩，就已经是及格的成年人。","你不是效率低下，你是在低功耗模式下正常运行。","允许自己今天当一条咸鱼，咸鱼也有自己的海。","别人的进度条不是你的计分板。","今天喝够水了吗？这是本日最高优先级。","你的存在本身不需要业绩支撑。","今天你只要活着并且尽量舒服，就已经完成了 KPI。","焦虑说明你在乎，但在乎过头会掉血。","你不是一个人在硬撑，你只是还没说出那句「我需要帮忙」。","今天的天气预报是：局部有情绪，随后转晴。"],
+ affirm:[
+"我的价值，不需要 offer、分数、别人的评价来证明。","就算事情不顺利，我依然值得被好好对待，包括被我自己善待。","我可以试错，可以调整，我拥有重新出发的选择权。","我可以接受自己暂时做不到，也愿意慢慢推进。","我有能力试错、调整、重新出发。","我的价值不由一次结果、一份 offer、一场考试定义。","我可以拒绝，也可以改变主意，这两件事都不需要道歉。","我今天状态一般，但我还在，这就够了。","我允许自己休息，休息不是欠债。","我可以慢，但我不打算停。","我不需要向所有人解释我的选择。","我可以既脆弱又坚强，这两件事可以同时存在。","我值得被理解，即使我说得不清楚。","我可以对自己温柔，温柔不会让我变弱。","我的进步不需要被别人看见才算数。","我可以今天先做到这里，明天继续。","我不必成为最好的那个，我只需要成为我自己。","我可以有情绪，情绪不等于失控。","我正在成为一个更能照顾自己的人。","我允许自己慢慢长，长成自己的样子。"]
+};
+const ENC_NAME={psychology:'心理学方法',quote:'名言',fun:'趣味短句',affirm:'自我肯定'};
+/* ============================================================
+   8. 黑话词典
+============================================================ */
+const GLOSS={
+ job:{label:'求职 / 秋招',icon:'💼',terms:[
+  {t:'wlb',d:'work-life balance 的缩写，工作与生活的平衡。常出现在「这家 wlb 不错」的评论里，属于主观评价，建议向在职者核实实际下班时间。'},
+  {t:'年包 / package',d:'年度总现金收入，通常 = 月薪 × 月数 + 年终奖 + 签字费等，一般不含股票期权。看到「年包 30w」要问清是固定部分还是含不确定奖金。'},
+  {t:'画饼',d:'公司在薪资、晋升、期权、转正上给出无法落地的口头承诺。典型话术：「先把项目做起来，明年一定给你调薪」。'},
+  {t:'向上管理',d:'主动管理上级的预期、信息与决策节奏，让上级清楚进度、认可你的价值。核心是信息同步 + 预期管理 + 方案先行。'},
+  {t:'hc',d:'headcount 的缩写，编制 / 招聘名额。「这个岗位还有 hc 吗」= 这个岗位还招人吗。hc 被冻结意味着流程可能随时中止。'},
+  {t:'oc',d:'offer call 的缩写，指 HR 电话通知你通过面试、准备发 offer。注意：oc 是口头的，不等于正式 offer，存在被鸽的风险。'},
+  {t:'泡池子',d:'面试通过但不发正式 offer，把人放进候选池排序等待。常见于大厂，可能等数周甚至数月，期间应继续投递其他公司。'},
+  {t:'k / w',d:'薪资单位。k = 千（1000），w = 万（10000）。「15k」= 月薪 1.5 万；「30w」= 年薪 30 万。注意区分「月薪 k」和「年薪 w」。'},
+  {t:'base',d:'两种含义：① base 地 = 工作常驻地，如「base 杭州」；② base salary = 基本工资，不含奖金补贴。面试时要问清是哪一个。'},
+  {t:'92',d:'指「985 / 211」高校。9 代表 985，2 代表 211。「92 硕」= 985 或 211 硕士。部分公司简历筛选会卡这条。'},
+  {t:'qs',d:'QS 世界大学排名。「qs 前 100」是部分外企、留服落户、人才引进的硬门槛，国内校招中主要影响外企与部分国企。'},
+  {t:'offer',d:'录用通知，分口头（oc）和书面（正式 offer letter）。书面 offer 才具备法律意义上的要约效力，口头随时可能变卦。'},
+  {t:'三方 / 两方',d:'三方协议 = 毕业生、学校、用人单位三方签订的就业协议，涉及档案与派遣，违约通常有违约金；两方协议 = 毕业生与用人单位双方签订，不涉及学校，约束力较弱。'},
+  {t:'双休',d:'每周休息两天（周六、周日）。面试时确认是真双休还是名义双休、周末随时待命。'},
+  {t:'大小周',d:'一周双休、一周单休交替进行。本质是每月多上两天班，计算时薪时要折算进去。'},
+  {t:'+1',d:'指你的直属上级。「+1 人很好」= 直接领导不错；「+2」= 上级的上级。来自组织架构图里向上加一层的说法。'},
+  {t:'大厂',d:'头部大型互联网 / 科技公司，如腾讯、阿里、字节、美团、京东、拼多多等。没有严格名单，属于约定俗成的说法。'},
+  {t:'新一线',d:'第一财经·新一线城市研究所发布的城市分级中的「新一线城市」，常见包括成都、杭州、重庆、武汉、西安、苏州、天津、南京、长沙、郑州、东莞、青岛、沈阳、宁波、昆明等（名单每年微调）。'},
+  {t:'独角兽',d:'估值达到 10 亿美元以上、尚未上市的创业公司。注意：估值不等于盈利，也不等于稳定。'},
+  {t:'oq',d:'over-qualified 的缩写，指资历明显高于岗位要求，HR 担心你留不住或要价太高而拒绝。被 oq 不代表你不够好。'},
+  {t:'绩效',d:'绩效考核结果或系数，直接影响年终奖与晋升。常见分档如 A/B/C 或 3.75/3.5 等，各公司口径不同，需向 HR 确认具体规则。'},
+  {t:'五险一金',d:'五险 = 养老、医疗、失业、工伤、生育保险；一金 = 住房公积金。要问清缴纳基数（按全额工资还是最低基数）和公积金比例。'},
+  {t:'JD',d:'job description 的缩写，岗位描述，包含职责与任职要求。投递前逐条对照，命中率高的关键词要写进简历。'},
+  {t:'hr',d:'human resources 的缩写，人力资源部门 / 人力资源从业者。校招中 HR 通常负责流程推进、薪资沟通与入职手续。'},
+  {t:'hrbp',d:'HR business partner 的缩写，人力资源业务伙伴，派驻到具体业务线，负责该业务线的招聘、绩效、员工关系等，比传统 HR 更贴近业务。'},
+  {t:'tbtc',d:'语境含义不稳定，常见理解是「ToB / ToC」，即面向企业客户与面向个人消费者的两类业务方向。部分群聊中另有用法，遇到请向发帖人确认。'},
+  {t:'bar',d:'招聘门槛 / 筛选标准。「这家 bar 很高」= 学历、经历要求高，简历筛选严格。'},
+  {t:'kpi',d:'key performance indicator 的缩写，关键绩效指标，用于量化考核工作结果。'},
+  {t:'sop',d:'standard operating procedure 的缩写，标准作业流程。把重复性工作写成固定步骤，是简历上很好的关键词（体现流程化能力）。'},
+  {t:'gmv',d:'gross merchandise volume 的缩写，商品交易总额，电商 / 零售行业常用规模指标，含未付款和退货部分。'},
+  {t:'bg',d:'两种含义：① background，指学历与经历背景，如「bg 很好」；② business group，事业群，如「某事业群 bg」。看上下文判断。'},
+  {t:'leader',d:'团队负责人 / 领导者，通常是你汇报的对象或团队的一号位。'},
+  {t:'带教',d:'新人入职后指定的指导人（mentor），负责带你熟悉业务。面试时可以问「有没有固定带教」，这是判断培养体系的重要信号。'},
+  {t:'owner',d:'第一责任人，指对某个项目或事项负总责的人。「你是这个需求的 owner」= 这件事你负责推进到底。'},
+  {t:'轮岗',d:'在多个岗位或部门之间轮换培养，常见于管培生项目。要问清轮岗时长、是否定岗、定岗依据是什么。'},
+  {t:'cv',d:'curriculum vitae 的缩写，即简历。外企和学术场景更常用 CV，国内校招多用「简历」。'},
+  {t:'白菜',d:'校招薪资的最低档，即「白菜价」。与之对应的是 sp、ssp。'},
+  {t:'sp',d:'special offer 的缩写，校招薪资中高于白菜档一档的 offer，通常给到面试表现突出的候选人。'},
+  {t:'ssp',d:'super special offer 的缩写，校招薪资中比 sp 再高一档的 offer，一般给到极少数顶尖候选人。'},
+  {t:'tp',d:'语境含义不稳定，不同群聊中用法差异大（可能指 trainee program、top 档，也可能是笔误）。遇到时请直接向发帖人确认。'},
+  {t:'倒挂',d:'新入职员工薪资高于同级老员工的现象。谈薪时可以此为由争取，但入职后打听同事薪资属于敏感行为。'},
+  {t:'劝退',d:'公司不直接裁员，而是用调岗、降薪、加工作量等方式让员工主动辞职，从而规避赔偿。遇到时注意保留证据。'},
+  {t:'n+1 / 大礼包',d:'裁员补偿的俗称。n = 工作年限对应的月薪补偿月数，+1 = 代通知金。「毕业大礼包」是裁员的自嘲说法。'},
+  {t:'摸鱼',d:'上班时间做与工作无关的事。适度摸鱼是自我调节，长期摸鱼要警惕岗位是否出了问题。'},
+  {t:'润',d:'英文 run 的谐音，指离职、跳槽或出国。「润了」= 走了。使用时多带调侃意味。'},
+  {t:'开奖',d:'等待 offer、谈薪、绩效等结果揭晓的时刻。「等开奖」= 在等消息，期间建议继续推进其他机会。'},
+  {t:'感谢信',d:'拒信的委婉说法，因模板常以「感谢你的投递」开头得名。收到感谢信不代表你不好，只是不匹配。'},
+  {t:'泡池子 / 排序',d:'通过面试但不立刻发 offer，HR 把候选人放进池子按优先级排队。排序靠后可能被拖很久。'},
+  {t:'保底',d:'先于 dream offer 拿到一个能接受的 offer 兜底的策略。有保底后谈判心态会稳很多。'}
+ ]},
+ ai:{label:'AI / 大模型',icon:'🤖',terms:[
+  {t:'skill',d:'技能包。指把一套提示词、流程、约束封装成的可复用能力模块，比如「简历优化 skill」。本质是结构化 prompt + 固定输出规范。'},
+  {t:'llm',d:'large language model 的缩写，大语言模型，如 GPT、豆包、Claude 等，基于海量文本训练、能生成与理解自然语言的模型。'},
+  {t:'具身智能',d:'embodied AI，指拥有物理身体（机器人本体）、能与真实环境交互并从中学习的智能系统，区别于只处理文本图像的纯软件模型。'},
+  {t:'prompt',d:'提示词，你输入给模型的指令文本。结构化 prompt 通常包含：角色、任务、约束、输入资料、输出格式。'},
+  {t:'幻觉',d:'hallucination，模型生成看似合理、流畅但事实上错误或凭空捏造的内容（假文献、假链接、假数据）。防幻觉靠：要求标注不确定、提供原始资料、人工核验。'},
+  {t:'rag',d:'retrieval-augmented generation 的缩写，检索增强生成。先从你的资料库里检索相关片段，再把片段塞进 prompt 让模型基于资料回答，能显著降低幻觉。'},
+  {t:'token',d:'模型处理文本的最小单位，约等于一个词或半个汉字到两个汉字。计费和上下文长度都按 token 计算。'},
+  {t:'上下文窗口',d:'context window，模型单次能「记住」的 token 上限。超出部分会被截断或遗忘，长文档要分段处理。'},
+  {t:'微调',d:'fine-tuning，在预训练模型基础上用特定领域数据继续训练，让模型更贴合某类任务。成本高于写 prompt，适合有大量标注数据的场景。'},
+  {t:'多模态',d:'multimodal，模型能同时处理文本、图像、音频、视频等多种输入输出形式。'},
+  {t:'agent',d:'智能体，能自主规划步骤、调用工具、循环执行直到完成目标的模型系统，区别于一次性问答。'},
+  {t:'mcp',d:'Model Context Protocol，模型上下文协议，一种让模型统一接入外部工具与数据源的开放协议。'},
+  {t:'思维链',d:'chain of thought（CoT），让模型把推理步骤逐步写出来再给结论，通常能提升复杂推理的准确率。'},
+  {t:'few-shot',d:'少样本示例。在 prompt 里给几个「输入→输出」的样例，让模型照着格式回答。不给样例叫 zero-shot。'},
+  {t:'embedding',d:'嵌入，把文本转成向量（一串数字），使语义相近的文本在向量空间里距离更近，用于检索、聚类、去重。'},
+  {t:'温度',d:'temperature，控制输出随机性的参数。越低越稳定保守，越高越发散有创意。做数据整理用低温，做创意用高温。'},
+  {t:'对齐',d:'alignment，让模型的行为符合人类意图与价值观的技术，包括有用性、诚实性、无害性三个方向。'},
+  {t:'越狱',d:'jailbreak，通过特殊话术绕过模型安全限制，让它输出本应拒绝的内容。'},
+  {t:'提示词注入',d:'prompt injection，在输入内容里夹带指令，劫持模型原本的任务。做 RAG 时要防范文档里的恶意指令。'},
+  {t:'蒸馏',d:'distillation，用大模型的输出训练小模型，让小模型以更低成本逼近大模型的效果。'},
+  {t:'涌现',d:'emergence，模型规模达到一定程度后，突然出现小模型不具备的能力（如多步推理）。'},
+  {t:'sota',d:'state of the art 的缩写，当前某任务上的最优水平。'},
+  {t:'开源 / 闭源',d:'开源指模型权重可下载、可本地部署（如 Llama 系列）；闭源指只能通过 API 调用（如 GPT、Claude）。'},
+  {t:'推理模型',d:'专门针对复杂推理优化的模型，回答前会先进行较长的内部思考，速度慢但准确率更高。'},
+  {t:'vibe coding',d:'氛围编程，指主要用自然语言描述需求、让 AI 生成代码、人负责验收和微调的编程方式。适合快速原型，关键系统仍需人工审查。'},
+  {t:'上下文工程',d:'context engineering，围绕「给模型喂什么信息」做设计：筛选资料、控制长度、组织结构，比单纯写 prompt 更系统的做法。'},
+  {t:'工作流',d:'workflow，把 AI 调用拆成多个固定步骤串成流水线，比如「检索→总结→校对→格式化」，比一次性问答更稳定可控。'},
+  {t:'知识库',d:'把个人文档、笔记、资料向量化后供模型检索的产品形态，是 RAG 最常见的落地方式。'},
+  {t:'降智',d:'用户体感术语，指模型版本更新后回答质量变差。官方通常不承认，遇到时可换模型或拆分任务。'},
+  {t:'checkpoint',d:'模型训练过程中的存档点，也指某个具体版本的模型权重文件。'},
+  {t:'system prompt',d:'系统提示词，在对话开始前设定模型角色与行为边界的指令，优先级高于普通用户输入。'}
+ ]},
+ work:{label:'职场通用',icon:'🏢',terms:[
+  {t:'闭环',d:'一件事从提出到落地反馈的完整链条。「形成闭环」= 有始有终、有反馈有验收。简历高频词。'},
+  {t:'台账',d:'记录事项进展的明细表，如「招聘台账」「风险台账」，强调可追溯、可核查。'},
+  {t:'口径',d:'数据统计的标准与定义，如「口径统一」= 各部门对同一指标的定义一致，避免数据打架。'},
+  {t:'里程碑',d:'milestone，项目中的关键节点，通常对应一个可验收的交付物。'},
+  {t:'验收',d:'交付物由需求方确认符合要求的过程，是项目闭环的关键一步。'},
+  {t:'整改',d:'发现问题后按要求修正并留痕的过程，常见于合规、质量、审计场景。'},
+  {t:'复盘',d:'项目或阶段结束后回顾目标、结果、差异与原因，沉淀可复用经验。'},
+  {t:'对齐',d:'多方就目标、口径、分工达成一致。「先对齐一下」= 先开会统一认识。'},
+  {t:'抓手',d:'推动某件事的切入点和着力点，偏务虚的职场用语，常见于汇报。'},
+  {t:'颗粒度',d:'任务或数据的细致程度。「颗粒度太粗」= 不够具体。'},
+  {t:'赋能',d:'通过资源、工具或方法让对方能力提升。职场高频但含义模糊，面试时最好换成具体动作。'},
+  {t:'组织架构',d:'公司内部的部门划分与汇报关系，面试时问清你所在的团队与汇报线。'},
+  {t:'拉通',d:'把相关方拉到一起同步信息、统一认知。「拉通一下」= 开个会对齐，避免各干各的。'},
+  {t:'透传',d:'信息原样传递、不经加工。「把用户反馈透传给研发」= 不改口径直接同步。'},
+  {t:'背锅 / 甩锅',d:'替别人的失误承担责任 / 把自己的责任推给别人。职场生存重点：留痕（邮件、纪要）是最好的防甩锅工具。'},
+  {t:'落地',d:'方案从纸面变成可执行、已执行的动作。「这个想法不落地」= 缺乏执行路径。'},
+  {t:'进 ICU',d:'调侃项目状态濒危、随时可能被砍。「项目在 ICU 里」= 需要紧急抢救。'},
+  {t:'对焦',d:'快速确认双方理解是否一致。「先对焦一下」= 先确认我们在说同一件事。'}
+ ]},
+ acad:{label:'学术科研',icon:'🎓',terms:[
+  {t:'小论文',d:'在读期间发表的期刊论文，区别于学位论文（大论文）。毕业要求常见「发表 1 篇小论文」。'},
+  {t:'开题',d:'学位论文正式开始前的选题论证环节，需提交开题报告并通过答辩。'},
+  {t:'中期考核',d:'研究生培养过程中的阶段性检查，评估进度与成果，未通过可能影响毕业。'},
+  {t:'盲审',d:'学位论文送外单位专家匿名评审，评审意见直接决定能否答辩。'},
+  {t:'查重',d:'检测论文与已有文献的重复率，各校阈值不同（常见 10%~20%），超标需修改后重检。'},
+  {t:'信效度',d:'信度 = 测量结果的一致性（常用 Cronbach α 系数）；效度 = 测到的确实是目标构念。心理学量表的必备指标。'},
+  {t:'预注册',d:'在数据收集前公开研究假设与分析计划，用于提高研究可信度、减少 p-hacking。'},
+  {t:'p 值',d:'在原假设成立的前提下，观察到当前或更极端结果的概率。p < .05 只是统计显著，不等于效应量大或结论重要。'},
+  {t:'效应量',d:"衡量差异或关联大小的指标（如 Cohen's d、η²），比 p 值更能说明实际意义。"},
+  {t:'同行评审',d:'peer review，投稿后由同领域专家匿名评审，常见结果为接收、小修、大修、拒稿。'},
+  {t:'影响因子',d:'期刊层面的引用指标（IF），反映期刊平均被引频次，不等于单篇论文质量。'},
+  {t:'预印本',d:'preprint，未经同行评审就公开的论文版本（如 PsyArXiv），可快速占位但需注意未被验证。'},
+  {t:'延毕',d:'延期毕业，未在标准学制内完成毕业要求。延毕不丢人，但要提前和家人、导师沟通好方案。'},
+  {t:'非升即走',d:'高校青年教师考核制度：聘期内评不上职称（副教授）就不再续聘。压力来源之一，入站前看清考核标准。'},
+  {t:'青椒',d:'「青年教师」的谐音自称，常带自嘲意味，关联话题多为考核、经费与职称压力。'},
+  {t:'横向 / 纵向',d:'纵向课题 = 政府基金项目（国自然、社科基金等），拼学术；横向课题 = 企业委托项目，拼交付。'},
+  {t:'大修 / 小修',d:'major / minor revision，审稿意见的两档：小修 ≈ 基本接收，大修 ≈ 需要实质改动并可能再审。'},
+  {t:'组会',d:'课题组固定例会，汇报进度、接受导师质询。提前准备「进展+卡点+下一步」三件套能显著降低痛苦。'}
+ ]},
+ bazi:{label:'八字 / 命理术语',icon:'☯️',terms:[
+  {t:'身强 / 身弱',d:'日主（出生日天干）在命局中得令、得地、得势偏多称身强；反之称身弱。身强宜泄宜克，身弱宜扶宜帮。这是判断喜用神的基础。'},
+  {t:'得令 / 失令',d:'看日主是否生在旺自己的月份。如庚金生于申酉月为得令，生于寅卯月为失令。'},
+  {t:'得地 / 失地',d:'看地支中是否有日主的根（如庚金见申酉为有根）。'},
+  {t:'得势 / 失势',d:'看天干中帮扶日主的比劫、印星数量多寡。'},
+  {t:'正官格',d:'月令正官透干，主守规矩、重名誉、适合体制内或管理岗。'},
+  {t:'七杀格',d:'月令七杀，主魄力强、压力大、适合竞争性强的行业，需有制化。'},
+  {t:'正印格',d:'月令正印，主学习力强、偏文职、学术、教育。'},
+  {t:'偏印格',d:'月令偏印（枭神），主思维独特、偏技术、研究、易孤独。'},
+  {t:'食神格',d:'月令食神，主温和、有才艺、享受生活，适合创意与内容岗。'},
+  {t:'伤官格',d:'月令伤官，主聪明外露、不服管、表达欲强，需配印或生财。'},
+  {t:'正财格',d:'月令正财，主务实、稳定收入、善于理财。'},
+  {t:'伤官配印',d:'伤官的才气被印星收敛，是贵格，主才华得以正用。'},
+  {t:'杀印相生',d:'七杀的魄力被印星化用，主掌权、有谋略，适合管理与军警。'},
+  {t:'官印相生',d:'正官与正印互生，主体制内顺畅、有贵人。'},
+  {t:'财官双美',d:'财生官、官护财，主名利双收，但需身强能担。'},
+  {t:'身弱不担财',d:'财旺而日主弱，反被财所累，主为钱奔波，需比劫或印星帮身。'},
+  {t:'枭神夺食',d:'偏印克食神，主思虑过度、抑郁倾向、食禄受损，需财星制枭。'},
+  {t:'伤官见官',d:'伤官与正官同现，主与权威冲突、易有口舌是非，为「伤官见官，为祸百端」。'},
+  {t:'比劫夺财',d:'比肩劫财多而财弱，主破财、合作易被分利。'},
+  {t:'食神制杀',d:'食神制约七杀，主化压力为能力，是权贵格局。'},
+  {t:'食神生财',d:'食神生正财，主靠手艺、才华稳定赚钱。'},
+  {t:'食神配印',d:'食神与印星同用，主才华与学识兼备。'},
+  {t:'五行偏枯',d:'命局某一行过旺或过弱，主性格与健康偏颇，需大运流年调和。'},
+  {t:'自坐财库',d:'日支为财库（如戊子、壬午），主有积蓄能力，财能入库。'},
+  {t:'金清水白',d:'金水相生、清透无杂，主聪明、清秀、思维敏捷。'},
+  {t:'专旺格',d:'命局某一行极旺成势，主个性极强、适合专精领域。'},
+  {t:'从格',d:'日主极弱、全局一边倒，舍弃自身顺从旺神，主随势而起。'},
+  {t:'羊刃格',d:'日主带羊刃，主刚强、有冲劲，需有制化，否则易冲动。'},
+  {t:'建禄格',d:'月令为日主临官之地，主自立、能担财官。'},
+  {t:'魁罡格',d:'日柱为庚辰、庚戌、壬辰、戊戌，主性刚、果断，喜身旺，忌刑冲。'},
+  {t:'日坐桃花',d:'日支为桃花（子午卯酉之一），主人缘好、异性缘佳，也易有感情纠葛。'},
+  {t:'九紫离火',d:'三元九运中的九紫离火运（2024–2043），主火属性行业（科技、文化、能源、美业）当旺。'},
+  {t:'换大运',d:'八字以十年为一步大运，换运前后常有明显的生活变动与心态转折，需重新评估喜用。'},
+  {t:'官杀混杂',d:'正官与七杀同时出现，主压力来源多、易犹豫，需去其一。'},
+  {t:'金木交战',d:'金克木过甚，主性格矛盾、易有冲突，需水来通关。'},
+  {t:'水火并济',d:'水火既济之象，主阴阳调和、做事有分寸。'},
+  {t:'木火相生',d:'木生火、火有源，主热情有持续力、适合创作与文化行业。'},
+  {t:'土重金埋',d:'土过旺埋没金，主才华被压抑，需木疏土、水淘金。'}
+ ]},
+ ziwei:{label:'紫微斗数术语',icon:'🔯',terms:[
+  {t:'夫妻宫空宫',d:'夫妻宫无主星，需借对宫（官禄宫）主星来看，主感情取向受事业影响大，易晚婚或异地。'},
+  {t:'杀破狼格局',d:'七杀、破军、贪狼三星会照，主动荡、开创、大起大落，适合开拓型事业。'},
+  {t:'紫府同宫',d:'紫微与天府同宫，主尊贵稳重、有领导力与守成能力。'},
+  {t:'紫府朝垣',d:'紫微天府分守命身宫或三方，主一生有靠、格局高。'},
+  {t:'三方四正辅星齐聚',d:'命宫的三方（财帛、官禄、迁移）与四正吉星（左辅右弼、天魁天钺、文昌文曲、禄存天马）会照，主助力多。'},
+  {t:'机月同梁',d:'天机、太阴、天同、天梁四星组合，主稳定、适合公职、文教、幕僚。'},
+  {t:'天乙',d:'天乙贵人，主逢凶化吉、有贵人相助。'},
+  {t:'禄马交驰',d:'禄存与天马同宫或对拱，主奔波生财、动中得利。'},
+  {t:'文星拱命',d:'文昌文曲拱照命宫，主文采、考试运佳。'},
+  {t:'三奇加会',d:'化禄、化权、化科三奇会照命宫，主才华与机遇兼备。'},
+  {t:'巨日同宫',d:'巨门与太阳同宫，主口才、名声，适合教育、传媒、法律。'},
+  {t:'石中玉隐',d:'命格初看平凡，需磨砺后方显才华，主大器晚成。'},
+  {t:'七杀朝斗',d:'七杀在寅申子午守命，主威权、果断、适合军警与管理。'},
+  {t:'君臣庆会',d:'紫微得左辅右弼、天魁天钺等辅佐，主上下同心、格局宏大。'},
+  {t:'府相朝垣',d:'天府与天相分守命身与官禄，主稳中有升、宜管理与幕僚。'},
+  {t:'月生沧海',d:'太阴在子守命，主清贵、智慧、内心细腻。'},
+  {t:'寿星入庙',d:'天梁在庙旺之地守命，主福寿、有长者缘。'},
+  {t:'廉贞文武',d:'廉贞与文昌文曲同会，主才艺与谋略兼备。'},
+  {t:'权煞化禄',d:'化权与煞星同宫，主以压力换成就，需防过劳。'},
+  {t:'权禄巡逢',d:'化权与化禄在三方巡会，主权势与财禄兼得。'}
+ ]},
+ astro:{label:'西洋星盘术语',icon:'🌌',terms:[
+  {t:'星座落宫',d:'行星落入某一宫位，决定该行星能量在生活哪个领域发力。如太阳落 10 宫主事业心强。'},
+  {t:'星体合 (0°)',d:'两星相距 0°，能量融合、互相强化，主该组合主题特别突出。'},
+  {t:'星体冲 (180°)',d:'两星相距 180°，对立拉扯，主在两者之间反复权衡。'},
+  {t:'星体刑 (90°)',d:'两星相距 90°，摩擦与压力，主需要通过行动化解的张力。'},
+  {t:'星体拱 (120°)',d:'两星相距 120°，顺畅和谐，主天赋与自然流露的能力。'},
+  {t:'宫主飞宫',d:'如「7 宫主狮子飞 12 宫处女」= 第 7 宫宫头落狮子座，狮子由太阳守护，太阳落处女座在第 12 宫。主关系议题与隐秘、服务、自我消融相关。'},
+  {t:'群星（群狮子 / 群天蝎）',d:'3 颗及以上行星落在同一星座或宫位，该星座 / 宫位主题被极度放大。'},
+  {t:'大三角格局',d:'三颗行星互成 120°，主天赋顺畅、有保护力，但易懒散。'},
+  {t:'风筝格局',d:'大三角中一颗星对冲第四点，形成风筝，主天赋被压力激活，成就导向。'},
+  {t:'莉莉丝（黑月）',d:'代表被压抑的欲望与阴影面。逆行落宫指向你不愿面对却反复出现的课题。'},
+  {t:'婚神星',d:'小行星，主管亲密关系与婚姻模式，落宫显示你最容易在哪个领域遇到伴侣。'},
+  {t:'凯龙星',d:'代表创伤与疗愈，落宫是你反复受伤也最终能疗愈他人的领域。'},
+  {t:'谷神星',d:'主管滋养与照顾，落宫显示你如何照顾他人、也需要被如何照顾。'},
+  {t:'智神星',d:'主管策略与智慧，落宫显示你的谋略与解决问题的方式。'},
+  {t:'灶神星',d:'主管专注与奉献，落宫显示你愿意长期投入的领域。'}
+ ]},
+ kygong:{label:'考研 / 考公',icon:'📚',terms:[
+  {t:'上岸',d:'考研、考公、考编成功的统称。源自「脱离苦海、抵达彼岸」的比喻，未上岸期间自称「在水里」。'},
+  {t:'二战 / 三战',d:'第二次、第三次参加考试。多战是常态不是失败，关键是复盘上一次差在哪。'},
+  {t:'报录比',d:'报考人数与录取人数之比，如 10:1 即 10 人抢 1 个名额。择校时比分数线更能反映竞争烈度。'},
+  {t:'调剂',d:'初试过线但未被一志愿录取时，申请调到其他有缺额的院校 / 专业。黄金期很短，要提前备好材料盯系统。'},
+  {t:'A 区 / B 区',d:'考研国家线分区。A 区为东部中部省份，线更高；B 区为西部部分省份，线低 10 分左右，调剂常往 B 区走。'},
+  {t:'国家线 / 复试线',d:'国家线 = 教育部划的最低门槛；复试线 = 院校自划的进面线，通常高于国家线。'},
+  {t:'进面',d:'进入面试环节。「进面分」= 该岗位历年进面试的最低分，是报岗的核心参考。'},
+  {t:'政审',d:'政治审查，考察本人及直系亲属的遵纪守法情况，考公考编录用前的必经环节。'},
+  {t:'行测',d:'行政职业能力测验，公考笔试科目：言语、数量、判断、资料分析、常识，拼的是速度和取舍。'},
+  {t:'申论',d:'公考笔试科目，给材料写分析和对策。核心是「材料为王」，答案要点大多能从材料里找到。'},
+  {t:'遴选',d:'面向在职公务员的内部选拔考试，是基层公务员往上走的通道。'},
+  {t:'三支一扶',d:'支教、支农、支医、帮扶乡村振兴的基层服务项目，服务期满考研加分、考公有定向岗。'}
+ ]},
+ net:{label:'网络热词',icon:'💬',terms:[
+  {t:'内耗',d:'心理能量被反复纠结、自我怀疑消耗的状态。破解思路：把想法写下来、设定「担忧时间」、先做最小一步。'},
+  {t:'摆烂',d:'主动放弃努力、任其发展。偶尔摆烂是自我保护，长期摆烂往往是「努力也看不到回报」的信号。'},
+  {t:'松弛感',d:'不慌不忙、不过度用力的状态。它不是躺平，而是对结果不过度紧绷的从容。'},
+  {t:'情绪价值',d:'一段关系中让人感受到被理解、被支持的部分。提供情绪价值 ≠ 讨好，双向流动才健康。'},
+  {t:'精神离职',d:'人在工位、心已下班：只完成分内事，不再投入额外情感。是 burnout（倦怠）的一种自我保护反应。'},
+  {t:'i 人 / e 人',d:'MBTI 中内向（Introversion）/ 外向（Extraversion）的网络缩写，指从独处还是社交中获得能量。'},
+  {t:'搭子',d:'为单一活动结伴的轻关系：饭搭子、健身搭子、学习搭子。低负担、边界清，是当代社交的节能形态。'},
+  {t:'电子榨菜',d:'吃饭时配着看的视频或直播，作用类似下饭咸菜。'},
+  {t:'破防',d:'心理防线被击穿，情绪突然绷不住。破防后允许自己缓一缓，不丢人。'},
+  {t:'上头 / 下头',d:'对人事物的迷恋快速升温 / 滤镜碎掉瞬间冷却。两个方向都别急着做重大决定。'},
+  {t:'emo',d:'情绪低落、陷入忧郁的口语说法，来自 emo 音乐风格。「我 emo 了」≈ 我有点丧。'},
+  {t:'卷',d:'内部过度竞争、投入产出比持续下降的状态。识别自己在「无效卷」还是「有效积累」很重要。'}
+ ]},
+ myst:{label:'玄学通用',icon:'✨',terms:[
+  {t:'正位 / 逆位',d:'塔罗牌正放为正位，含义顺向发挥；倒置为逆位，含义受阻、内化或过度。逆位不等于坏牌，只是能量换了个方向。'},
+  {t:'大阿卡纳 / 小阿卡纳',d:'塔罗 78 张 = 22 张大阿卡纳（人生大主题、精神课题）+ 56 张小阿卡纳（权杖 / 圣杯 / 宝剑 / 星币四组，对应行动、情感、思维、物质）。'},
+  {t:'牌阵',d:'抽牌的摆放结构：单张 = 每日指引；三张 = 过去/现在/未来或身/心/灵；凯尔特十字 = 十张复杂牌阵。'},
+  {t:'天使数字',d:'反复看到的重复数字组合（111、222、1212 等），被解读为宇宙的提示信号，本质是注意力筛选后的意义赋予。'},
+  {t:'显化',d:'manifestation，通过明确意图、视觉化想象与行动配合，让目标逐步实现的说法。心理学上接近自我实现预言与目标聚焦。'},
+  {t:'水晶',d:'不同矿石被赋予不同寓意：白水晶净化、紫水晶安定、粉晶招好人缘。实际作用接近安慰剂与仪式感载体。'},
+  {t:'脉轮',d:'印度传统中人体的七个能量中心（海底轮到顶轮），现代语境里常用作「身心状态自查」的隐喻框架。'},
+  {t:'月相',d:'月亮的盈亏周期约 29.5 天：新月许愿开始、满月释放感恩、残月休养清理。适合作为复盘节奏的自然刻度。'},
+  {t:'水逆',d:'水星逆行的简称，占星中指水星视觉上倒退的时期（每年约三次），传统上认为沟通、交通、电子设备易出岔子。'},
+  {t:'如尼符文',d:'北欧古文字（Elder Futhark 24 符），每符对应一种自然力量或人生主题，现代多用于占卜与冥想。'},
+  {t:'神谕卡',d:'oracle cards，规则比塔罗自由的卡牌体系，每张直接印有主题词与指引，适合新手抽每日一卡。'},
+  {t:'净化 / 消磁',d:'清理水晶、牌卡能量附着的仪式：月光晒、流水冲、鼠尾草烟熏等。本质是「重新开始」的心理仪式。'},
+  {t:'许愿',d:'在新月、满月或特定仪式中明确表达意图。有效许愿的要诀：具体、正向、自己可控。'},
+  {t:'灵气',d:'Reiki，源自日本的能量疗愈体系，通过手势引导能量放松身心。作为放松练习体验尚可，不替代医疗。'}
+ ]}
+};
+function glossHTML(keys,filter){
+  const out=[];
+  keys.forEach(k=>{
+    const f=(filter||'').trim().toLowerCase();
+    if(k==='__mine'){
+      const terms=myGloss.filter(t=>!f||t.t.toLowerCase().includes(f)||t.d.toLowerCase().includes(f));
+      if(!terms.length&&f)return;
+      out.push('<div class="gg"><div class="gt">🌱 我的自建'+(terms.length?'（'+terms.length+'）':'')+'</div>'+
+        (terms.length?terms.map(t=>{
+          let d=esc(t.d);
+          if(f){const re=new RegExp('('+f.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');d=d.replace(re,'<mark>$1</mark>')}
+          return '<div class="gi2 mine"><span class="gops"><button data-ge="'+t.id+'">编辑</button><button data-gd="'+t.id+'">删</button></span><b>'+esc(t.t)+'</b>　<span>'+d+'</span></div>';
+        }).join(''):'<div class="gi2" style="color:var(--mu)">还没有自建词条，点右上角「＋ 自建词条」添加你的第一条黑话。</div>')+'</div>');
+      return;
+    }
+    const g=GLOSS[k];if(!g)return;
+    const terms=g.terms.filter(t=>!f||t.t.toLowerCase().includes(f)||t.d.toLowerCase().includes(f));
+    if(!terms.length)return;
+    out.push('<div class="gg"><div class="gt">'+g.icon+' '+esc(g.label)+'（'+terms.length+'）</div>'+
+      terms.map(t=>{
+        let d=esc(t.d);
+        if(f){const re=new RegExp('('+f.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');d=d.replace(re,'<mark>$1</mark>')}
+        return '<div class="gi2"><b>'+esc(t.t)+'</b>　<span>'+d+'</span></div>';
+      }).join('')+'</div>');
+  });
+  return out.join('')||'<div class="empty">没有匹配的黑话</div>';
+}
+function openGloss(){
+  $('#mBox').innerHTML='<h3>📖 黑话词典 <span style="float:right"><button class="btn s p" id="gAdd">＋ 自建词条</button></span></h3>'+
+    '<div id="gForm" style="display:none;background:var(--bg);border:1.5px dashed rgba(var(--pr),.5);border-radius:12px;padding:12px;margin-bottom:12px">'+
+    '<div style="font-size:12px;font-weight:800;color:var(--p);margin-bottom:9px" id="gfTitle">🌱 添加自建词条</div>'+
+    '<label class="f"><span>词条名称</span><input id="gfT" placeholder="如：闭环 / 圣杯十 / 提前批"></label>'+
+    '<label class="f" style="margin-bottom:0"><span>释义</span><textarea id="gfD" rows="3" placeholder="用你自己的话解释它：含义、使用场景、注意事项都可以"></textarea></label>'+
+    '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:11px"><button class="btn s" id="gfCancel">取消</button><button class="btn s p" id="gfSave">保存词条</button></div></div>'+
+    '<div class="sb" style="margin-bottom:13px"><span class="si">🔍</span><input id="gSearch" placeholder="搜黑话，如 wlb / 年包 / 幻觉 / rag / 你自建的词"></div>'+
+    '<div id="gBody" style="max-height:48vh;overflow-y:auto"></div>'+
+    '<div class="macts"><button class="btn p" id="mOk">关闭</button></div>';
+  $('#mMask').classList.add('show');
+  const keys=['__mine'].concat(Object.keys(GLOSS));
+  let editing=null;
+  const refresh=()=>{$('#gBody').innerHTML=glossHTML(keys,$('#gSearch').value)};
+  refresh();
+  $('#gSearch').addEventListener('input',refresh);
+  const closeForm=()=>{$('#gForm').style.display='none';$('#gfT').value='';$('#gfD').value='';editing=null};
+  $('#gAdd').onclick=()=>{editing=null;$('#gfTitle').textContent='🌱 添加自建词条';$('#gfT').value='';$('#gfD').value='';$('#gForm').style.display='block';$('#gfT').focus()};
+  $('#gfCancel').onclick=closeForm;
+  $('#gfSave').onclick=()=>{
+    const t=$('#gfT').value.trim(),d=$('#gfD').value.trim();
+    if(!t){toast('请填写词条名称');return}
+    if(!d){toast('请填写释义');return}
+    const wasEdit=!!editing;
+    if(editing){const it=myGloss.find(x=>x.id===editing);if(it){it.t=t;it.d=d}}
+    else myGloss.unshift({id:uid(),t,d,date:todayS()});
+    saveGloss();closeForm();refresh();toast(wasEdit?'词条已更新':'已加入「我的自建」');
+  };
+  $('#gBody').addEventListener('click',e=>{
+    const eb=e.target.closest('[data-ge]');
+    if(eb){const it=myGloss.find(x=>x.id===eb.dataset.ge);if(!it)return;editing=it.id;$('#gfTitle').textContent='✏️ 编辑自建词条';$('#gfT').value=it.t;$('#gfD').value=it.d;$('#gForm').style.display='block';$('#mBox').scrollTop=0;return}
+    const db=e.target.closest('[data-gd]');
+    if(db){const it=myGloss.find(x=>x.id===db.dataset.gd);if(!it)return;if(!confirm('删除自建词条「'+it.t+'」？'))return;myGloss=myGloss.filter(x=>x.id!==db.dataset.gd);saveGloss();refresh();toast('已删除')}
+  });
+  $('#mOk').onclick=()=>{$('#mMask').classList.remove('show');$('#mBox').innerHTML=''};
+  $('#mMask').onclick=e=>{if(e.target.id==='mMask'){$('#mMask').classList.remove('show');$('#mBox').innerHTML=''}};
+}
+/* ============================================================
+   9. Skill 数据
+============================================================ */
+const TPL_HEAD=`【输出约束（固定）】
+1. 涉及考试政策、分数线、报名时间、岗位要求、证书规则、时间节点，不确定时必须标注：【信息存在变动风险，请以官方公告为准】，严禁编造；
+2. 不编造不存在的题库、资料链接、机构、内推信息、面经；
+3. 优先输出结构化、可落地的行动方案，多用列表，简洁；
+4. 如果用户档案信息不足，直接列出缺失项，不要自行脑补补充；
+5. 严格围绕用户档案 + 当前提问回答，不要无关发散；
+6. 不要主动拓展额外工具、额外方案，除非用户主动要求；
+7. 输出内容尽量克制，减少冗余长文，方便我转为打卡任务。`;
+const TPL_TAIL=`=== 用户档案区（由当前Skill表单自动填充） ===
+{{archiveContent}}
+
+=== 我的问题 ===
+{{userQuestion}}`;
+function buildTpl(sop){let s=TPL_HEAD;if(sop&&sop.trim())s+='\n\n=== 参考流程 / 输出框架 ===\n'+sop.trim();return s+'\n\n'+TPL_TAIL}
+function mk(o){return{id:o.id,title:o.title,icon:o.icon||'✨',cat:o.cat,tags:o.tags||[],keywords:o.keywords||'',description:o.description||'',glossary:o.glossary||[],archiveFields:o.archiveFields||[],promptTemplate:buildTpl(o.sop||''),uploadDate:o.uploadDate||'2026-11-18',builtin:true,isArchived:false}}
+const BUILTIN=[
+mk({id:'job-scout',cat:'求职',icon:'🎯',title:'岗位侦察 · 秋招/春招',tags:['秋招','岗位筛选','求职'],keywords:'岗位 校招 实习 城市 薪资 匹配 HR 用户研究 数据分析',description:'按硬条件过滤真实岗位，输出可投递清单、关键词映射与投递节奏。',glossary:['job'],archiveFields:[{label:'毕业年份',key:'gradYear'},{label:'学历',key:'degree'},{label:'院校',key:'school'},{label:'专业',key:'major'},{label:'实习经历简述',key:'intern'},{label:'项目经历',key:'project'},{label:'性格标签',key:'personality'},{label:'期望薪资',key:'salary'},{label:'意向城市',key:'city'},{label:'岗位方向',key:'direction'},{label:'投递周期',key:'season'},{label:'可到岗时间',key:'available'},{label:'英语证书',key:'english'},{label:'技能栈',key:'skills'},{label:'不接受项',key:'avoid'}],sop:['【岗位筛选硬规则】','- 城市：江浙沪优先；成都/重庆/武汉/广东可收；其他城市仅备选单列。','- 薪资：<8k/月 一律不推；JD 未公开薪资标「未公开-待确认」，不得默认达标。','- 公司：中型及以上规模、主体可查证；警惕「综合管培轮岗方向不定」「合伙创业」「底薪面议绩效上不封顶」。','- 岗位关键词：跨部门协调、数据处理、流程、SOP、台账、合规、交付、验收、整改、报表、口径。','- 每条岗位必须给出：公司主体 / 岗位名 / 城市 / 薪资状态 / 来源渠道 / 截止日期 / 匹配理由。','- 缺链接或信息不全的岗位放进「待核实」区，不进正式清单。','','【心理学背景 → 岗位语言】','- 心理测量 / 实验心理学 / SPSS / R → 测评工具、信效度检验、问卷设计、数据分析报告','- 研究方向经历 → 用户访谈、实验设计、统计分析、研究报告撰写','- 学生会 / 社团 / 项目 → 跨部门协调、里程碑推进、风险台账、SOP 沉淀','- 心理咨询 / 团辅 → 访谈技术、共情倾听、危机识别、保密意识'].join('\n')}),
+mk({id:'resume',cat:'求职',icon:'📄',title:'简历优化',tags:['简历','求职','STAR'],keywords:'简历 改写 经历 STAR 关键词 JD 匹配',description:'按目标 JD 重写经历描述，动词+任务+数据+结果。',glossary:['job'],archiveFields:[{label:'目标岗位',key:'target'},{label:'目标 JD 原文',key:'jd'},{label:'现有简历要点',key:'current'},{label:'想突出的能力',key:'highlight'},{label:'担心被质疑的点',key:'weak'}],sop:['【简历硬规则】','- 每条经历 = 动词 + 任务 + 数据 + 结果，没有精确数据就用可核实的规模 / 频次替代。','- 删掉「性格开朗」「吃苦耐劳」「学习能力强」这类空话，换成岗位关键词。','- 一页纸优先，倒序排列，最近经历写最多行。','- 输出格式：先给 3 版不同侧重的改法，再逐条给「原句 → 改后句 → 改的理由」。'].join('\n')}),
+mk({id:'interview',cat:'求职',icon:'🎤',title:'面试准备',tags:['面试','STAR','反问'],keywords:'面试 问题 追问 自我介绍 STAR 反问',description:'预测问题 + STAR 答案骨架 + 反问清单。',glossary:['job'],archiveFields:[{label:'公司 / 岗位',key:'company'},{label:'面试轮次与形式',key:'round'},{label:'岗位 JD',key:'jd'},{label:'我的自我介绍稿',key:'intro'},{label:'最担心被问到的点',key:'worry'},{label:'已准备的内容',key:'prepare'}],sop:['【面试准备输出要求】','- 给出 10 个高概率问题（含 3 个压力追问），每题给 STAR 骨架，留空让我填细节。','- 给一版 60 秒自我介绍（口语化、能背下来）。','- 给 5 个可以在反问环节问的问题，要能体现专业性。','- 标注哪些问题必须提前查公司资料才能答好。'].join('\n')}),
+mk({id:'kaoyan',cat:'学习备考',icon:'📚',title:'考研规划',tags:['考研','规划','复盘'],keywords:'考研 院校 专业课 政治 英语 计划 阶段 复盘',description:'阶段拆分 + 月周日计划 + 复盘模板。',archiveFields:[{label:'目标院校专业',key:'target'},{label:'考试科目与代码',key:'subjects'},{label:'当前基础',key:'level'},{label:'每日可投入时间',key:'hours'},{label:'目标分数',key:'score'},{label:'考试时间',key:'examDate'},{label:'薄弱科目',key:'weak'}],sop:['【考研规划要求】','- 按「基础—强化—冲刺」三阶段拆分，给每阶段起止月份与验收标准。','- 输出一份可执行的本月周计划表（周一到周日，上午/下午/晚上）。','- 给每周复盘模板（3 个问题即可）。','- 报录比、分数线、参考书目不确定时必须标注以官方公告为准。'].join('\n')}),
+mk({id:'ielts',cat:'学习备考',icon:'🌍',title:'雅思备考',tags:['雅思','英语','留学'],keywords:'雅思 听力 阅读 写作 口语 分数 模考',description:'四项分数拆解 + 每日任务模板 + 模考节奏。',archiveFields:[{label:'目标分数',key:'target'},{label:'考试日期',key:'examDate'},{label:'当前水平',key:'level'},{label:'每日学习时长',key:'hours'},{label:'薄弱单项',key:'weak'},{label:'已用资料',key:'material'},{label:'考试形式',key:'mode'}],sop:['【雅思备考要求】','- 先给四项分数目标拆解（听力/阅读/写作/口语各需多少分才能达标）。','- 给每日任务模板（按我填写的时长设计）。','- 给写作 Task1 / Task2 的通用结构骨架。','- 给模考节奏建议（考前 6 周开始，每周几次）。','- 考试时间、报名、考点信息必须标注以官网为准。'].join('\n')}),
+mk({id:'cet',cat:'学习备考',icon:'📖',title:'四六级',tags:['四六级','英语'],keywords:'四级 六级 听力 阅读 翻译 作文 单词 真题',description:'分数拆解 + 单词与真题节奏。',archiveFields:[{label:'考试时间',key:'examDate'},{label:'目标分数',key:'target'},{label:'当前水平',key:'level'},{label:'薄弱项',key:'weak'},{label:'每日时长',key:'hours'},{label:'已背单词量',key:'words'}],sop:['【四六级备考要求】','- 给分数拆解（听力/阅读/写作翻译各需多少）。','- 给单词背诵节奏（每天多少、怎么滚动复习）。','- 给真题使用节奏（近 10 年真题怎么刷、刷几遍）。','- 给考前 2 周冲刺安排。'].join('\n')}),
+mk({id:'japanese',cat:'学习备考',icon:'🗾',title:'日语学习',tags:['日语','N2','语言'],keywords:'日语 N1 N2 标日 单词 语法 听力',description:'等级目标 + 教材进度 + 每日节奏。',archiveFields:[{label:'目标等级',key:'target'},{label:'考试时间',key:'examDate'},{label:'当前水平',key:'level'},{label:'每日时长',key:'hours'},{label:'用途',key:'purpose'},{label:'在用教材',key:'material'}],sop:['【日语学习要求】','- 按目标等级倒推需要掌握的词汇量、语法条目、听力时长。','- 给每日任务模板（单词/语法/听力/阅读分配）。','- 给考前 8 周冲刺安排。','- 报名时间、考点必须标注以官方公告为准。'].join('\n')}),
+mk({id:'teacher-cert',cat:'学习备考',icon:'🏫',title:'教师资格证',tags:['教资','笔试','面试'],keywords:'教资 教资证 科目一 科目二 面试 试讲 结构化',description:'笔试科目安排 + 面试准备。',archiveFields:[{label:'学段学科',key:'subject'},{label:'当前阶段',key:'stage'},{label:'考试时间',key:'examDate'},{label:'当前进度',key:'progress'},{label:'每日时长',key:'hours'},{label:'是否已报名',key:'signup'}],sop:['【教资备考要求】','- 给各科目的分值结构与高频考点分布。','- 给每周任务表。','- 面试部分给结构化答题模板与试讲流程。','- 报名、笔试、面试时间必须标注以官方公告为准。'].join('\n')}),
+mk({id:'ncre',cat:'学习备考',icon:'💻',title:'计算机等级考试',tags:['计算机','二级','Office'],keywords:'计算机二级 MS Office 真题 选择题 操作题',description:'科目选择 + 刷题节奏。',archiveFields:[{label:'科目等级',key:'subject'},{label:'考试时间',key:'examDate'},{label:'当前基础',key:'level'},{label:'每日时长',key:'hours'}],sop:['【计算机等级考试要求】','- 给该科目的题型与分值分布。','- 给刷题节奏（真题几套、怎么练操作题）。','- 给每日任务模板。'].join('\n')}),
+mk({id:'research',cat:'科研',icon:'🔬',title:'科研 / 论文',tags:['科研','论文','毕业'],keywords:'论文 文献 实验 数据分析 投稿 小论文 盲审 信效度',description:'文献—实验—写作的阶段拆解与里程碑倒排。',glossary:['acad'],archiveFields:[{label:'研究方向',key:'topic'},{label:'当前阶段',key:'stage'},{label:'目标成果',key:'goal'},{label:'截止时间',key:'deadline'},{label:'数据情况',key:'data'},{label:'导师要求',key:'advisor'},{label:'每日可投入时间',key:'hours'}],sop:['【科研推进要求】','- 先判断当前阶段的关键卡点（选题不聚焦 / 文献不足 / 方法不对 / 写作结构散）。','- 给出从现在到截止日的倒排时间表，标出每个里程碑的交付物。','- 给本周可立即执行的三件事。','- 涉及统计方法时说明适用条件与需要检查的前提假设。'].join('\n')}),
+mk({id:'fitness',cat:'生活成长',icon:'💪',title:'健身 / 减脂',tags:['健身','减脂','饮食'],keywords:'健身 减脂 增肌 训练 饮食 体态 热量',description:'目标拆解 + 每周训练与饮食安排。',archiveFields:[{label:'身高体重',key:'body'},{label:'目标',key:'goal'},{label:'周期',key:'period'},{label:'每周可练次数',key:'freq'},{label:'饮食条件',key:'diet'},{label:'器械条件',key:'gear'},{label:'伤病或限制',key:'injury'}],sop:['【健身减脂要求】','- 给每周训练表（动作、组数、次数、休息日）。','- 给饮食框架（不要求精确到克，给可执行的选择原则）。','- 给 4 周一个周期的评估指标与调整规则。','- 有伤病时必须提示先咨询专业人士。'].join('\n')}),
+mk({id:'driving',cat:'生活成长',icon:'🚗',title:'驾照',tags:['驾照','科二','科三'],keywords:'驾照 C1 C2 科目一 科目二 科目三 练车',description:'科目进度 + 每周练车安排。',archiveFields:[{label:'报考类型',key:'type'},{label:'所在城市',key:'city'},{label:'当前进度',key:'progress'},{label:'每周可练时间',key:'time'},{label:'目标拿证时间',key:'target'}],sop:['【驾照进度要求】','- 按剩余科目倒排时间表。','- 给每个科目的练习重点与常见挂科点。','- 给每周练车安排建议。'].join('\n')}),
+mk({id:'mood-story',cat:'生活成长',icon:'🌙',title:'心情小故事',tags:['心情','治愈','关键词'],keywords:'心情 故事 治愈 关键词 自我接纳',description:'用三个心情关键词生成一段温柔治愈的小故事 + 一句启示。',archiveFields:[{label:'今日完成率',key:'completionRate'},{label:'今日状态自评（1-10）',key:'moodScore'},{label:'想被抚慰的方向',key:'theme'}],sop:['【心情小故事输出要求】','- 使用给定三个关键词，创作一段温柔治愈的短小故事，三词都要自然融入。','- 故事字数不少于 150 字。','- 风格偏向自我接纳、抚慰内心、适合备考 / 秋招 / 内耗的人。','- 故事写完之后，单独一小段启示鼓励，启示简短，引导自我肯定，不鸡汤、不鸡血。'].join('\n')})
+];
+function allSkills(){return BUILTIN.concat(customSkills)}
+function getSkill(id){return allSkills().find(s=>s.id===id)}
+function getStat(id){return stats[id]||{useCount:0}}
+function bumpStat(id){if(!stats[id])stats[id]={useCount:0};stats[id].useCount++;stats[id].lastUsed=todayS();saveSt()}
+function getArch(sid){
+  if(!archives[sid]||!archives[sid].snapshots||!archives[sid].snapshots.length){
+    const sn={id:uid(),name:'默认档案',data:{},question:''};
+    archives[sid]={active:sn.id,snapshots:[sn]};saveAr();
+  }
+  return archives[sid];
+}
+function activeSnap(sid){const a=getArch(sid);let s=a.snapshots.find(x=>x.id===a.active);if(!s){s=a.snapshots[0];a.active=s.id}if(!s.data)s.data={};return s}
+function buildPrompt(skill,snap){
+  const arch=(skill.archiveFields||[]).map(f=>f.label+'：'+(String(snap.data[f.key]||'').trim()||'（未填写）')).join('\n');
+  const q=String(snap.question||'').trim()||'请根据以上档案，输出一份可落地、分步骤的行动方案。';
+  let t=skill.promptTemplate||buildTpl('');
+  if(t.indexOf('{{archiveContent}}')>=0||t.indexOf('{{userQuestion}}')>=0){t=t.replace(/\{\{archiveContent\}\}/g,arch).replace(/\{\{userQuestion\}\}/g,q)}
+  else{t+='\n\n=== 用户档案区 ===\n'+arch+'\n\n=== 我的问题 ===\n'+q}
+  return '【当前日期】'+todayS()+'（周'+WK[new Date().getDay()]+'）\n\n'+t;
+}
+/* ============================================================
+   10. 打卡
+============================================================ */
+let curDate=todayS();
+function peekDay(ds){return ledger.checkins[ds]||{goals:[],note:''}}
+function getDay(ds){if(!ledger.checkins[ds])ledger.checkins[ds]={goals:[],note:''};const d=ledger.checkins[ds];if(!d.goals)d.goals=[];if(typeof d.note!=='string')d.note='';return d}
+function renderDate(){
+  const d=parseD(curDate);
+  $('#dMain').textContent=(d.getMonth()+1)+'月'+d.getDate()+'日';
+  $('#dSub').textContent=d.getFullYear()+' · 周'+WK[d.getDay()]+(curDate===todayS()?' · 今天':'');
+  $('#dPick').value=curDate;
+  $('#brandSub').textContent=d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日 周'+WK[d.getDay()];
+}
+function renderGoals(){
+  const day=peekDay(curDate),box=$('#goalList');
+  if(!day.goals.length){box.innerHTML='<div class="empty">今天还没有大目标，在下面添加一个吧 👇</div>';return}
+  box.innerHTML=day.goals.map(g=>{
+    const items=g.items||[],done=items.filter(i=>i.done).length,total=items.length,pct=total?Math.round(done/total*100):0;
+    return '<div class="card goal" data-gid="'+g.id+'">'+
+      '<div class="gh"><div class="gtw"><span class="gdot"></span><span class="gtitle" data-act="edit-goal">'+esc(g.title)+'</span></div>'+
+      '<div class="gm"><span class="gc">'+done+'/'+total+'</span><button class="ib sm" data-act="del-goal" title="删除目标">✕</button></div></div>'+
+      '<div class="gbar"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="gi">'+items.map(it=>'<label class="item '+(it.done?'done':'')+'"><input type="checkbox" data-act="toggle" data-iid="'+it.id+'" '+(it.done?'checked':'')+'><span class="itx" data-act="edit-item" data-iid="'+it.id+'">'+esc(it.text)+'</span><button class="ib xs" data-act="del-item" data-iid="'+it.id+'" title="删除">✕</button></label>').join('')+'</div>'+
+      '<div class="ga"><input data-act="add-item" placeholder="+ 添加子项，回车确认"></div></div>';
+  }).join('');
+}
+function renderNote(){$('#noteArea').value=peekDay(curDate).note||''}
+function renderStats(){
+  const day=peekDay(curDate);let total=0,done=0;
+  day.goals.forEach(g=>(g.items||[]).forEach(i=>{total++;if(i.done)done++}));
+  const pct=total?Math.round(done/total*100):0;
+  const r=$('#ring');r.style.setProperty('--p',pct);r.querySelector('span').textContent=pct+'%';
+  $('#stToday').textContent=done+' / '+total;
+  const now=new Date(),wd=now.getDay()||7,mon=new Date(now);mon.setDate(now.getDate()-wd+1);
+  let wt=0,wdn=0;
+  for(let i=0;i<7;i++){const dd=new Date(mon);dd.setDate(mon.getDate()+i);if(dd>sod(now))break;const rec=ledger.checkins[fmtD(dd)];if(!rec)continue;(rec.goals||[]).forEach(g=>(g.items||[]).forEach(it=>{wt++;if(it.done)wdn++}))}
+  $('#stWeek').textContent=(wt?Math.round(wdn/wt*100):0)+'%';
+  let n=0,cur=new Date();
+  const has=d=>{const r=ledger.checkins[fmtD(d)];return r&&(r.goals||[]).some(g=>(g.items||[]).some(i=>i.done))};
+  if(!has(cur))cur.setDate(cur.getDate()-1);
+  for(let g=0;g<3650;g++){if(!has(cur))break;n++;cur.setDate(cur.getDate()-1)}
+  $('#stStreak').textContent=n+' 天';
+}
+function nextBday(b){
+  const today=sod(new Date()),y0=today.getFullYear();
+  for(let y=y0;y<=y0+2;y++){
+    let dt=null;
+    if(b.type==='solar'){dt=new Date(y,b.month-1,b.day);if(b.month===2&&b.day===29&&dt.getMonth()!==1)dt=new Date(y,1,28)}
+    else{dt=l2s(b.month,b.day,y);if(!dt&&b.day===30)dt=l2s(b.month,29,y)}
+    if(dt&&dt>=today)return dt;
+  }
+  return null;
+}
+function renderBdays(){
+  const box=$('#bdayList');
+  if(!ledger.birthdays.length){box.innerHTML='<div class="empty" style="padding:15px;font-size:11.5px">还没有添加生日提醒</div>';return}
+  const list=ledger.birthdays.map(b=>({b,next:nextBday(b)})).filter(x=>x.next).sort((a,b)=>a.next-b.next);
+  box.innerHTML=list.map(({b,next})=>{
+    const days=dayDiff(next,new Date()),remind=b.remindDays!=null?b.remindDays:ledger.setting.remindDays;
+    const cls=days===0?'today':(days<=remind?'soon':'');
+    const dt=b.type==='solar'?(b.month+'月'+b.day+'日'):('农历'+LM[b.month-1]+'月'+LD[b.day-1]);
+    const txt=days===0?'🎉 今天':(days===1?'明天':'还有 '+days+' 天');
+    return '<div class="mi '+cls+'" data-bid="'+b.id+'"><div class="mim"><div class="min">'+esc(b.name)+(b.tag?' · '+esc(b.tag):'')+'</div><div class="mis">'+dt+' · '+next.getFullYear()+'-'+pad2(next.getMonth()+1)+'-'+pad2(next.getDate())+'</div></div><div class="mid">'+txt+'</div><button class="ib xs" data-act="del-bday" title="删除">✕</button></div>';
+  }).join('');
+}
+function renderDDLs(){
+  const box=$('#ddlList');
+  if(!ledger.ddls.length){box.innerHTML='<div class="empty" style="padding:15px;font-size:11.5px">还没有 DDL</div>';return}
+  const list=ledger.ddls.slice().sort((a,b)=>parseD(a.date)-parseD(b.date));
+  box.innerHTML=list.map(d=>{
+    const left=dayDiff(parseD(d.date),new Date()),cls=left<0?'over':(left<=3?'soon':'');
+    const txt=left<0?('已过期 '+(-left)+' 天'):(left===0?'今天截止':'剩 '+left+' 天');
+    return '<div class="mi '+cls+'" data-did="'+d.id+'"><div class="mim"><div class="min">'+esc(d.name)+'</div><div class="mis">'+d.date+'</div></div><div class="mid '+(left<0?'ot':'')+'">'+txt+'</div><button class="ib xs" data-act="del-ddl" title="删除">✕</button></div>';
+  }).join('');
+}
+function renderDaily(){renderDate();renderGoals();renderNote();renderStats();renderBdays();renderDDLs()}
+/* ============================================================
+   11. Skill 列表
+============================================================ */
+const PS=12;
+let wb={cat:'全部',q:'',sort:'recent',showArc:false,page:0,sT:null};
+function renderCatTabs(){
+  const cats=['全部'];allSkills().forEach(s=>{if(!cats.includes(s.cat))cats.push(s.cat)});
+  $('#catTabs').innerHTML=cats.map(c=>'<button class="cat '+(c===wb.cat?'active':'')+'" data-cat="'+esc(c)+'">'+esc(c)+'</button>').join('');
+}
+function filteredSkills(){
+  let list=allSkills().slice();
+  if(wb.cat!=='全部')list=list.filter(s=>s.cat===wb.cat);
+  list=list.filter(s=>wb.showArc?s.isArchived:!s.isArchived);
+  const q=wb.q.trim().toLowerCase();
+  if(q){list=list.filter(s=>[s.title,s.description,s.keywords,(s.tags||[]).join(' ')].join(' ').toLowerCase().indexOf(q)>=0)}
+  if(wb.sort==='hot')list.sort((a,b)=>(getStat(b.id).useCount||0)-(getStat(a.id).useCount||0));
+  else if(wb.sort==='name')list.sort((a,b)=>a.title.localeCompare(b.title,'zh'));
+  else list.sort((a,b)=>String(b.uploadDate||'').localeCompare(String(a.uploadDate||'')));
+  return list;
+}
+function renderSkillGrid(){
+  const list=filteredSkills(),tp=Math.max(1,Math.ceil(list.length/PS));
+  if(wb.page>=tp)wb.page=tp-1;if(wb.page<0)wb.page=0;
+  const pageList=list.slice(wb.page*PS,(wb.page+1)*PS);
+  const grid=$('#sGrid');
+  if(!list.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1">没有匹配的 Skill，换个关键词或新建一个</div>'}
+  else{
+    grid.innerHTML=pageList.map(s=>{
+      const st=getStat(s.id);
+      const tags=(s.tags||[]).slice(0,3).map(t=>'<span class="tag">'+esc(t)+'</span>').join('');
+      return '<div class="sc" data-sid="'+s.id+'">'+
+        (s.builtin?'':'<button class="ib xs scdel" data-act="del-skill" data-sid="'+s.id+'" title="删除">✕</button>')+
+        '<div class="sci">'+esc(s.icon||'✨')+'</div><div class="scn">'+esc(s.title)+'</div>'+
+        '<div class="scd">'+esc(s.description||'')+'</div>'+
+        '<div class="sct"><span class="tag g">'+esc(s.cat)+'</span>'+tags+'</div>'+
+        '<div class="scf"><span>🔥 '+(st.useCount||0)+' 次</span><span>'+esc(s.uploadDate||'')+'</span>'+(s.isArchived?'<span class="tag g">已归档</span>':'')+'</div></div>';
+    }).join('');
+  }
+  if(wb.page===0&&tp===1&&!wb.q){grid.insertAdjacentHTML('beforeend','<div class="sc asc" id="addSkillCard">＋ 新建自定义 Skill</div>')}
+  const pager=$('#sPager');
+  if(tp<=1)pager.innerHTML='<span>共 '+list.length+' 个 Skill</span>';
+  else pager.innerHTML='<button class="btn s" id="pgPrev" '+(wb.page===0?'disabled style="opacity:.4"':'')+'>‹ 上一页</button><span>'+(wb.page+1)+' / '+tp+' · 共 '+list.length+' 个</span><button class="btn s" id="pgNext" '+(wb.page>=tp-1?'disabled style="opacity:.4"':'')+'>下一页 ›</button>';
+}
+function renderSkills(){renderCatTabs();renderSkillGrid()}
+/* ============================================================
+   12. Skill 抽屉
+============================================================ */
+let curSkill=null;
+function openSkill(sid){
+  const skill=getSkill(sid);if(!skill)return;
+  curSkill=sid;
+  const arch=getArch(sid),snap=activeSnap(sid);
+  const snapOpts=arch.snapshots.map(s=>'<option value="'+s.id+'" '+(s.id===snap.id?'selected':'')+'>'+esc(s.name)+'</option>').join('');
+  const fieldsHTML=(skill.archiveFields||[]).map(f=>{
+    const v=snap.data[f.key]==null?'':snap.data[f.key];
+    const isLong=String(f.label).indexOf('简述')>=0||String(f.label).indexOf('经历')>=0||String(f.label).indexOf('要求')>=0||String(f.label).indexOf('JD')>=0||String(f.label).indexOf('情况')>=0||String(f.label).indexOf('内容')>=0||String(f.label).indexOf('要求')>=0;
+    const ctrl=isLong?'<textarea data-key="'+f.key+'" rows="3" placeholder="'+esc(f.default||'')+'">'+esc(v)+'</textarea>':'<input type="text" data-key="'+f.key+'" value="'+esc(v)+'" placeholder="'+esc(f.default||'')+'">';
+    return '<label class="f"><span>'+esc(f.label)+'</span>'+ctrl+'</label>';
+  }).join('');
+  const glossHTML_=(skill.glossary&&skill.glossary.length)?'<details class="acc"><summary>📖 相关黑话速查（点击展开）</summary><div class="accb">'+glossHTML(skill.glossary,'')+'</div></details>':'';
+  const tplHTML='<details class="acc"><summary>🧩 查看此 Skill 的 Prompt 模板</summary><div class="accb"><pre>'+esc(skill.promptTemplate||'')+'</pre></div></details>';
+  $('#drawer').innerHTML='<div class="dh"><span class="dhi">'+esc(skill.icon||'✨')+'</span><div><div class="dht">'+esc(skill.title)+'</div><div class="dhs">'+esc(skill.cat)+' · 档案仅存本地</div></div><button class="ib" id="closeDrawer" title="关闭">✕</button></div>'+
+    '<div class="dbd"><div class="snapb"><select id="snapSelect">'+snapOpts+'</select><button class="btn s" id="snapNew">新建</button><button class="btn s" id="snapRen">重命名</button><button class="btn s d" id="snapDel">删除</button></div>'+
+    '<div id="skillFields">'+fieldsHTML+'</div>'+glossHTML_+
+    '<label class="f" style="margin-top:13px"><span>我这次的问题</span><textarea id="skillQuestion" rows="4" placeholder="例：帮我筛选适合我的岗位，给出投递时间表和简历修改要点">'+esc(snap.question||'')+'</textarea></label>'+
+    tplHTML+
+    '<div class="pacts"><button class="btn p" id="btnCopyPrompt">📋 生成并复制 Prompt</button><button class="btn" id="btnPreview">👁 预览</button><button class="btn" id="btnExpSkill">⬇ 导出此 Skill</button><a class="btn g" href="https://www.doubao.com/chat/" target="_blank" rel="noopener">打开豆包 ↗</a></div>'+
+    '<pre class="pprev" id="promptPreview" hidden></pre></div>';
+  $('#dMask').classList.add('show');$('#drawer').classList.add('show');document.body.style.overflow='hidden';
+}
+function closeDrawer(){$('#dMask').classList.remove('show');$('#drawer').classList.remove('show');document.body.style.overflow='';curSkill=null}
+function openForm(o){
+  const{title,fields,values={},onSubmit,okText='保存'}=o;
+  const body=fields.map(f=>{
+    const v=values[f.key]!=null?values[f.key]:(f.default!=null?f.default:'');
+    let c;
+    if(f.type==='textarea')c='<textarea data-key="'+f.key+'" rows="'+(f.rows||3)+'" placeholder="'+esc(f.placeholder||'')+'">'+esc(v)+'</textarea>';
+    else if(f.type==='select')c='<select data-key="'+f.key+'">'+(f.options||[]).map(x=>'<option value="'+esc(x)+'" '+(x===v?'selected':'')+'>'+esc(x)+'</option>').join('')+'</select>';
+    else if(f.type==='date')c='<input type="date" data-key="'+f.key+'" value="'+esc(v)+'">';
+    else if(f.type==='number')c='<input type="number" data-key="'+f.key+'" value="'+esc(v)+'" placeholder="'+esc(f.placeholder||'')+'">';
+    else c='<input type="text" data-key="'+f.key+'" value="'+esc(v)+'" placeholder="'+esc(f.placeholder||'')+'">';
+    return '<label class="f"><span>'+esc(f.label)+'</span>'+c+'</label>';
+  }).join('');
+  $('#mBox').innerHTML='<h3>'+esc(title)+'</h3>'+body+'<div class="macts"><button class="btn" id="mCancel">取消</button><button class="btn p" id="mOk">'+esc(okText)+'</button></div>';
+  $('#mMask').classList.add('show');
+  const close=()=>{$('#mMask').classList.remove('show');$('#mBox').innerHTML=''};
+  $('#mCancel').onclick=close;
+  $('#mOk').onclick=()=>{const data={};$$('#mBox [data-key]').forEach(el=>{data[el.dataset.key]=el.value});if(onSubmit(data)!==false)close()};
+  $('#mMask').onclick=e=>{if(e.target.id==='mMask')close()};
+  setTimeout(()=>{const f=$('#mBox [data-key]');if(f)f.focus()},60);
+}
+function openNewSkill(){
+  openForm({title:'新建自定义 Skill',okText:'创建',fields:[
+    {key:'title',label:'Skill 标题',placeholder:'例：实习投递追踪 / 减肥建议'},
+    {key:'cat',label:'分类',type:'select',options:['求职','学习备考','科研','生活成长','自定义'],default:'自定义'},
+    {key:'icon',label:'图标（emoji）',placeholder:'✨',default:'✨'},
+    {key:'tags',label:'标签（逗号分隔）',placeholder:'减肥, 健身, 饮食'},
+    {key:'keywords',label:'关键词（空格分隔，便于搜索）',placeholder:'减脂 热量 训练 饮食'},
+    {key:'description',label:'一句话描述',placeholder:'这个 Skill 用来做什么'},
+    {key:'fieldsText',label:'档案字段（每行一个，格式：字段名|提示）',type:'textarea',rows:4,default:'目标\n当前进度|已做到哪一步\n每日可投入时间|2 小时\n其他补充'},
+    {key:'sop',label:'参考流程 / 输出框架（可选）',type:'textarea',rows:4,placeholder:'告诉 AI 按什么步骤、什么标准输出'}
+  ],onSubmit(d){
+    const title=(d.title||'').trim();if(!title){toast('请填写 Skill 标题');return false}
+    const fields=(d.fieldsText||'').split('\n').map(l=>l.trim()).filter(Boolean).map((l,i)=>{const p=l.split('|').map(x=>x.trim());return{label:p[0],key:'f'+i,default:p[1]||''}});
+    if(!fields.length){toast('至少填写一个档案字段');return false}
+    const tags=(d.tags||'').split(/[,，]/).map(x=>x.trim()).filter(Boolean);
+    customSkills.unshift({id:'cs_'+uid(),title,cat:d.cat||'自定义',icon:(d.icon||'✨').trim()||'✨',tags,keywords:(d.keywords||'').trim(),description:(d.description||'').trim(),glossary:[],archiveFields:fields,promptTemplate:buildTpl(d.sop||''),uploadDate:todayS(),builtin:false,isArchived:false});
+    saveSk();renderSkills();toast('已创建：'+title);
+  }});
+}
+function expSkillObj(s){
+  const st=getStat(s.id);
+  return{skillId:s.id,title:s.title,icon:s.icon,cat:s.cat,tags:s.tags||[],keywords:s.keywords||'',description:s.description||'',uploadDate:s.uploadDate||todayS(),promptTemplate:s.promptTemplate||'',archiveFields:s.archiveFields||[],useCount:st.useCount||0,isArchived:!!s.isArchived};
+}
+function dlJSON(obj,fn){
+  const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=fn;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function impSkillFile(f){
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const o=JSON.parse(r.result),arr=Array.isArray(o)?o:[o];let c=0;
+      arr.forEach(x=>{
+        if(!x||!x.title)return;
+        const fields=(x.archiveFields||[]).map((f,i)=>({label:f.label||('字段'+(i+1)),key:f.key||('f'+i),default:f.default||''}));
+        customSkills.unshift({id:'cs_'+uid(),title:String(x.title),cat:x.cat||'自定义',icon:x.icon||'✨',tags:Array.isArray(x.tags)?x.tags:[],keywords:x.keywords||'',description:x.description||'',glossary:[],archiveFields:fields,promptTemplate:x.promptTemplate||buildTpl(''),uploadDate:x.uploadDate||todayS(),builtin:false,isArchived:!!x.isArchived});
+        c++;
+      });
+      saveSk();renderSkills();toast(c?('已导入 '+c+' 个 Skill'):'没有可导入的内容');
+    }catch(e){toast('导入失败：文件不是有效的 JSON')}
+  };
+  r.readAsText(f);
+}
+/* ============================================================
+   13. 塔罗
+============================================================ */
+/* ============================================================
+   12.5 占卜额度（每日 7 次 · 间隔 1 分钟）+ 今日加持
+============================================================ */
+const ORACLE_MAX=7,ORACLE_CD=60*1000;
+const ORACLE_BTNS=['btnDrawTarot','btnCastHex','btnDrawBazi','btnDrawAstro','btnDrawSign','btnCastNum','btnCastE'];
+function renderQuota(){
+  const dots=[];for(let i=0;i<ORACLE_MAX;i++)dots.push('<span class="qd '+(i<ORACLE_MAX-orc.used?'on':'')+'"></span>');
+  const el=$('#quotaDots');if(el)el.innerHTML=dots.join('');
+  const tx=$('#quotaText');if(tx)tx.textContent=(ORACLE_MAX-orc.used)+' / '+ORACLE_MAX;
+}
+function oracleCooldownLeft(){return Math.max(0,ORACLE_CD-(Date.now()-(orc.last||0)))}
+function tryOracle(){
+  if(orc.date!==todayS()){orc={date:todayS(),used:0,last:0};saveOrc()}
+  if(orc.used>=ORACLE_MAX){toast('今天的 7 次占卜机会用完啦，明天 0 点再来');return false}
+  const cd=oracleCooldownLeft();
+  if(cd>0){toast('占卜需要间隔 1 分钟，还需等待 '+Math.ceil(cd/1000)+' 秒');return false}
+  orc.used++;orc.last=Date.now();saveOrc();renderQuota();return true;
+}
+function tickOracleCd(){
+  const cd=oracleCooldownLeft();
+  const el=$('#quotaCd');
+  if(el){
+    if(orc.used>=ORACLE_MAX){el.textContent='今日机会已用完 · 0 点重置';el.classList.remove('hot')}
+    else if(cd>0){el.textContent='冷却 '+Math.ceil(cd/1000)+'s';el.classList.add('hot')}
+    else{el.textContent='';el.classList.remove('hot')}
+  }
+  const cooling=cd>0||orc.used>=ORACLE_MAX;
+  ORACLE_BTNS.forEach(id=>{const b=$('#'+id);if(b)b.classList.toggle('cooling',cooling)});
+}
+const LUCKY_COLORS=['银杏黄','雾霾蓝','豆沙粉','橄榄绿','奶油白','焦糖棕','雾紫','青瓷色','橘橙','松绿','月白','绯红'];
+const YI_POOL=['整理桌面','早点睡','主动发一条消息','晒十分钟太阳','喝一杯热的','写下三件小事','给一件事收尾','说一次「不」','慢慢吃饭','拉伸五分钟','听一首老歌','关掉通知一小时','走一段不熟悉的路','夸奖一个人'];
+const JI_POOL=['深夜做决定','反复刷新消息','和人硬碰硬','空腹喝咖啡','边吃饭边刷手机','对自己放狠话','临睡前复盘失误','一次立太多目标','把日程排满','在情绪头上回消息','跟别人的进度比较','把委屈憋到睡前'];
+function blessOf(){
+  const r=a=>a[Math.floor(Math.random()*a.length)];
+  const yi=YI_POOL.slice().sort(()=>Math.random()-.5).slice(0,2);
+  const ji=JI_POOL.slice().sort(()=>Math.random()-.5).slice(0,2);
+  return '<div class="blessline">✦ 今日加持 · 幸运色 <b>'+r(LUCKY_COLORS)+'</b> · 幸运数字 <b>'+(1+Math.floor(Math.random()*9))+'</b><br>宜 <b>'+yi.join('、')+'</b>　·　忌 <b>'+ji.join('、')+'</b></div>';
+}
+function burstParticles(){
+  const box=$('#tParticles');if(!box)return;box.innerHTML='';
+  for(let i=0;i<18;i++){
+    const s=document.createElement('i');
+    const ang=Math.random()*Math.PI*2,d=70+Math.random()*95;
+    s.style.setProperty('--dx',(Math.cos(ang)*d).toFixed(0)+'px');
+    s.style.setProperty('--dy',(Math.sin(ang)*d).toFixed(0)+'px');
+    s.style.background=Math.random()<.5?'var(--p)':'#e8c66a';
+    s.style.animationDelay=(Math.random()*.22).toFixed(2)+'s';
+    box.appendChild(s);
+  }
+  setTimeout(()=>{box.innerHTML=''},1700);
+}
+const TAROT=[
+{n:'愚者',a:'大阿卡纳',s:'🃏',u:'新的开始、自由冒险、保持好奇',r:'鲁莽冲动、准备不足、逃避责任'},
+{n:'魔术师',a:'大阿卡纳',s:'🎩',u:'主动创造、资源整合、行动力',r:'空谈、能力未落地、自我怀疑'},
+{n:'女祭司',a:'大阿卡纳',s:'🌙',u:'直觉敏锐、内在智慧、静观其变',r:'忽视直觉、信息不透明、内耗'},
+{n:'皇后',a:'大阿卡纳',s:'🌾',u:'丰盛、滋养、创造力',r:'过度依赖、拖延、忽略自我照顾'},
+{n:'皇帝',a:'大阿卡纳',s:'🏛️',u:'秩序、掌控、规则与执行力',r:'僵化、控制欲、缺乏弹性'},
+{n:'教皇',a:'大阿卡纳',s:'📜',u:'传统、求教、体系化学习',r:'教条、盲从、需要打破常规'},
+{n:'恋人',a:'大阿卡纳',s:'💞',u:'选择、契合、价值观一致',r:'犹豫不决、关系失衡、错误选择'},
+{n:'战车',a:'大阿卡纳',s:'🛡️',u:'意志力、冲刺、目标明确',r:'方向混乱、内耗、欲速不达'},
+{n:'力量',a:'大阿卡纳',s:'🦁',u:'温柔而坚定、耐心、自控',r:'自我怀疑、情绪失控、退缩'},
+{n:'隐士',a:'大阿卡纳',s:'🕯️',u:'独处沉淀、向内求索、复盘',r:'封闭、过度纠结、逃避社交'},
+{n:'命运之轮',a:'大阿卡纳',s:'🎡',u:'转机、周期变化、顺势而为',r:'停滞、时机未到、抗拒变化'},
+{n:'正义',a:'大阿卡纳',s:'⚖️',u:'公平、权衡、理性决断',r:'失衡、偏见、逃避责任'},
+{n:'倒吊人',a:'大阿卡纳',s:'🙃',u:'换个角度、暂停、主动等待',r:'白白拖延、钻牛角尖、无谓牺牲'},
+{n:'死神',a:'大阿卡纳',s:'🦋',u:'结束与重生、断舍离',r:'抗拒改变、藕断丝连、停滞'},
+{n:'节制',a:'大阿卡纳',s:'🏺',u:'平衡、调和、节奏感',r:'极端、失衡、急于求成'},
+{n:'恶魔',a:'大阿卡纳',s:'⛓️',u:'欲望、束缚、看清诱因',r:'挣脱、戒断、重新掌控'},
+{n:'塔',a:'大阿卡纳',s:'🗼',u:'突变、打破旧结构、真相浮现',r:'延迟的崩塌、勉强维持、逃避面对'},
+{n:'星星',a:'大阿卡纳',s:'⭐',u:'希望、疗愈、长期主义',r:'失望、信心不足、好高骛远'},
+{n:'月亮',a:'大阿卡纳',s:'🌕',u:'模糊、潜意识的焦虑、需要时间',r:'迷雾散去、真相显现、走出焦虑'},
+{n:'太阳',a:'大阿卡纳',s:'☀️',u:'光明、成功、活力与坦诚',r:'短暂阴云、过度乐观、好消息延迟'},
+{n:'审判',a:'大阿卡纳',s:'📯',u:'觉醒、复盘、重新出发',r:'自我批判、逃避总结、错过信号'},
+{n:'世界',a:'大阿卡纳',s:'🌍',u:'完成、圆满、阶段性收官',r:'差一步、未收尾、迟迟不闭环'},
+{n:'权杖王牌',a:'权杖',s:'🔥',u:'灵感迸发、新机会的火种',r:'动力不足、时机未熟'},
+{n:'权杖二',a:'权杖',s:'🔥',u:'规划、选择方向、布局',r:'犹豫、计划落空'},
+{n:'权杖三',a:'权杖',s:'🔥',u:'初步成果、视野打开、合作',r:'延迟、短视'},
+{n:'权杖四',a:'权杖',s:'🔥',u:'稳定、庆祝、阶段性的安定',r:'不安于现状、根基不稳'},
+{n:'权杖五',a:'权杖',s:'🔥',u:'竞争、摩擦、磨合',r:'化解冲突、回避竞争'},
+{n:'权杖六',a:'权杖',s:'🔥',u:'胜利、被认可、进展顺利',r:'骄傲自满、认可延迟'},
+{n:'权杖七',a:'权杖',s:'🔥',u:'守住位置、应对挑战、坚持',r:'疲于应付、放弃抵抗'},
+{n:'权杖八',a:'权杖',s:'🔥',u:'加速、消息到来、迅速推进',r:'拖延、消息延迟、节奏混乱'},
+{n:'权杖九',a:'权杖',s:'🔥',u:'坚持到底、韧性强',r:'疲惫、戒备过度'},
+{n:'权杖十',a:'权杖',s:'🔥',u:'负重前行、责任过多、接近极限',r:'卸下负担、学会放手'},
+{n:'权杖侍从',a:'权杖',s:'🔥',u:'好奇心、学习新事物、消息传来',r:'三分钟热度、不够成熟'},
+{n:'权杖骑士',a:'权杖',s:'🔥',u:'行动、冲劲、立刻出发',r:'冲动、半途而废'},
+{n:'权杖王后',a:'权杖',s:'🔥',u:'热情、自信、有感染力',r:'情绪化、自我中心'},
+{n:'权杖国王',a:'权杖',s:'🔥',u:'领导力、远见、掌控全局',r:'专断、好大喜功'},
+{n:'圣杯王牌',a:'圣杯',s:'💧',u:'新的情感、疗愈、善意流动',r:'情感封闭、失落'},
+{n:'圣杯二',a:'圣杯',s:'💧',u:'互相吸引、结盟、和解',r:'关系失衡、误会'},
+{n:'圣杯三',a:'圣杯',s:'💧',u:'友谊、庆祝、支持系统',r:'社交消耗、小圈子'},
+{n:'圣杯四',a:'圣杯',s:'💧',u:'倦怠、视而不见、情绪停滞',r:'走出低潮、重新接纳'},
+{n:'圣杯五',a:'圣杯',s:'💧',u:'失落、遗憾、执着于失去的',r:'释怀、重新振作'},
+{n:'圣杯六',a:'圣杯',s:'💧',u:'怀旧、温柔的回忆、纯真',r:'沉溺过去、放不下'},
+{n:'圣杯七',a:'圣杯',s:'💧',u:'幻想、选择过多、不切实际',r:'回归现实、看清真相'},
+{n:'圣杯八',a:'圣杯',s:'💧',u:'离开、追寻更深的意义',r:'不敢离开、原地徘徊'},
+{n:'圣杯九',a:'圣杯',s:'💧',u:'满足、心愿达成、幸福感',r:'表面满足、内心空虚'},
+{n:'圣杯十',a:'圣杯',s:'💧',u:'圆满的关系、家庭和睦',r:'关系裂痕、理想化破灭'},
+{n:'圣杯侍从',a:'圣杯',s:'💧',u:'柔软的心、情感萌动、直觉',r:'情绪化、逃避表达'},
+{n:'圣杯骑士',a:'圣杯',s:'💧',u:'浪漫、主动示好、追寻',r:'空头承诺、情绪不稳'},
+{n:'圣杯王后',a:'圣杯',s:'💧',u:'共情、包容、情绪成熟',r:'过度付出、界限模糊'},
+{n:'圣杯国王',a:'圣杯',s:'💧',u:'情绪稳定、成熟的爱',r:'情感操控、压抑'},
+{n:'宝剑王牌',a:'宝剑',s:'⚔️',u:'清晰、真相、突破性的想法',r:'混乱、沟通受阻'},
+{n:'宝剑二',a:'宝剑',s:'⚔️',u:'抉择、僵局、暂时回避',r:'做出决定、打破僵局'},
+{n:'宝剑三',a:'宝剑',s:'⚔️',u:'心痛、冲突、言语伤害',r:'疗愈开始、逐渐释怀'},
+{n:'宝剑四',a:'宝剑',s:'⚔️',u:'休息、恢复、暂停思考',r:'焦虑难眠、无法停下'},
+{n:'宝剑五',a:'宝剑',s:'⚔️',u:'争执、得不偿失、不甘心',r:'和解、放下胜负'},
+{n:'宝剑六',a:'宝剑',s:'⚔️',u:'过渡、离开困境、前往平静',r:'滞留原地、难以摆脱'},
+{n:'宝剑七',a:'宝剑',s:'⚔️',u:'策略、谨慎、信息不透明',r:'真相暴露、坦白'},
+{n:'宝剑八',a:'宝剑',s:'⚔️',u:'自我设限、感觉被困住',r:'松绑、看到出口'},
+{n:'宝剑九',a:'宝剑',s:'⚔️',u:'焦虑、过度思考、失眠',r:'走出焦虑、寻求帮助'},
+{n:'宝剑十',a:'宝剑',s:'⚔️',u:'触底、结束、终于到头',r:'缓慢恢复、重新开始'},
+{n:'宝剑侍从',a:'宝剑',s:'⚔️',u:'求知、敏锐、收集信息',r:'口舌是非、想法散乱'},
+{n:'宝剑骑士',a:'宝剑',s:'⚔️',u:'果断、快速推进、直率',r:'莽撞、冲动发言'},
+{n:'宝剑王后',a:'宝剑',s:'⚔️',u:'理性、独立、边界清晰',r:'刻薄、冷漠'},
+{n:'宝剑国王',a:'宝剑',s:'⚔️',u:'逻辑、权威、客观判断',r:'武断、教条'},
+{n:'星币王牌',a:'星币',s:'🪙',u:'新机会、务实的起点、资源',r:'机会落空、投入不足'},
+{n:'星币二',a:'星币',s:'🪙',u:'平衡、灵活应变、多线并行',r:'失衡、顾此失彼'},
+{n:'星币三',a:'星币',s:'🪙',u:'协作、专业被认可、打磨',r:'配合不佳、质量不足'},
+{n:'星币四',a:'星币',s:'🪙',u:'守成、稳定、掌控资源',r:'过度抓取、害怕失去'},
+{n:'星币五',a:'星币',s:'🪙',u:'匮乏感、困境、被排除在外',r:'出现转机、获得援手'},
+{n:'星币六',a:'星币',s:'🪙',u:'给予与接受、资源流动',r:'失衡的付出、过度依赖'},
+{n:'星币七',a:'星币',s:'🪙',u:'耐心、长期投入、评估',r:'急于求成、投入产出不符'},
+{n:'星币八',a:'星币',s:'🪙',u:'精进、刻意练习、专注',r:'敷衍、重复无成长'},
+{n:'星币九',a:'星币',s:'🪙',u:'独立、成果、自我肯定',r:'过度依赖外物、虚荣'},
+{n:'星币十',a:'星币',s:'🪙',u:'稳固、长期积累、家族支持',r:'根基动摇、短期思维'},
+{n:'星币侍从',a:'星币',s:'🪙',u:'学习、踏实起步、务实',r:'拖延、眼高手低'},
+{n:'星币骑士',a:'星币',s:'🪙',u:'稳步推进、可靠、按部就班',r:'停滞、过于保守'},
+{n:'星币王后',a:'星币',s:'🪙',u:'务实、照顾、经营生活',r:'琐碎、物质焦虑'},
+{n:'星币国王',a:'星币',s:'🪙',u:'成果、资源掌控、稳健',r:'固执、唯利是图'}
+];
+const QS=[
+{id:'love',label:'爱情',adv:'在关系里，先照顾好自己的节奏，别急着索要一个答案。'},
+{id:'career',label:'事业',adv:'把注意力放回可执行的那一步，先推进最小的动作。'},
+{id:'health',label:'健康',adv:'身体比情绪更诚实，先睡好、吃好、动一动。'},
+{id:'study',label:'学业',adv:'把大目标拆成一个 25 分钟就能开始的小任务。'},
+{id:'social',label:'人际',adv:'不必讨好所有人，先照顾真正重要的那几段关系。'},
+{id:'dream',label:'梦想',adv:'梦想需要日程表，给它一个具体的下一步。'},
+{id:'anxiety',label:'焦虑',adv:'焦虑来自不确定，写下你能控制的三件事。'},
+{id:'random',label:'不指定',adv:'此刻你需要的不是答案，而是先停下来呼吸。'}
+];
+let tq='career',tDrawn=false;
+function renderTarotChips(){$('#tarotChips').innerHTML=QS.map(q=>'<button class="chip '+(q.id===tq?'active':'')+'" data-q="'+q.id+'">'+q.label+'</button>').join('')}
+function drawTarot(){
+  if(!tryOracle())return;
+  const card=TAROT[Math.floor(Math.random()*TAROT.length)];
+  const rev=Math.random()<0.5;
+  const q=QS.find(x=>x.id===tq)||QS[7];
+  const el=$('#tarotCard');
+  el.classList.remove('flipped');tDrawn=false;
+  $('#tarotReading').hidden=true;
+  el.classList.remove('shuffling');void el.offsetWidth;el.classList.add('shuffling');
+  setTimeout(()=>{
+    el.classList.remove('shuffling');
+    burstParticles();
+    el.classList.add('glow');
+    const f=$('#tarotFront');
+    f.classList.toggle('rev',rev);
+    let rm=f.querySelector('.revmark');
+    if(rev){if(!rm){rm=document.createElement('span');rm.className='revmark';rm.textContent='逆位';f.appendChild(rm)}}
+    else if(rm)rm.remove();
+    f.querySelector('.tfs').textContent=card.s;
+    f.querySelector('.tfn').textContent=card.n;
+    f.querySelector('.tfa').textContent=card.a+(rev?' · 逆位':' · 正位');
+    f.querySelector('.tfp').textContent=rev?'逆位':'正位';
+    el.classList.add('flipped');
+    tDrawn=true;
+    setTimeout(()=>el.classList.remove('glow'),1500);
+    const mean=rev?card.r:card.u;
+    const box=$('#tarotReading');box.hidden=false;
+    box.innerHTML='<h4>关于「'+esc(q.label)+'」的指引</h4><div>你抽到的是 <span class="kw">'+esc(card.n)+'</span>（'+esc(card.a)+' · '+(rev?'逆位':'正位')+'）。</div><div style="margin-top:7px">牌面关键词：<span class="kw">'+esc(mean)+'</span></div>'+(rev?'<div style="margin-top:7px;font-size:11.5px;color:var(--mu)">逆位提示：这张牌的能量此刻被堵住或走向反面，先留意「'+esc(card.r.split('、')[0])+'」这个信号，它往往比牌面本身更值得看。</div>':'')+'<div class="adv">'+esc(q.adv)+'</div>'+blessOf();
+  },950);
+}
+/* ============================================================
+   14. 六爻
+============================================================ */
+const TRI=[
+{name:'乾',bits:'111',sym:'☰'},{name:'兑',bits:'110',sym:'☱'},{name:'离',bits:'101',sym:'☲'},{name:'震',bits:'100',sym:'☳'},
+{name:'巽',bits:'011',sym:'☴'},{name:'坎',bits:'010',sym:'☵'},{name:'艮',bits:'001',sym:'☶'},{name:'坤',bits:'000',sym:'☷'}
+];
+const HT=[
+['乾为天','天泽履','天火同人','天雷无妄','天风姤','天水讼','天山遁','天地否'],
+['泽天夬','兑为泽','泽火革','泽雷随','泽风大过','泽水困','泽山咸','泽地萃'],
+['火天大有','火泽睽','离为火','火雷噬嗑','火风鼎','火水未济','火山旅','火地晋'],
+['雷天大壮','雷泽归妹','雷火丰','震为雷','雷风恒','雷水解','雷山小过','雷地豫'],
+['风天小畜','风泽中孚','风火家人','风雷益','巽为风','风水涣','风山渐','风地观'],
+['水天需','水泽节','水火既济','水雷屯','水风井','坎为水','水山蹇','水地比'],
+['山天大畜','山泽损','山火贲','山雷颐','山风蛊','山水蒙','艮为山','山地剥'],
+['地天泰','地泽临','地火明夷','地雷复','地风升','地水师','地山谦','坤为地']
+];
+const HX={
+'乾为天':'刚健进取，宜主动出击，但需防过刚易折。','天泽履':'如履薄冰，谨慎前行，按规则办事则无咎。','天火同人':'与人同心，合作顺遂，主动联络会有回应。','天雷无妄':'不妄为则吉，顺其自然，不要强求。','天风姤':'不期而遇，机会短暂，把握分寸，勿贪。','天水讼':'易起争执，宜退让协商，不宜硬碰。','天山遁':'退一步保全自己，暂避锋芒是一种智慧。','天地否':'闭塞不通，宜守不宜攻，静待转机。','泽天夬':'当断则断，果断处理，别拖泥带水。','兑为泽':'喜悦和睦，沟通顺畅，宜多交流。','泽火革':'变革之时，除旧布新，勇敢调整方向。','泽雷随':'顺势而为，跟随节奏，别逆流而上。','泽风大过':'负担过重，压力临界，学会减负。','泽水困':'暂时受困，守住本心，静待水退。','泽山咸':'感应相通，真诚相待，关系会有进展。','泽地萃':'汇聚人气，宜合作、宜社交。','火天大有':'丰盛有成，收获在望，保持谦和。','火泽睽':'意见分歧，求同存异，别强求一致。','离为火':'光明外显，展现自己，注意情绪之火。','火雷噬嗑':'需要下决心处理障碍，明断是非。','火风鼎':'革新定型，稳中求变，把基础筑牢。','火水未济':'事情未成，尚在途中，别急着收尾。','火山旅':'漂泊变动，宜轻装前行，勿恋栈。','火地晋':'步步上升，前景向好，继续推进。','雷天大壮':'气势正盛，可强势推进，但忌蛮干。','雷泽归妹':'关系推进需谨慎，勿仓促定终身。','雷火丰':'盛极之时，把握当下，也要防盛极而衰。','震为雷':'变动突发，先稳住心，再行动。','雷风恒':'持之以恒，稳定长期，别轻易更换。','雷水解':'困局松动，问题化解，可以松口气。','雷山小过':'宜小不宜大，做小事、走小步更稳。','雷地豫':'愉悦顺遂，准备充分则事成。','风天小畜':'小有积累，力量未足，先蓄势。','风泽中孚':'以诚待人，内心笃定，事情会顺。','风火家人':'内部和睦最重要，先安内再攘外。','风雷益':'增益之时，多做利他之事，收获自来。','巽为风':'柔顺渗透，以柔克刚，潜移默化。','风水涣':'涣散消解，宜梳理心绪、化开郁结。','风山渐':'循序渐进，慢就是快，别求速成。','风地观':'静观其变，先看清再动手。','水天需':'等待时机，蓄势待发，急不得。','水泽节':'有节有度，控制节奏与开支。','水火既济':'事已成，守成之时，防止松懈。','水雷屯':'起步艰难，万事开头难，坚持住。','水风井':'井水养人，稳住基本盘，惠及他人。','坎为水':'重重险阻，谨慎涉险，步步为营。','水山蹇':'前路受阻，宜求助、宜绕行。','水地比':'亲近依靠，抱团取暖，找对同伴。','山天大畜':'厚积薄发，积蓄实力，等待出口。','山泽损':'有舍有得，减掉负担才能前进。','山火贲':'注重修饰与呈现，但别只做表面。','山雷颐':'养精蓄锐，注意身心与口舌。','山风蛊':'积弊需清理，正视旧问题才能翻身。','山水蒙':'懵懂待启，虚心求教，别硬撑。','艮为山':'止步静止，该停就停，静能生慧。','山地剥':'剥落衰退，收敛锋芒，守住底线。','地天泰':'通达顺遂，上下同心，事可成。','地泽临':'亲临现场，主动靠近，机会在眼前。','地火明夷':'光明受伤，低调蛰伏，保护好自己。','地雷复':'一阳来复，转机初现，慢慢回升。','地风升':'稳步上升，积小成大，继续努力。','地水师':'需要纪律与组织，别单打独斗。','地山谦':'谦逊受益，低调的人走得更远。','坤为地':'厚德载物，包容承载，顺势承接。'
+};
+function triIdx(bits){for(let i=0;i<TRI.length;i++)if(TRI[i].bits===bits)return i;return 7}
+let hq='career';
+function renderHexChips(){$('#hexChips').innerHTML=QS.map(q=>'<button class="chip '+(q.id===hq?'active':'')+'" data-q="'+q.id+'">'+q.label+'</button>').join('')}
+function castHex(){
+  if(!tryOracle())return;
+  const cs=$('#coinStage');cs.hidden=false;
+  $('#hexReading').hidden=true;
+  setTimeout(()=>{cs.hidden=true;renderHexCast()},950);
+}
+function renderHexCast(){
+  const vals=[];for(let i=0;i<6;i++){const r=Math.floor(Math.random()*4);vals.push([7,8,9,6][r])}
+  const yang=vals.map(v=>(v===7||v===9)?1:0),mov=vals.map(v=>(v===9||v===6));
+  const lb=''+yang[0]+yang[1]+yang[2],ub=''+yang[3]+yang[4]+yang[5];
+  const name=HT[triIdx(ub)][triIdx(lb)];
+  let chg=null;
+  if(mov.some(Boolean)){const cy=yang.map((y,i)=>mov[i]?(y?0:1):y);chg=HT[triIdx(''+cy[3]+cy[4]+cy[5])][triIdx(''+cy[0]+cy[1]+cy[2])]}
+  const labels=['初爻','二爻','三爻','四爻','五爻','上爻'];
+  let html='';
+  for(let i=5;i>=0;i--){
+    html+='<div class="hline"><span class="hlb">'+labels[i]+'</span>'+(yang[i]===1?'<div class="hy"></div>':'<div class="hyi"><i></i><i></i></div>')+'<span class="hmk">'+(mov[i]?'★':'')+'</span></div>';
+  }
+  html+='<div class="hname">'+esc(name)+'</div><div class="hsub">'+TRI[triIdx(ub)].sym+' 上卦 '+TRI[triIdx(ub)].name+' · '+TRI[triIdx(lb)].sym+' 下卦 '+TRI[triIdx(lb)].name+'</div>';
+  if(chg)html+='<div class="hchg">变卦：<b>'+esc(chg)+'</b></div>';
+  $('#hexBox').innerHTML=html;
+  const q=QS.find(x=>x.id===hq)||QS[1];
+  const rd=$('#hexReading');rd.hidden=false;
+  let txt='<h4>关于「'+esc(q.label)+'」的本卦 · '+esc(name)+'</h4><div>'+esc(HX[name]||'顺势而行，守正待时。')+'</div>';
+  if(chg){txt+='<div style="margin-top:9px"><span class="kw">有 '+mov.filter(Boolean).length+' 个变爻</span>，事情还在变化中。</div><h4 style="margin-top:13px">变卦 · '+esc(chg)+'</h4><div>'+esc(HX[chg]||'变化之中，保持弹性。')+'</div>'}
+  else{txt+='<div style="margin-top:9px">此卦<span class="kw">无变爻</span>，局势相对稳定，按本卦的方向走即可。</div>'}
+  txt+='<div class="adv">'+esc(q.adv)+'</div>'+blessOf();
+  rd.innerHTML=txt;
+}
+/* ============================================================
+   15. 八字·紫微 随机
+============================================================ */
+const DAY_MASTER=['甲木','乙木','丙火','丁火','戊土','己土','庚金','辛金','壬水','癸水'];
+const BAZI_POOL=[
+'日主身强庚金','日主身弱乙木','日主身强丙火','日主身弱癸水','金木交战','水火并济','木火相生','土重金埋','枭神夺食','官印相生','财官双美','专旺格','羊刃格','建禄格','正官格','正财格','身弱不担财','从格','魁罡格','伤官配印','杀印相生','官杀混杂','正印格','伤官格','七杀格','食神格','偏印格','得令','失令','得地','失地','得势','失势','日坐桃花','伤官见官','比劫夺财','五行偏枯','自坐财库','金清水白','食神配印','食神制杀','食神生财','官杀大运','九紫离火','换大运'
+];
+const ZIWEI_POOL=[
+'夫妻宫空宫','杀破狼格局','紫府同宫','三方四正辅星齐聚','紫府朝垣','机月同梁','天乙','禄马交驰','文星拱命','三奇加会','巨日同宫','石中玉隐','七杀朝斗','君臣庆会','府相朝垣','月生沧海','寿星入庙','廉贞文武','权煞化禄','权禄巡逢'
+];
+const BAZI_Q=[
+{id:'career',label:'事业',adv:'把注意力放回可执行的那一步，先推进最小的动作。'},
+{id:'love',label:'感情',adv:'关系里先照顾好自己的节奏，别急着索要一个答案。'},
+{id:'wealth',label:'财运',adv:'先稳住基本盘，再谈扩张；能守住的才是你的。'},
+{id:'study',label:'学业',adv:'把大目标拆成今天能做的一件小事。'},
+{id:'health',label:'健康',adv:'身体比情绪更诚实，先睡好、吃好、动一动。'},
+{id:'social',label:'人际',adv:'不必讨好所有人，先照顾真正重要的那几段关系。'},
+{id:'anxiety',label:'焦虑',adv:'焦虑来自不确定，写下你能控制的三件事。'}
+];
+const BAZI_FILLER=[
+'此命局的关键在于五行流通是否顺畅，喜用神一旦到位，格局便能立起来。',
+'日主的力量决定你适合主动出击还是稳守待时，顺势比硬拼更重要。',
+'命局中的冲克不是坏事，它往往是推动你离开舒适区的力量。',
+'大运流年只是风向，不是判决；风来了借力，风停了就休整。',
+'格局高低不等于人生好坏，它只是说明你更适合哪种节奏与路径。',
+'喜用神不是固定的，它会随大运变化，所以每十年需要重新校准一次。'
+];
+const ZIWEI_FILLER=[
+'紫微斗数看的是格局与宫位的组合，单一星曜不能决定全部。',
+'三方四正会照的吉星越多，助力越明显；煞星会照则提示需要多留一分谨慎。',
+'夫妻宫、官禄宫、财帛宫三者的互动，决定了感情与事业的平衡点。',
+'命宫主星决定你的底层性格，身宫主星决定你行动时的姿态。',
+'大限与流年只是时间刻度，真正决定走向的是你每个当下的选择。'
+];
+let bq='career';
+function renderBaziChips(){$('#baziChips').innerHTML=BAZI_Q.map(q=>'<button class="chip '+(q.id===bq?'active':'')+'" data-q="'+q.id+'">'+q.label+'</button>').join('')}
+function drawBazi(){
+  if(!tryOracle())return;
+  const box=$('#baziReading');box.hidden=false;
+  box.innerHTML='<div style="text-align:center;padding:16px;color:var(--mu);font-size:12.5px">☯️ 排盘演算中…</div>';
+  setTimeout(renderBazi,700);
+}
+function renderBazi(){
+  const dm=DAY_MASTER[Math.floor(Math.random()*DAY_MASTER.length)];
+  const pool=BAZI_POOL.slice().sort(()=>Math.random()-0.5).slice(0,3);
+  const zw=ZIWEI_POOL.slice().sort(()=>Math.random()-0.5).slice(0,2);
+  const q=BAZI_Q.find(x=>x.id===bq)||BAZI_Q[0];
+  const f1=BAZI_FILLER[Math.floor(Math.random()*BAZI_FILLER.length)];
+  const f2=ZIWEI_FILLER[Math.floor(Math.random()*ZIWEI_FILLER.length)];
+  const box=$('#baziReading');box.hidden=false;
+  box.innerHTML='<h4>关于「'+esc(q.label)+'」的命盘摘要</h4>'+
+    '<div>日主：<span class="kw">'+esc(dm)+'</span></div>'+
+    '<div style="margin-top:7px">八字关键词：<span class="kw">'+pool.map(esc).join(' · ')+'</span></div>'+
+    '<div style="margin-top:7px">紫微关键词：<span class="kw">'+zw.map(esc).join(' · ')+'</span></div>'+
+    '<div style="margin-top:11px">'+esc(f1)+'</div>'+
+    '<div style="margin-top:5px">'+esc(f2)+'</div>'+
+    '<div class="adv">'+esc(q.adv)+'</div>'+blessOf()+
+    '<div style="margin-top:9px;font-size:11px;color:var(--mu)">注：此结果为随机仪式，不构成命理判断或任何决策依据。</div>';
+}
+/* ============================================================
+   16. 星盘 随机
+============================================================ */
+const SIGN_NAMES=['白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座','摩羯座','水瓶座','双鱼座'];
+const PLANETS=['太阳','月亮','水星','金星','火星','木星','土星','天王星','海王星','冥王星','凯龙星','莉莉丝','婚神星','谷神星','智神星','灶神星'];
+const ASPECTS=['合','冲','刑','拱','六合'];
+const ASTRO_POOL=[
+'星座落几宫（行星落入某一宫位，决定该行星能量在生活哪个领域发力）','星体合（0°，能量融合）','星体冲（180°，对立拉扯）','星体刑（90°，摩擦与压力）','星体拱（120°，天赋顺畅）','宫主飞宫（如 7 宫主狮子飞 12 宫处女）','群星（群狮子 / 群天蝎，3 颗及以上同星座）','大三角格局（三颗星互成 120°）','风筝格局（大三角中一颗对冲第四点）','莉莉丝逆行落宫（被压抑的欲望与阴影面）','婚神星落宫（亲密关系与婚姻模式）','凯龙星落宫（创伤与疗愈）','谷神星落宫（滋养与照顾）','智神星落宫（策略与智慧）','灶神星落宫（专注与奉献）'
+];
+const ASTRO_Q=[
+{id:'career',label:'事业',adv:'把星盘提示当成一面镜子，先做好今天能控制的那一步。'},
+{id:'love',label:'感情',adv:'关系里的课题往往和你的自我边界有关，先照顾好自己的节奏。'},
+{id:'study',label:'学业',adv:'把大目标拆成今天能开始的小任务，行动比分析更重要。'},
+{id:'social',label:'人际',adv:'不必讨好所有人，先照顾真正重要的那几段关系。'},
+{id:'anxiety',label:'焦虑',adv:'焦虑来自不确定，写下你能控制的三件事。'},
+{id:'random',label:'不指定',adv:'此刻你需要的不是答案，而是先停下来呼吸。'}
+];
+let aq='career';
+function renderAstroChips(){$('#astroChips').innerHTML=ASTRO_Q.map(q=>'<button class="chip '+(q.id===aq?'active':'')+'" data-q="'+q.id+'">'+q.label+'</button>').join('')}
+function drawAstro(){
+  if(!tryOracle())return;
+  const box=$('#astroReading');box.hidden=false;
+  box.innerHTML='<div style="text-align:center;padding:16px;color:var(--mu);font-size:12.5px">🌌 星体定位中…</div>';
+  setTimeout(renderAstro,700);
+}
+function renderAstro(){
+  const house=(n)=>(n===1?'1 宫':n+' 宫');
+  const r=(a)=>a[Math.floor(Math.random()*a.length)];
+  const sun=SIGN_NAMES[Math.floor(Math.random()*12)];
+  const moon=SIGN_NAMES[Math.floor(Math.random()*12)];
+  const asc=SIGN_NAMES[Math.floor(Math.random()*12)];
+  const sunHouse=Math.floor(Math.random()*12)+1;
+  const moonHouse=Math.floor(Math.random()*12)+1;
+  const p1=PLANETS[Math.floor(Math.random()*PLANETS.length)];
+  const p2=PLANETS[Math.floor(Math.random()*PLANETS.length)].replace(p1,'火星');
+  const asp=ASPECTS[Math.floor(Math.random()*ASPECTS.length)];
+  const lordSign=SIGN_NAMES[Math.floor(Math.random()*12)];
+  const toSign=SIGN_NAMES[Math.floor(Math.random()*12)];
+  const toHouse=Math.floor(Math.random()*12)+1;
+  const pool=ASTRO_POOL.slice().sort(()=>Math.random()-0.5).slice(0,3);
+  const q=ASTRO_Q.find(x=>x.id===aq)||ASTRO_Q[0];
+  const box=$('#astroReading');box.hidden=false;
+  box.innerHTML='<h4>关于「'+esc(q.label)+'」的星盘摘要</h4>'+
+    '<div>太阳落 <span class="kw">'+sun+' · '+house(sunHouse)+'</span>　月亮落 <span class="kw">'+moon+' · '+house(moonHouse)+'</span>　上升 <span class="kw">'+asc+'</span></div>'+
+    '<div style="margin-top:6px">相位：<span class="kw">'+p1+' '+asp+' '+p2+'</span></div>'+
+    '<div style="margin-top:6px">宫主飞宫：<span class="kw">7 宫主'+lordSign+'飞 '+toHouse+' 宫'+toSign+'</span></div>'+
+    '<div style="margin-top:7px">星盘关键词：<span class="kw">'+pool.map(esc).join(' · ')+'</span></div>'+
+    '<div style="margin-top:11px">星盘是一张性格与议题的地图，它不预测事件，只提示你反复出现的课题。把它当成提醒，而不是判决。</div>'+
+    '<div class="adv">'+esc(q.adv)+'</div>'+blessOf()+
+    '<div style="margin-top:9px;font-size:11px;color:var(--mu)">注：此结果为随机仪式，不构成占星判断或任何决策依据。</div>';
+}
+/* ============================================================
+   16.5 每日灵签（月相 / 天使数字 / 水晶 / 脉轮 / 符文）
+============================================================ */
+const CRYSTALS=[
+{n:'白水晶',d:'净化与聚焦，适合清理思绪'},{n:'紫水晶',d:'安定神经、帮助睡眠'},{n:'粉晶',d:'温柔与自我接纳'},{n:'黄水晶',d:'丰盛感与行动力'},{n:'黑曜石',d:'边界感与保护'},{n:'月光石',d:'直觉与情绪的流动'},{n:'海蓝宝',d:'表达与沟通的勇气'},{n:'茶晶',d:'落地感与稳定'},{n:'绿幽灵',d:'事业与机会'},{n:'草莓晶',d:'人缘与好心情'},{n:'青金石',d:'洞察与真实表达'},{n:'太阳石',d:'活力与自信'}
+];
+const CHAKRAS=[
+{n:'海底轮',d:'安全感与生存根基——今天先照顾好吃饭、睡觉这些小事。'},
+{n:'脐轮',d:'情绪与创造力——允许感受自然流动，别堵着。'},
+{n:'太阳轮',d:'自信与行动力——适合做一个小小的决定。'},
+{n:'心轮',d:'爱与连接——对自己温柔一点，也接受别人的好意。'},
+{n:'喉轮',d:'表达与倾听——把真实的想法说出来，哪怕只对自己。'},
+{n:'眉心轮',d:'直觉与洞察——相信第一感觉，它往往有依据。'},
+{n:'顶轮',d:'意义与联结——适合安静地待几分钟，什么都不做。'}
+];
+const ANGEL_NUMS={
+'111':'新开始正在萌芽，留意反复出现的念头。','222':'一切都在对的位置上，保持耐心。','333':'你的努力有人看见，寻求支持是对的。','444':'你很安全，基础比想象中稳。','555':'变化要来了，别抓太紧。','666':'把注意力从担忧拉回生活本身。','777':'好运加成，适合学习新东西。','888':'丰盛在流动，大方接受好意。','999':'一个阶段正在收尾，好好告别。','1111':'适合许愿的时刻，让念头变清晰。','1212':'保持乐观，下一步会自然出现。','1010':'你走在对的路上，继续。'
+};
+const RUNES=[
+{s:'ᚠ',n:'Fehu 费胡',d:'资源与流动，付出会有回响。'},{s:'ᚢ',n:'Uruz 乌鲁兹',d:'原始的力量，身体比你想象中能扛。'},
+{s:'ᚦ',n:'Thurisaz 苏里萨兹',d:'带刺的保护，必要时亮出边界。'},{s:'ᚨ',n:'Ansuz 安苏兹',d:'讯息与灵感，留意今天听到的话。'},
+{s:'ᚱ',n:'Raidho 雷多',d:'旅程与节奏，按部就班就好。'},{s:'ᚲ',n:'Kenaz 肯纳兹',d:'火把与看清，答案会自己浮现。'},
+{s:'ᚷ',n:'Gebo 吉博',d:'给予与交换，关系讲究平衡。'},{s:'ᚹ',n:'Wunjo 温究',d:'喜悦与和谐，允许自己开心。'},
+{s:'ᚺ',n:'Hagalaz 哈格拉兹',d:'小冰雹，提醒你提前留缓冲。'},{s:'ᚾ',n:'Nauthiz 诺瑟兹',d:'需求与约束，匮乏感教你取舍。'},
+{s:'ᛁ',n:'Isa 伊萨',d:'冰与暂停，慢就是快。'},{s:'ᛃ',n:'Jera 耶拉',d:'收获与周期，种下的会结果。'},
+{s:'ᛇ',n:'Eihwaz 艾瓦兹',d:'紫杉树，韧性是你最大的底牌。'},{s:'ᛈ',n:'Perthro 佩索',d:'命运的骰子，享受一点未知。'},
+{s:'ᛉ',n:'Algiz 阿尔吉兹',d:'守护与直觉，相信身体的警报。'},{s:'ᛋ',n:'Sowilo 索维罗',d:'太阳的能量，目标清晰可见。'},
+{s:'ᛏ',n:'Tiwaz 提瓦兹',d:'勇气与公正，做难而正确的事。'},{s:'ᛒ',n:'Berkana 贝尔卡纳',d:'新生与成长，温柔地开始。'},
+{s:'ᛖ',n:'Ehwaz 埃瓦兹',d:'马与信任，合作比单打独斗快。'},{s:'ᛗ',n:'Mannaz 曼纳兹',d:'人与互助，开口求助不丢人。'},
+{s:'ᛚ',n:'Laguz 拉古兹',d:'水与流动，别硬顶，顺着走。'},{s:'ᛜ',n:'Ingwaz 英格瓦兹',d:'种子与酝酿，急不得。'},
+{s:'ᛞ',n:'Dagaz 达加兹',d:'黎明与突破，转折点就在眼前。'},{s:'ᛟ',n:'Othala 欧塞拉',d:'传承与归属，回头看看来路。'}
+];
+function moonPhase(d){
+  const syn=29.530588853,known=Date.UTC(2000,0,6,18,14);
+  const age=(((d.getTime()-known)/864e5)%syn+syn)%syn;
+  const PH=[
+   {max:1.84566,n:'新月',e:'🌑',d:'适合许愿与开始，写下一个小小心愿。'},
+   {max:5.53699,n:'娥眉月',e:'🌒',d:'种子刚发芽，给计划浇浇水。'},
+   {max:9.22831,n:'上弦月',e:'🌓',d:'行动与决断，把犹豫的事推进一步。'},
+   {max:12.91963,n:'盈凸月',e:'🌔',d:'接近圆满，检查进度、微调方向。'},
+   {max:16.61096,n:'满月',e:'🌕',d:'情绪容易被放大，适合感恩与复盘。'},
+   {max:20.30228,n:'亏凸月',e:'🌖',d:'分享与回馈，把经验说给别人听。'},
+   {max:23.99361,n:'下弦月',e:'🌗',d:'断舍离的好时机，删掉一件负担。'},
+   {max:27.68493,n:'残月',e:'🌘',d:'休养与释放，给自己留白。'},
+   {max:29.53059,n:'新月',e:'🌑',d:'适合许愿与开始，写下一个小小心愿。'}];
+  for(const x of PH)if(age<=x.max)return x;
+  return PH[0];
+}
+function drawSign(){
+  if(!tryOracle())return;
+  const r=a=>a[Math.floor(Math.random()*a.length)];
+  const mp=moonPhase(new Date());
+  const ak=Object.keys(ANGEL_NUMS),an=r(ak);
+  const cr=r(CRYSTALS),ck=r(CHAKRAS),ru=r(RUNES);
+  const box=$('#signResult');
+  box.hidden=true;box.innerHTML='';
+  setTimeout(()=>{
+    box.hidden=false;
+    box.innerHTML='<div class="sign-grid">'+
+      '<div class="sign-item"><div class="sl1">今夜月相</div><div class="sl2"><span class="moon-phase">'+mp.e+'</span> '+mp.n+'</div><div>'+mp.d+'</div></div>'+
+      '<div class="sign-item"><div class="sl1">天使数字</div><div class="sl2">'+an+'</div><div>'+ANGEL_NUMS[an]+'</div></div>'+
+      '<div class="sign-item"><div class="sl1">今日水晶</div><div class="sl2">'+cr.n+'</div><div>'+cr.d+'</div></div>'+
+      '<div class="sign-item"><div class="sl1">脉轮提醒</div><div class="sl2">'+ck.n+'</div><div>'+ck.d+'</div></div>'+
+      '<div class="sign-item"><div class="sl1">如尼符文</div><div class="sl2">'+ru.s+' '+ru.n+'</div><div>'+ru.d+'</div></div>'+
+      '<div class="sign-item"><div class="sl1">幸运指引</div><div class="sl2">'+r(LUCKY_COLORS)+' · No.'+(1+Math.floor(Math.random()*9))+'</div><div>宜 '+r(YI_POOL)+' · 忌 '+r(JI_POOL)+'</div></div>'+
+      '</div>'+
+      '<div class="reading" style="max-width:640px"><div style="font-size:11.5px;color:var(--mu)">✦ 灵签是一份仪式感小礼物：月相是真实天文数据，其余为随机组合，不构成任何预测或决策依据。</div></div>';
+  },650);
+}
+/* ============================================================
+   17. 数字仪式（结合梅花易数）
+============================================================ */
+const NUM_GROUPS=[
+{name:'乾·天',words:['启程','勇气','迈步','出发','决定'],songs:['摇滚-华语-高能量','流行-英文-鼓舞','电子-纯音乐-推进']},
+{name:'兑·泽',words:['表达','坦诚','靠近','回声','被看见'],songs:['民谣-华语-轻快','流行-英文-明亮','独立-华语-温暖']},
+{name:'离·火',words:['亮处','星芒','暖阳','绽放','生长'],songs:['嘻哈-英文-快节奏','流行-华语-明亮','舞曲-英文-高能量']},
+{name:'震·雷',words:['破土','重启','拔节','韧性','用力'],songs:['摇滚-英文-强劲','电子-纯音乐-动能','嘻哈-华语-鼓点']},
+{name:'巽·风',words:['慢行','舒展','藤蔓','留白','缓坡'],songs:['轻音乐-纯音乐-流动','爵士-英文-松弛','民谣-华语-安静']},
+{name:'坎·水',words:['沉淀','呼吸','月色','慢渡','安宁'],songs:['氛围-纯音乐-沉静','爵士-英文-夜晚','抒情-华语-安静']},
+{name:'艮·山',words:['扎根','停顿','守候','蓄力','等待'],songs:['古典-纯音乐-稳定','民谣-华语-缓慢','后摇-纯音乐-辽阔']},
+{name:'坤·地',words:['接纳','允许','温柔','休憩','拥抱'],songs:['治愈-华语-温柔','轻音乐-纯音乐-温暖','流行-英文-舒缓']}
+];
+function numToGroup(nums){
+  const sum=nums.reduce((a,b)=>a+b,0);
+  return NUM_GROUPS[sum%8];
+}
+function castNum(nums,boxId){
+  const g=numToGroup(nums);
+  const w=g.words[Math.floor(Math.random()*g.words.length)];
+  const s=g.songs[Math.floor(Math.random()*g.songs.length)];
+  const box=$('#'+boxId);box.hidden=false;
+  box.innerHTML='<h4>你的今日主题词：<span class="kw">'+esc(w)+'</span></h4>'+
+    '<div>数字：'+nums.join(' · ')+'　→　取余映射到 <span class="kw">'+esc(g.name)+'</span> 卦组</div>'+
+    '<div style="margin-top:7px">推荐歌曲类别：<span class="kw">'+esc(s)+'</span></div>'+
+    '<div style="margin-top:9px">把这三个数字当成今日的仪式感：它不预测什么，只是提醒你，今天可以从「'+esc(w)+'」这个角度出发。</div>'+
+    '<div class="adv">如果此刻心里有点乱，先听一首这个类别的歌，再回来做一件小事。</div>'+blessOf();
+}
+/* ============================================================
+   18. 元气补给站
+============================================================ */
+let curEnc=null;
+function randEnc(){
+  const types=Object.keys(ENC);
+  const t=types[Math.floor(Math.random()*types.length)];
+  const arr=ENC[t];
+  return{type:t,content:arr[Math.floor(Math.random()*arr.length)]};
+}
+function showEnc(){
+  const e=randEnc();curEnc=e;
+  const map={psychology:'psychology',quote:'quote',fun:'fun',affirm:'affirm'};
+  $('#egType').textContent=ENC_NAME[e.type];
+  $('#egText').textContent=e.content;
+}
+/* ============================================================
+   18.5 心情打卡（情绪 + 强度 + 触发 + 走势）
+============================================================ */
+const MOOD_EMO=[
+ {id:'joy',name:'开心',emoji:'😄',score:9.0,color:'#F5A623'},
+ {id:'hope',name:'期待',emoji:'🤩',score:8.2,color:'#7C6CFF'},
+ {id:'calm',name:'平静',emoji:'😌',score:7.5,color:'#2FBF9B'},
+ {id:'tired',name:'疲惫',emoji:'😪',score:4.2,color:'#9B8AC4'},
+ {id:'anxious',name:'焦虑',emoji:'😰',score:3.2,color:'#FF8A5B'},
+ {id:'lonely',name:'孤独',emoji:'🥺',score:3.0,color:'#6E93B8'},
+ {id:'angry',name:'愤怒',emoji:'😠',score:2.6,color:'#E8563F'},
+ {id:'sad',name:'难过',emoji:'😢',score:2.2,color:'#5B8DEF'}
+];
+const MOOD_MAP=MOOD_EMO.reduce((o,e)=>(o[e.id]=e,o),{});
+const MOOD_RESP={
+ joy:['这份开心值得被记住。','把此刻的好心情存进心里，它会成为以后的光。'],
+ hope:['有期待的日子，连空气都是轻的。','愿你期待的事，正在慢慢靠近。'],
+ calm:['平静是一种很珍贵的能力。','能在纷乱里找到片刻安宁，你已经做得很好了。'],
+ tired:['累了就休息，这不是偷懒，是充电。','你已经撑了很久了，今晚早点睡吧。'],
+ anxious:['焦虑说明你在乎，但你不必现在就想清楚所有事。','先深呼吸一次，我们一件一件来。'],
+ lonely:['孤独的时候，也请记得你值得被看见。','要不要给一个信任的人发条消息？哪怕只是「在吗」。'],
+ angry:['生气是正常的，你的感受是合理的。','先让身体离开现场 90 秒，情绪会自己降下来一点。'],
+ sad:['难过不需要被立刻解决，允许自己待一会儿。','你已经很努力了，今天对自己温柔一点。']
+};
+const MOOD_TRIG=['学业考试','工作职场','人际社交','家人关系','亲密关系','健康睡眠','经济压力','自我评价','未来不确定','信息过载','其他'];
+let moodSel=null,moodTagSet=new Set();
+function moodVal(r){const e=MOOD_MAP[r.emotionId];if(!e)return 5;const dir=e.score>=6?1:-1;const it=typeof r.intensity==='number'?r.intensity:5;return Math.max(0,Math.min(10,e.score+(it-5)*0.25*dir))}
+function moodAvg(arr){return arr.length?arr.reduce((a,r)=>a+moodVal(r),0)/arr.length:0}
+function moodDK(ts){const d=new Date(ts);return fmtD(d)}
+function renderEmoGrid(){
+  $('#emoGrid').innerHTML=MOOD_EMO.map(e=>'<button type="button" class="emo'+(moodSel===e.id?' sel':'')+'" data-e="'+e.id+'" style="--emoc:'+e.color+'"><span class="emoi">'+e.emoji+'</span><span class="emon">'+e.name+'</span></button>').join('');
+}
+function renderMoodTags(){
+  $('#moodTags').innerHTML=MOOD_TRIG.map(t=>'<button type="button" class="mtag'+(moodTagSet.has(t)?' on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join('');
+}
+function renderMoodToday(){
+  const k=todayS();
+  const list=moodRec.filter(r=>moodDK(r.ts)===k).sort((a,b)=>b.ts-a.ts);
+  const box=$('#moodToday');
+  if(!list.length){box.innerHTML='';return}
+  box.innerHTML='<div class="mood-sub" style="margin-top:15px">今天已记录 '+list.length+' 条</div>'+list.map(r=>{
+    const e=MOOD_MAP[r.emotionId]||{emoji:'·',name:'?'};
+    const d=new Date(r.ts),tm=pad2(d.getHours())+':'+pad2(d.getMinutes());
+    return '<div class="mood-rec"><span class="me">'+e.emoji+'</span><div class="mm"><div class="mn">'+e.name+' · 强度 '+r.intensity+'/10</div>'+(r.note?'<div class="ms2">'+esc(r.note)+'</div>':'')+((r.triggers&&r.triggers.length)?'<div class="ms2">'+r.triggers.map(esc).join('、')+'</div>':'')+'</div><span class="mt">'+tm+'</span><button class="md" data-md="'+r.id+'" title="删除">✕</button></div>';
+  }).join('');
+}
+function renderMoodStats(){
+  const now=Date.now(),DAY=864e5;
+  const last7=moodRec.filter(r=>r.ts>now-7*DAY);
+  const set=new Set(moodRec.map(r=>moodDK(r.ts)));
+  const d=sod(new Date());
+  if(!set.has(fmtD(d)))d.setDate(d.getDate()-1);
+  let streak=0;while(set.has(fmtD(d))){streak++;d.setDate(d.getDate()-1)}
+  $('#moodStats').innerHTML='<div class="mstat"><b>'+last7.length+'</b><span>近 7 天记录</span></div><div class="mstat"><b>'+(moodRec.length?moodAvg(moodRec).toFixed(1):'—')+'</b><span>平均情绪值</span></div><div class="mstat"><b>'+streak+'</b><span>连续记录(天)</span></div>';
+}
+function renderMoodTrend(){
+  const box=$('#moodTrend');
+  if(!moodRec.length){box.innerHTML='<div style="font-size:11.5px;color:var(--mu);padding:6px 4px 10px">记录几天后，这里会出现你的情绪曲线。</div>';return}
+  const days=7,td=sod(new Date()),pts=[];
+  for(let i=days-1;i>=0;i--){
+    const d=new Date(td);d.setDate(d.getDate()-i);
+    const k=fmtD(d);
+    const rs=moodRec.filter(r=>moodDK(r.ts)===k);
+    pts.push({d,v:rs.length?moodAvg(rs):null});
+  }
+  const W=340,H=120,L=26,R=12,T=10,B=22,iw=W-L-R,ih=H-T-B;
+  const X=i=>L+iw*i/(days-1),Y=v=>T+ih*(1-v/10);
+  let svg='';
+  [0,5,10].forEach(v=>{svg+='<line x1="'+L+'" y1="'+Y(v)+'" x2="'+(W-R)+'" y2="'+Y(v)+'" stroke="rgba(120,130,150,.16)" stroke-width="1"/><text x="'+(L-6)+'" y="'+(Y(v)+3)+'" font-size="8.5" fill="var(--mu)" text-anchor="end">'+v+'</text>'});
+  pts.forEach((p,i)=>{const wd=WK[p.d.getDay()];svg+='<text x="'+X(i)+'" y="'+(H-7)+'" font-size="9" fill="var(--mu)" text-anchor="middle">'+wd+'</text>'});
+  const segs=[];let cur=[];
+  pts.forEach((p,i)=>{if(p.v===null){if(cur.length)segs.push(cur);cur=[]}else cur.push({x:X(i),y:Y(p.v),v:p.v})});
+  if(cur.length)segs.push(cur);
+  segs.forEach(s=>{
+    if(s.length===1)svg+='<circle cx="'+s[0].x+'" cy="'+s[0].y+'" r="3.6" fill="var(--p)"/>';
+    else{
+      svg+='<polyline points="'+s.map(p=>p.x+','+p.y).join(' ')+'" fill="none" stroke="var(--p)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>';
+      s.forEach(p=>{svg+='<circle cx="'+p.x+'" cy="'+p.y+'" r="3.2" fill="var(--card)" stroke="var(--p)" stroke-width="1.8"><title>'+p.v.toFixed(1)+'</title></circle>'});
+    }
+  });
+  box.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block">'+svg+'</svg>';
+}
+function renderMoodAll(){renderEmoGrid();renderMoodTags();renderMoodStats();renderMoodToday();renderMoodTrend()}
+function celebrate(){
+  const pv=getComputedStyle(document.documentElement).getPropertyValue('--p').trim()||'#5b6fd0';
+  const colors=['#F5A623','#7C6CFF','#2FBF9B','#FF8A5B','#E8563F','#5B8DEF',pv];
+  const wrap=document.createElement('div');wrap.className='confetti-layer';
+  document.body.appendChild(wrap);
+  for(let i=0;i<26;i++){
+    const s=document.createElement('i');
+    s.style.background=colors[i%colors.length];
+    const ang=Math.random()*Math.PI*2,dist=80+Math.random()*180;
+    s.style.setProperty('--tx',(Math.cos(ang)*dist).toFixed(1)+'px');
+    s.style.setProperty('--ty',(Math.sin(ang)*dist).toFixed(1)+'px');
+    s.style.animationDelay=(Math.random()*.16).toFixed(2)+'s';
+    wrap.appendChild(s);
+  }
+  setTimeout(()=>wrap.remove(),1400);
+}
+function saveMoodRec(){
+  if(!moodSel){toast('先选一个此刻的心情吧');return}
+  const note=$('#moodNote').value.trim();
+  const inten=parseInt($('#intenRange').value,10)||5;
+  moodRec.push({id:uid(),ts:Date.now(),emotionId:moodSel,intensity:inten,triggers:Array.from(moodTagSet),note});
+  if(moodRec.length>500)moodRec=moodRec.slice(-500);
+  saveMood();
+  celebrate();
+  const e=MOOD_MAP[moodSel];
+  const pool=MOOD_RESP[moodSel]||['谢谢你愿意记录下来。'];
+  toast(e.emoji+' 已记录 · '+pool[Math.floor(Math.random()*pool.length)]);
+  moodSel=null;moodTagSet=new Set();
+  $('#intenRange').value=5;$('#intenVal').textContent='5';$('#moodNote').value='';
+  renderMoodAll();
+}
+/* ============================================================
+   19. 心情小故事生成器
+============================================================ */
+let storyState={round:1,picked:[],cand:[]};
+function randThree(exclude){
+  const pool=WORDS.map(w=>w[0]).filter(w=>!exclude.includes(w));
+  const shuffled=pool.slice().sort(()=>Math.random()-0.5);
+  return shuffled.slice(0,3);
+}
+function renderStoryCand(){
+  if(storyState.round>3){
+    $('#storyCand').innerHTML='<div class="empty" style="width:100%">三个词都选好了，点击下方「生成故事」</div>';
+    $('#roundInfo').textContent='三轮已选完，可以生成故事了';
+    return;
+  }
+  storyState.cand=randThree(storyState.picked);
+  $('#storyCand').innerHTML=storyState.cand.map(w=>'<button class="cand" data-w="'+esc(w)+'">'+esc(w)+'</button>').join('');
+  $('#roundInfo').textContent='第 '+storyState.round+' 轮 / 共 3 轮，选 1 个词';
+}
+function pickWord(w){
+  if(storyState.round>3||storyState.picked.includes(w))return;
+  storyState.picked.push(w);
+  storyState.round++;
+  $('#pickedKeys').textContent=storyState.picked.join(' / ');
+  if(storyState.round>3){
+    $('#roundInfo').textContent='三轮已选完，可以生成故事了';
+    $('#storyCand').innerHTML='<div class="empty" style="width:100%">三个词都选好了</div>';
+    $('#btnGenStory').disabled=false;
+  }else{
+    renderStoryCand();
+  }
+}
+function resetStory(){
+  storyState={round:1,picked:[],cand:[]};
+  $('#pickedKeys').textContent='（尚未选择）';
+  $('#btnGenStory').disabled=true;
+  $('#storyText').style.display='none';
+  $('#btnAddStoryToNote').style.display='none';
+  $('#btnCopyStory').style.display='none';
+  renderStoryCand();
+}
+function genStory(){
+  if(storyState.picked.length<3){toast('请先选满三个关键词');return}
+  const mode=Math.random()<0.5?'template':'single';
+  let story='';
+  if(mode==='template'){
+    let t=TPL[Math.floor(Math.random()*TPL.length)];
+    t=t.replace(/\{w1\}/g,storyState.picked[0]).replace(/\{w2\}/g,storyState.picked[1]).replace(/\{w3\}/g,storyState.picked[2]);
+    story=t;
+  }else{
+    const types=['s1','s2','s3'];
+    let pickedTypes=[];
+    for(let i=0;i<3;i++){
+      let tries=0,ty;
+      do{ty=types[Math.floor(Math.random()*3)];tries++}while(tries<10&&pickedTypes.length===i&&pickedTypes.every(x=>x===ty));
+      pickedTypes.push(ty);
+    }
+    const sentences=storyState.picked.map((w,i)=>{
+      const row=WORDS.find(x=>x[0]===w);
+      const idx=pickedTypes[i]==='s1'?1:pickedTypes[i]==='s2'?2:3;
+      return row?row[idx]:'';
+    });
+    story=sentences.join(' ');
+  }
+  const day=peekDay(curDate);let total=0,done=0;
+  day.goals.forEach(g=>(g.items||[]).forEach(i=>{total++;if(i.done)done++}));
+  const rate=total?done/total:0;
+  let pool;
+  if(rate>=0.8)pool=INSIGHT.celebrate;
+  else if(rate>=0.3)pool=INSIGHT.steady;
+  else pool=INSIGHT.accept;
+  const ins=pool[Math.floor(Math.random()*pool.length)];
+  const full=story+'\n\n启示：'+ins;
+  $('#storyText').textContent=full;
+  $('#storyText').style.display='block';
+  $('#btnAddStoryToNote').style.display='inline-flex';
+  $('#btnCopyStory').style.display='inline-flex';
+  storyRec.unshift({id:uid(),date:todayS(),selectedKeys:storyState.picked.slice(),mode,templateId:mode==='template'?'random':'single',storyResult:full,isFavorite:false});
+  if(storyRec.length>50)storyRec.length=50;
+  saveStory();
+}
+function buildStoryPrompt(){
+  if(storyState.picked.length<3)return '';
+  return TPL_HEAD+'\n\n=== 用户档案区 ===\n当前日期：'+todayS()+'\n今日完成率：'+(()=>{const d=peekDay(curDate);let t=0,dn=0;d.goals.forEach(g=>(g.items||[]).forEach(i=>{t++;if(i.done)dn++}));return t?Math.round(dn/t*100)+'%':'未统计'})()+'\n\n=== 我的问题 ===\n请使用下面三个关键词，创作一段温柔治愈的短小故事，三个词都要自然融入故事中，故事字数不少于150字，风格偏向自我接纳、抚慰内心、适合备考 / 秋招 / 内耗的人；故事写完之后，单独一小段启示鼓励，启示简短，引导自我肯定，不鸡汤、不鸡血。\n\n关键词：'+storyState.picked[0]+'、'+storyState.picked[1]+'、'+storyState.picked[2];
+}
+/* ============================================================
+   20. 设置
+============================================================ */
+function openSet(){
+  const used=usage(),warn=used>3*1024*1024;
+  const zTip=(()=>{if(!ledger.user.birthday)return'填写生日后自动应用星座配色';const p=ledger.user.birthday.split('-').map(Number);return'当前星座：'+getZ(p[1],p[2])+'（配色已生效）'})();
+  $('#mBox').innerHTML='<h3>⚙️ 设置</h3>'+
+    '<label class="f"><span>我的生日（用于星座主题配色）</span><input type="date" id="setBday" value="'+esc(ledger.user.birthday||'')+'"><div style="font-size:11px;color:var(--mu);margin-top:5px">'+esc(zTip)+'</div></label>'+
+    '<label class="f"><span>默认提前提醒天数</span><input type="number" id="setRemind" min="0" max="60" value="'+ledger.setting.remindDays+'"></label>'+
+    '<label class="f" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="setZodiac" style="width:auto" '+(ledger.setting.useZodiac?'checked':'')+'><span style="margin:0">启用星座主题配色</span></label>'+
+    '<label class="f" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="setDark" style="width:auto" '+(ledger.setting.mode==='dark'?'checked':'')+'><span style="margin:0">暗色模式</span></label>'+
+    '<div style="border-top:1px solid var(--bd);margin:15px 0 11px"></div>'+
+    '<div style="font-size:12px;color:var(--tx2);margin-bottom:7px">本地存储占用：<b style="color:'+(warn?'#e05a4f':'var(--p)')+'">'+fmtB(used)+'</b>（上限约 5MB）</div>'+
+    '<div style="font-size:11px;color:var(--mu);line-height:1.8;background:var(--bg);padding:10px 12px;border-radius:10px;margin-bottom:13px">💡 存储减负提示：<br>1. 本工作台不支持图片上传，仅保存文本，降低缓存占用；<br>2. 归档后的 Skill 不会在首页检索列表渲染；<br>3. 长期不用的 Skill 建议直接删除；<br>4. localStorage 总容量约 5MB，上方会显示当前占用；<br>5. 建议定期导出 JSON 备份；<br>6. 使用次数仅统计点击复制的次数，不保存对话记录；<br>7. 心情故事超过 50 条建议清理旧记录。</div>'+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+    '<button class="btn s" id="btnExpLg">⬇ 导出打卡记录</button>'+
+    '<button class="btn s" id="btnExpSk">⬇ 导出 Skill 库</button>'+
+    '<button class="btn s" id="btnExpStory">⬇ 导出心情故事</button>'+
+    '<button class="btn s" id="btnImpLg">⬆ 导入打卡记录</button>'+
+    '<button class="btn s d" id="btnClearSk">清空自定义 Skill</button>'+
+    '<button class="btn s d" id="btnReset">清空全部数据</button>'+
+    '</div><div class="macts"><button class="btn p" id="mOk">完成</button></div>';
+  $('#mMask').classList.add('show');
+  const close=()=>{$('#mMask').classList.remove('show');$('#mBox').innerHTML=''};
+  $('#mOk').onclick=()=>{
+    ledger.user.birthday=$('#setBday').value;
+    ledger.setting.remindDays=Math.max(0,parseInt($('#setRemind').value,10)||7);
+    ledger.setting.useZodiac=$('#setZodiac').checked;
+    ledger.setting.mode=$('#setDark').checked?'dark':'light';
+    saveLg();applyTheme();renderDaily();close();toast('设置已保存');
+  };
+  $('#mMask').onclick=e=>{if(e.target.id==='mMask')close()};
+  $('#btnExpLg').onclick=()=>{dlJSON(ledger,'打卡记录_'+todayS()+'.json');toast('已导出打卡记录')};
+  $('#btnExpSk').onclick=()=>{const arr=customSkills.map(expSkillObj);if(!arr.length){toast('还没有自定义 Skill');return}dlJSON(arr,'Skill库_'+todayS()+'.json');toast('已导出 '+arr.length+' 个 Skill')};
+  $('#btnExpStory').onclick=()=>{if(!storyRec.length){toast('还没有心情故事');return}dlJSON(storyRec,'心情故事_'+todayS()+'.json');toast('已导出 '+storyRec.length+' 条')};
+  $('#btnImpLg').onclick=()=>$('#fileLedger').click();
+  $('#fileLedger').onchange=e=>{
+    const f=e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||!o.checkins)throw new Error('不是打卡记录文件');if(!confirm('导入将覆盖当前打卡记录，确定继续？'))return;ledger=Object.assign(defLg(),o);saveLg();location.reload()}catch(err){toast('导入失败：'+err.message)}};
+    r.readAsText(f);
+  };
+  $('#btnClearSk').onclick=()=>{if(!customSkills.length){toast('没有自定义 Skill');return}if(!confirm('确定清空全部自定义 Skill？此操作不可恢复，建议先导出备份。'))return;customSkills=[];saveSk();renderSkills();close();toast('已清空自定义 Skill')};
+  $('#btnReset').onclick=()=>{if(!confirm('确定清空全部本地数据？建议先导出备份。'))return;Object.keys(KEY).forEach(k=>localStorage.removeItem(KEY[k]));location.reload()};
+}
+/* ============================================================
+   21. 行内编辑
+============================================================ */
+function inlineEdit(el,onDone){
+  const old=el.textContent;
+  const inp=document.createElement('input');inp.type='text';inp.value=old;inp.className='ie';
+  el.replaceWith(inp);inp.focus();inp.select();
+  let done=false;
+  const finish=commit=>{
+    if(done)return;done=true;
+    const v=inp.value.trim();
+    const sp=document.createElement('span');sp.className=el.className;
+    if(el.dataset.act)sp.dataset.act=el.dataset.act;
+    if(el.dataset.iid)sp.dataset.iid=el.dataset.iid;
+    sp.textContent=(commit&&v)?v:old;
+    inp.replaceWith(sp);
+    if(commit&&v&&v!==old)onDone(v);
+  };
+  inp.addEventListener('blur',()=>finish(true));
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();inp.blur()}if(e.key==='Escape'){e.preventDefault();finish(false)}});
+}
+/* ============================================================
+   22. 事件绑定
+============================================================ */
+function bind(){
+  /* tabs */
+  $$('.tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      $$('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');
+      $$('.view').forEach(v=>v.classList.remove('active'));
+      $('#view-'+t.dataset.v).classList.add('active');
+      if(t.dataset.v==='skill')renderSkills();
+      if(t.dataset.v==='energy')showEnc();
+    });
+  });
+  $('#btnTheme').addEventListener('click',()=>{ledger.setting.mode=ledger.setting.mode==='dark'?'light':'dark';saveLg();applyTheme()});
+  $('#btnSet').addEventListener('click',openSet);
+  $('#btnGloss').addEventListener('click',openGloss);
+  /* 日期 */
+  $('#prevD').addEventListener('click',()=>{const d=parseD(curDate);d.setDate(d.getDate()-1);curDate=fmtD(d);renderDaily()});
+  $('#nextD').addEventListener('click',()=>{const d=parseD(curDate);d.setDate(d.getDate()+1);curDate=fmtD(d);renderDaily()});
+  $('#btnToday').addEventListener('click',()=>{curDate=todayS();renderDaily()});
+  $('#dPick').addEventListener('change',e=>{if(e.target.value){curDate=e.target.value;renderDaily()}});
+  /* 目标 */
+  const addGoal=()=>{
+    const v=$('#newGoal').value.trim();if(!v){toast('请输入目标内容');return}
+    getDay(curDate).goals.push({id:uid(),title:v,items:[]});
+    $('#newGoal').value='';saveLg();renderGoals();renderStats();
+  };
+  $('#btnAddGoal').addEventListener('click',addGoal);
+  $('#newGoal').addEventListener('keydown',e=>{if(e.key==='Enter')addGoal()});
+  $('#goalList').addEventListener('click',e=>{
+    const t=e.target.closest('[data-act]');if(!t)return;
+    const goalEl=e.target.closest('.goal');const gid=goalEl?goalEl.dataset.gid:null;
+    const act=t.dataset.act;const day=getDay(curDate);
+    if(act==='del-goal'){e.preventDefault();e.stopPropagation();if(!confirm('删除这个目标及其全部子项？'))return;day.goals=day.goals.filter(x=>x.id!==gid);saveLg();renderGoals();renderStats();return}
+    if(act==='del-item'){e.preventDefault();e.stopPropagation();const g=day.goals.find(x=>x.id===gid);if(!g)return;g.items=g.items.filter(x=>x.id!==t.dataset.iid);saveLg();renderGoals();renderStats()}
+  });
+  $('#goalList').addEventListener('change',e=>{
+    if(e.target.matches('input[data-act="toggle"]')){
+      const gid=e.target.closest('.goal').dataset.gid;const day=getDay(curDate);
+      const g=day.goals.find(x=>x.id===gid);if(!g)return;
+      const it=g.items.find(x=>x.id===e.target.dataset.iid);
+      if(it){it.done=e.target.checked;saveLg();renderGoals();renderStats()}
+    }
+  });
+  $('#goalList').addEventListener('keydown',e=>{
+    if(e.target.matches('[data-act="add-item"]')&&e.key==='Enter'){
+      const gid=e.target.closest('.goal').dataset.gid;const text=e.target.value.trim();if(!text)return;
+      const day=getDay(curDate);const g=day.goals.find(x=>x.id===gid);if(!g)return;
+      g.items.push({id:uid(),text,done:false});saveLg();renderGoals();renderStats();
+    }
+  });
+  $('#goalList').addEventListener('dblclick',e=>{
+    const it=e.target.closest('.itx');
+    if(it){const gid=it.closest('.goal').dataset.gid;const iid=it.dataset.iid;
+      inlineEdit(it,v=>{const g=getDay(curDate).goals.find(x=>x.id===gid);const i=g&&g.items.find(x=>x.id===iid);if(i){i.text=v;saveLg();renderGoals()}});return}
+    const ti=e.target.closest('.gtitle');
+    if(ti){const gid=ti.closest('.goal').dataset.gid;
+      inlineEdit(ti,v=>{const g=getDay(curDate).goals.find(x=>x.id===gid);if(g){g.title=v;saveLg();renderGoals()}})}
+  });
+  /* 日志 */
+  let nt=null;
+  $('#noteArea').addEventListener('input',e=>{
+    clearTimeout(nt);const v=e.target.value;
+    nt=setTimeout(()=>{getDay(curDate).note=v;saveLg()},300);
+  });
+  /* 生日 */
+  $('#btnAddBday').addEventListener('click',()=>{
+    openForm({title:'添加生日提醒',okText:'添加',fields:[
+      {key:'name',label:'称呼',placeholder:'例：妈妈 / 小王'},
+      {key:'type',label:'日期类型（solar=公历 lunar=农历）',type:'select',options:['solar','lunar'],default:'solar'},
+      {key:'month',label:'月份（1-12）',type:'number',default:'1'},
+      {key:'day',label:'日期（农历最多 30）',type:'number',default:'1'},
+      {key:'tag',label:'标签（可选）',placeholder:'家人 / 朋友 / 同事'},
+      {key:'remindDays',label:'提前几天提醒',type:'number',default:String(ledger.setting.remindDays)}
+    ],onSubmit(d){
+      const name=(d.name||'').trim(),m=parseInt(d.month,10),dd=parseInt(d.day,10);
+      if(!name){toast('请填写称呼');return false}
+      if(!(m>=1&&m<=12)){toast('月份需在 1-12 之间');return false}
+      if(!(dd>=1&&dd<=31)){toast('日期需在 1-31 之间');return false}
+      if(d.type==='lunar'&&dd>30){toast('农历日期最多 30');return false}
+      ledger.birthdays.push({id:uid(),name,type:d.type,month:m,day:dd,tag:(d.tag||'').trim(),remindDays:Math.max(0,parseInt(d.remindDays,10)||ledger.setting.remindDays)});
+      saveLg();renderBdays();toast('已添加生日提醒');
+    }});
+  });
+  $('#bdayList').addEventListener('click',e=>{
+    const b=e.target.closest('[data-act="del-bday"]');if(!b)return;
+    const it=e.target.closest('[data-bid]');if(!it)return;
+    if(!confirm('删除这条生日提醒？'))return;
+    ledger.birthdays=ledger.birthdays.filter(x=>x.id!==it.dataset.bid);saveLg();renderBdays();
+  });
+  /* DDL */
+  $('#btnAddDDL').addEventListener('click',()=>{
+    openForm({title:'添加 DDL 倒计时',okText:'添加',fields:[
+      {key:'name',label:'事项名称',placeholder:'例：国自然项目书 / 论文初稿'},
+      {key:'date',label:'截止日期',type:'date'}
+    ],onSubmit(d){
+      if(!d.name.trim()){toast('请填写事项名称');return false}
+      if(!d.date){toast('请选择截止日期');return false}
+      ledger.ddls.push({id:uid(),name:d.name.trim(),date:d.date});saveLg();renderDDLs();toast('已添加 DDL');
+    }});
+  });
+  $('#ddlList').addEventListener('click',e=>{
+    const b=e.target.closest('[data-act="del-ddl"]');if(!b)return;
+    const it=e.target.closest('[data-did]');if(!it)return;
+    if(!confirm('删除这个 DDL？'))return;
+    ledger.ddls=ledger.ddls.filter(x=>x.id!==it.dataset.did);saveLg();renderDDLs();
+  });
+  /* Skill 页 */
+  $('#sSearch').addEventListener('input',e=>{
+    clearTimeout(wb.sT);const v=e.target.value;
+    wb.sT=setTimeout(()=>{wb.q=v;wb.page=0;renderSkillGrid()},250);
+  });
+  $('#sSort').addEventListener('change',e=>{wb.sort=e.target.value;wb.page=0;renderSkillGrid()});
+  $('#chkArc').addEventListener('change',e=>{wb.showArc=e.target.checked;wb.page=0;renderSkillGrid()});
+  $('#btnNewSkill').addEventListener('click',openNewSkill);
+  $('#btnImpSkill').addEventListener('click',()=>$('#fileSkill').click());
+  $('#fileSkill').addEventListener('change',e=>{if(e.target.files[0])impSkillFile(e.target.files[0]);e.target.value=''});
+  $('#btnExpAll').addEventListener('click',()=>{const arr=customSkills.map(expSkillObj);if(!arr.length){toast('还没有自定义 Skill 可导出');return}dlJSON(arr,'Skill库_'+todayS()+'.json');toast('已导出 '+arr.length+' 个 Skill')});
+  $('#catTabs').addEventListener('click',e=>{
+    const t=e.target.closest('.cat');if(!t)return;
+    wb.cat=t.dataset.cat;wb.page=0;renderCatTabs();renderSkillGrid();
+  });
+  $('#sGrid').addEventListener('click',e=>{
+    const del=e.target.closest('[data-act="del-skill"]');
+    if(del){e.stopPropagation();const id=del.dataset.sid;const s=customSkills.find(x=>x.id===id);if(!s)return;if(!confirm('删除自定义 Skill「'+s.title+'」？其档案也会一并删除。'))return;customSkills=customSkills.filter(x=>x.id!==id);delete archives[id];saveSk();saveAr();renderSkills();toast('已删除');return}
+    if(e.target.closest('#addSkillCard')){openNewSkill();return}
+    const card=e.target.closest('.sc[data-sid]');if(card)openSkill(card.dataset.sid);
+  });
+  $('#sPager').addEventListener('click',e=>{
+    if(e.target.id==='pgPrev'){wb.page--;renderSkillGrid();window.scrollTo({top:0,behavior:'smooth'})}
+    if(e.target.id==='pgNext'){wb.page++;renderSkillGrid();window.scrollTo({top:0,behavior:'smooth'})}
+  });
+  /* 抽屉 */
+  $('#dMask').addEventListener('click',closeDrawer);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){
+      if($('#drawer').classList.contains('show'))closeDrawer();
+      if($('#mMask').classList.contains('show')){$('#mMask').classList.remove('show');$('#mBox').innerHTML=''}
+    }
+  });
+  $('#drawer').addEventListener('input',e=>{
+    if(!curSkill)return;
+    const snap=activeSnap(curSkill);
+    if(e.target.matches('[data-key]')){snap.data[e.target.dataset.key]=e.target.value;saveAr()}
+    else if(e.target.id==='skillQuestion'){snap.question=e.target.value;saveAr()}
+  });
+  $('#drawer').addEventListener('change',e=>{
+    if(e.target.id==='snapSelect'&&curSkill){getArch(curSkill).active=e.target.value;saveAr();openSkill(curSkill)}
+  });
+  $('#drawer').addEventListener('click',async e=>{
+    if(!curSkill)return;
+    const skill=getSkill(curSkill);if(!skill)return;
+    const arch=getArch(curSkill),snap=activeSnap(curSkill);
+    if(e.target.id==='closeDrawer'){closeDrawer();return}
+    if(e.target.id==='snapNew'){
+      const ns={id:uid(),name:'快照 '+(arch.snapshots.length+1),data:Object.assign({},snap.data),question:snap.question||''};
+      arch.snapshots.push(ns);arch.active=ns.id;saveAr();openSkill(curSkill);toast('已新建快照');return;
+    }
+    if(e.target.id==='snapRen'){
+      openForm({title:'重命名快照',fields:[{key:'name',label:'快照名称',default:snap.name}],onSubmit(d){const n=(d.name||'').trim();if(!n){toast('名称不能为空');return false}snap.name=n;saveAr();openSkill(curSkill);toast('已重命名')}});return;
+    }
+    if(e.target.id==='snapDel'){
+      if(arch.snapshots.length<=1){toast('至少保留一个快照');return}
+      if(!confirm('删除当前快照「'+snap.name+'」？'))return;
+      arch.snapshots=arch.snapshots.filter(s=>s.id!==snap.id);arch.active=arch.snapshots[0].id;saveAr();openSkill(curSkill);toast('已删除快照');return;
+    }
+    if(e.target.id==='btnCopyPrompt'){
+      const text=buildPrompt(skill,snap);const ok=await copyT(text);
+      if(ok){bumpStat(skill.id);renderSkillGrid();toast('✅ Prompt 已复制，去豆包粘贴提问吧')}
+      else{const pre=$('#promptPreview');pre.hidden=false;pre.textContent=text;toast('自动复制失败，请手动复制下方内容')}
+      return;
+    }
+    if(e.target.id==='btnPreview'){
+      const pre=$('#promptPreview');
+      if(pre.hidden){pre.textContent=buildPrompt(skill,snap);pre.hidden=false}else{pre.hidden=true}
+      return;
+    }
+    if(e.target.id==='btnExpSkill'){
+      dlJSON(expSkillObj(skill),'Skill_'+skill.title.replace(/[\\/:*?"<>|]/g,'_')+'.json');toast('已导出此 Skill');
+    }
+  });
+  /* 占卜 tabs */
+  $$('.otab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      $$('.otab').forEach(x=>x.classList.remove('active'));t.classList.add('active');
+      $$('.opanel').forEach(p=>p.classList.remove('active'));
+      $('#op-'+t.dataset.op).classList.add('active');
+    });
+  });
+  /* 塔罗 */
+  $('#tarotChips').addEventListener('click',e=>{
+    const c=e.target.closest('.chip');if(!c)return;
+    tq=c.dataset.q;renderTarotChips();
+  });
+  $('#btnDrawTarot').addEventListener('click',drawTarot);
+  $('#tarotCard').addEventListener('click',()=>{if(!tDrawn)drawTarot()});
+  /* 六爻 */
+  $('#hexChips').addEventListener('click',e=>{
+    const c=e.target.closest('.chip');if(!c)return;
+    hq=c.dataset.q;renderHexChips();
+  });
+  $('#btnCastHex').addEventListener('click',castHex);
+  /* 八字 */
+  $('#baziChips').addEventListener('click',e=>{
+    const c=e.target.closest('.chip');if(!c)return;
+    bq=c.dataset.q;renderBaziChips();
+  });
+  $('#btnDrawBazi').addEventListener('click',drawBazi);
+  /* 星盘 */
+  $('#btnDrawAstro').addEventListener('click',drawAstro);
+  /* 数字仪式 */
+  $('#btnRollNum').addEventListener('click',()=>{
+    $('#n1').value=Math.floor(Math.random()*10);
+    $('#n2').value=Math.floor(Math.random()*10);
+    $('#n3').value=Math.floor(Math.random()*10);
+  });
+  $('#btnCastNum').addEventListener('click',()=>{
+    const a=parseInt($('#n1').value,10),b=parseInt($('#n2').value,10),c=parseInt($('#n3').value,10);
+    if([a,b,c].some(x=>isNaN(x))){toast('请先输入三个数字，或点随机 roll 一组');return}
+    if(!tryOracle())return;
+    castNum([a,b,c],'numReading');
+  });
+  /* 元气 */
+  $('#btnNextEg').addEventListener('click',showEnc);
+  $('#btnFavEg').addEventListener('click',()=>{
+    if(!curEnc)return;
+    const exists=encLib.list.some(x=>x.content===curEnc.content);
+    if(exists){toast('已经在收藏里了');return}
+    encLib.list.push({id:uid(),type:curEnc.type,content:curEnc.content,tag:[],isFavorite:true,custom:false});
+    saveEnc();toast('已收藏');
+  });
+  $('#btnCopyEg').addEventListener('click',async()=>{
+    if(!curEnc)return;
+    const ok=await copyT(curEnc.content);
+    toast(ok?'已复制打气文案':'复制失败，请手动选择文本复制');
+  });
+  $('#btnRollE').addEventListener('click',()=>{
+    $('#e1').value=Math.floor(Math.random()*10);
+    $('#e2').value=Math.floor(Math.random()*10);
+    $('#e3').value=Math.floor(Math.random()*10);
+  });
+  $('#btnCastE').addEventListener('click',()=>{
+    const a=parseInt($('#e1').value,10),b=parseInt($('#e2').value,10),c=parseInt($('#e3').value,10);
+    if([a,b,c].some(x=>isNaN(x))){toast('请先输入三个数字，或点摇一组');return}
+    if(!tryOracle())return;
+    castNum([a,b,c],'eReading');
+  });
+  /* 心情故事 */
+  $('#storyCand').addEventListener('click',e=>{
+    const c=e.target.closest('.cand');if(!c)return;
+    pickWord(c.dataset.w);
+  });
+  $('#btnRefreshCand').addEventListener('click',()=>{
+    if(storyState.round>3){toast('三轮已选完，请直接生成故事');return}
+    renderStoryCand();
+  });
+  $('#btnResetStory').addEventListener('click',resetStory);
+  $('#btnGenStory').addEventListener('click',genStory);
+  $('#btnCopyStoryPrompt').addEventListener('click',async()=>{
+    const t=buildStoryPrompt();
+    if(!t){toast('请先选满三个关键词');return}
+    const ok=await copyT(t);
+    toast(ok?'Prompt 已复制，去豆包粘贴生成':'复制失败，请手动复制');
+  });
+  $('#btnCopyStory').addEventListener('click',async()=>{
+    const t=$('#storyText').textContent;
+    if(!t)return;
+    const ok=await copyT(t);
+    toast(ok?'故事已复制':'复制失败，请手动选择文本复制');
+  });
+  $('#btnAddStoryToNote').addEventListener('click',()=>{
+    const t=$('#storyText').textContent;
+    if(!t)return;
+    const d=getDay(curDate);
+    d.note=(d.note?d.note+'\n\n':'')+t;
+    saveLg();renderNote();toast('已写入今日日志');
+  });
+  /* 心情打卡 */
+  $('#emoGrid').addEventListener('click',e=>{const b=e.target.closest('.emo');if(!b)return;moodSel=b.dataset.e;renderEmoGrid()});
+  $('#moodTags').addEventListener('click',e=>{const b=e.target.closest('.mtag');if(!b)return;const t=b.dataset.t;if(moodTagSet.has(t))moodTagSet.delete(t);else moodTagSet.add(t);renderMoodTags()});
+  $('#intenRange').addEventListener('input',e=>{$('#intenVal').textContent=e.target.value});
+  $('#btnSaveMood').addEventListener('click',saveMoodRec);
+  $('#moodToday').addEventListener('click',e=>{const b=e.target.closest('[data-md]');if(!b)return;if(!confirm('删除这条心情记录？'))return;moodRec=moodRec.filter(x=>x.id!==b.dataset.md);saveMood();renderMoodAll();toast('已删除')});
+  /* 每日灵签 */
+  $('#btnDrawSign').addEventListener('click',drawSign);
+}
+/* ============================================================
+   23. 初始化
+============================================================ */
+(function init(){
+  applyTheme();
+  renderDaily();
+  renderSkills();
+  renderTarotChips();
+  renderHexChips();
+  renderBaziChips();
+  renderMoodAll();
+  renderQuota();
+  showEnc();
+  resetStory();
+  bind();
+  let lastDay=todayS();
+  setInterval(()=>{
+    const now=todayS();
+    if(now!==lastDay){lastDay=now;if(curDate===lastDay)renderDaily()}
+  },60000);
+  setInterval(tickOracleCd,1000);tickOracleCd();
+})();
+</script>
+</body>
+</html>
